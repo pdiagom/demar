@@ -25,6 +25,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    def destroy(self, request, pk=None):
+        connection = self.get_object()
+        connection.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     permissions_classes = [permissions.AllowAny]
