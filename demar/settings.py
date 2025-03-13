@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'demarapp',
     'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -80,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'demar',
         'USER': 'root',
-        'PASSWORD': 'rootroot',
+        'PASSWORD': 'root',
         'HOST': 'localhost',  # O la IP del servidor de MySQL
         'PORT': '3306',
         'OPTIONS': {
@@ -120,14 +121,20 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Configurar el modelo de usuario personalizado
+AUTH_USER_MODEL = 'demarapp.User'
+
+# Configurar autenticación por defecto
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
 }
+
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,12 +1,43 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from .models import Article, Category, User, Order, Cart, Report
 from .serializers import (
-    ArticleSerializer, CategorySerializer, UserSerializer,
-    OrderSerializer, CartSerializer, ReportSerializer
+    ArticleSerializer, CategorySerializer, LoginSerializer, UserSerializer,
+    OrderSerializer, CartSerializer, ReportSerializer,RegisterSerializer
 )
+from rest_framework.permissions import AllowAny
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from .serializers import UserSerializer, RegisterSerializer
+from django.contrib.auth import get_user_model
+
+# USUARIOS (Users)
+User = get_user_model()
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
+
+class LoginView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    def get_serializer_class(self):
+        return LoginSerializer
+    
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        print(username)
+        print(password)
+        user = authenticate(request, username=username, password=password)
+        print(user)
+        if user is not None:
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key, "user": UserSerializer(user).data}, status=status.HTTP_200_OK)
+        return Response({"error": "Credenciales inválidas"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 # ARTÍCULOS (Article)
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -50,21 +81,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = CategorySerializer
 
-# USUARIOS (User)
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    permission_classes = [permissions.IsAdminUser]  # Solo accesible para administradores
-    serializer_class = UserSerializer
-    
-    def list(self, request):
-        users = self.queryset
-        serializer = self.get_serializer(users, many=True)
-        return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
-        user = get_object_or_404(self.queryset, pk=pk)
-        serializer = self.get_serializer(user)
-        return Response(serializer.data)
 
 # PEDIDOS (Order)
 class OrderViewSet(viewsets.ModelViewSet):
