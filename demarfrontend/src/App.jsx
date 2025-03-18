@@ -4,7 +4,7 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import Navigation from "./components/Navigation";
-
+import ArticleList from "./components/ArticleList";
 function App() {
     return (
         <Router>
@@ -21,6 +21,7 @@ function App() {
                     }
                 />
             </Routes>
+            <ArticleList />
         </Router>
     );
 }
