@@ -6,12 +6,12 @@ from .api import ArticleViewSet, CategoryViewSet, UserViewSet, OrderViewSet, Car
 
 router=routers.DefaultRouter()
 
-router.register('demar/articles', ArticleViewSet, 'articles')
-router.register('demar/categories', CategoryViewSet, 'categories')
-router.register('demar/users', UserViewSet, 'users')
-router.register('demar/orders', OrderViewSet, 'orders')
-router.register('demar/carts', CartViewSet, 'carts')
-router.register('demar/reports', ReportViewSet, 'reports')
+router.register(r'articles', ArticleViewSet, 'articles')
+router.register(r'categories', CategoryViewSet, 'categories')
+router.register(r'users', UserViewSet, 'users')
+router.register(r'orders', OrderViewSet, 'orders')
+router.register(r'carts', CartViewSet, 'carts')
+router.register(r'reports', ReportViewSet, 'reports')
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
