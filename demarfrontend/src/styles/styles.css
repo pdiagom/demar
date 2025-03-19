@@ -1,0 +1,71 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo del body */
+body {
+    font-family: 'Arial', sans-serif; /* Fuente general */
+    background-color: #f0f4ff; /* Fondo claro */
+    color: #333; /* Texto oscuro */
+    line-height: 1.6; /* Espaciado entre líneas */
+}
+
+/* Encabezados */
+h1, h2, h3 {
+    color: #2a9df4; /* Azul brillante */
+}
+
+/* Estilo de enlaces */
+a {
+    color: #007bff; /* Azul para enlaces */
+    text-decoration: none; /* Sin subrayado */
+    margin-left: 10%;
+    margin-bottom: 2%;
+    padding: 10px;
+}
+
+a:hover {
+    background-color: rgba(30, 210, 198, 0.467);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+/* Botones */
+button {
+    background-color: #007bff; /* Azul para botones */
+    color: white; /* Texto blanco */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar */
+    transition: background-color 0.3s; /* Transición suave */
+}
+
+button:hover {
+    background-color: #0056b3; /* Azul más oscuro al hover */
+}
+
+/* Estilo de formularios */
+input, textarea, select {
+    border: 1px solid #007bff; /* Borde azul */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    width: 100%; /* Ancho completo */
+    margin-bottom: 10px; /* Espaciado inferior */
+}
+
+/* Listas */
+ul {
+    list-style-type: none; /* Sin viñetas */
+}
+
+li {
+    background-color: #e7f0ff; /* Fondo azul claro para artículos */
+    border: 1px solid #007bff; /* Borde azul */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 15px; /* Espaciado interno */
+    margin-bottom: 10px; /* Espaciado inferior */
+}

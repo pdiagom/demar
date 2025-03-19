@@ -5,6 +5,7 @@ import Dashboard from "./components/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import Navigation from "./components/Navigation";
 import ArticleList from "./components/ArticleList";
+import "./styles/styles.css";
 function App() {
     return (
         <Router>
