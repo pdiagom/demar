@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import CategorySelect from './CategorySelect';
 
@@ -19,11 +19,13 @@ const CreateArticle = ({ onArticleCreated }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            // Asegúrate de que formData tenga todos los datos correctos
+            console.log('Datos enviados:', formData);
             const response = await axios.post('http://localhost:8000/demar/articles/', formData);
             onArticleCreated(response.data); // Notifica el artículo creado
             setFormData({ name: '', numRef: '', description: '', price: '', stock: '', categoryId: '' }); // Reinicia el formulario
         } catch (error) {
-            console.error('Error creando artículo:', error);
+            console.error('Error creando artículo:', error.response.data); // Para obtener más detalles
         }
     };
 

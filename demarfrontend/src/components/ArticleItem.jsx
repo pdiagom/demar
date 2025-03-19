@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import CategorySelect from './CategorySelect';
 
-const ArticleItem = ({ article, onArticleUpdated, onArticleDeleted }) => {
+const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...article });
 
@@ -30,6 +30,10 @@ const ArticleItem = ({ article, onArticleUpdated, onArticleDeleted }) => {
         }
     };
 
+    // Encuentra el nombre de la categoría correspondiente usando categoryId
+    const category = categories.find(cat => cat.idCategory === article.categoryId);
+    const categoryName = category ? category.name : 'Categoría no encontrada';
+
     return (
         <li>
             {isEditing ? (
@@ -39,7 +43,7 @@ const ArticleItem = ({ article, onArticleUpdated, onArticleDeleted }) => {
                     <textarea name="description" value={formData.description} onChange={handleEditChange} required></textarea>
                     <input type="number" name="price" value={formData.price} onChange={handleEditChange} required />
                     <input type="number" name="stock" value={formData.stock} onChange={handleEditChange} required />
-                    <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: e.target.value })} required />
+                    <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: parseInt(e.target.value, 10) })} required />
                     <button type="submit">Actualizar</button>
                 </form>
             ) : (
@@ -49,6 +53,7 @@ const ArticleItem = ({ article, onArticleUpdated, onArticleDeleted }) => {
                     <p>Descripción: {article.description}</p>
                     <p>Precio: {article.price}</p>
                     <p>Stock: {article.stock}</p>
+                    <p>Categoría: {categoryName}</p> {/* Muestra el nombre de la categoría */}
                     <button onClick={() => setIsEditing(true)}>Editar</button>
                     <button onClick={handleDelete}>Eliminar</button>
                 </div>

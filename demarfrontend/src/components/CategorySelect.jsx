@@ -21,7 +21,7 @@ const CategorySelect = ({ selectedCategory, onCategoryChange, required = true })
         <select value={selectedCategory} onChange={onCategoryChange} required={required}>
             <option value="">Seleccionar categoría</option>
             {categories.map(category => (
-                <option key={category.id} value={category.id}>{category.name}</option> 
+                <option key={category.idCategory} value={category.idCategory}>{category.name}</option> 
             ))}
         </select>
     );
