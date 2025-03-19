@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem';
-import { getCategories } from '../services/categoryService'; // Asegúrate de importar esto
+import CategoryFilter from './CategoryFilter'; // Asegúrate de importar tu componente de filtro de categorías
+import { getCategories } from '../services/categoryService'; 
 
 const ArticleList = () => {
     const [articles, setArticles] = useState([]);
-    const [categories, setCategories] = useState([]); // Estado para las categorías
+    const [categories, setCategories] = useState([]); 
+    const [selectedCategory, setSelectedCategory] = useState(''); // Estado para la categoría seleccionada
 
     const fetchArticles = async () => {
         const response = await axios.get('http://localhost:8000/demar/articles/');
@@ -14,7 +16,7 @@ const ArticleList = () => {
 
     const fetchCategories = async () => {
         try {
-            const data = await getCategories(); // Llama a tu servicio para obtener categorías
+            const data = await getCategories(); 
             setCategories(data);
         } catch (error) {
             console.error('Error al obtener las categorías:', error);
@@ -23,33 +25,50 @@ const ArticleList = () => {
 
     useEffect(() => {
         fetchArticles();
-        fetchCategories(); // Carga las categorías
+        fetchCategories(); 
     }, []);
-
-
 
     const handleArticleUpdated = (updatedArticle) => {
         setArticles(articles.map(article => article.idArticle === updatedArticle.idArticle ? updatedArticle : article));
     };
 
     const handleArticleDeleted = (id) => {
-        setArticles(articles.filter(article => article.idArticle !== id)); // Elimina el artículo de la lista
+        setArticles(articles.filter(article => article.idArticle !== id)); 
+    };
+
+    const handleCategoryChange = (event) => {
+        setSelectedCategory(event.target.value); // Actualiza la categoría seleccionada
+    };
+
+    const filteredArticles = selectedCategory
+        ? articles.filter(article => article.categoryId === selectedCategory) // Filtra por categoría
+        : articles; // Si no hay categoría seleccionada, muestra todos los artículos
+
+    const renderArticlesList = () => {
+        if (filteredArticles.length === 0) {
+            return <h3>No hay artículos disponibles</h3>; 
+        }
+        return filteredArticles.map(article => (
+            <ArticleItem 
+                key={article.idArticle} 
+                article={article} 
+                categories={categories} 
+                onArticleUpdated={handleArticleUpdated}
+                onArticleDeleted={handleArticleDeleted}
+            />
+        ));
     };
 
     return (
         <div>
             <h1>Lista de Artículos</h1>
-
+            <CategoryFilter 
+                categories={categories} 
+                selectedCategory={selectedCategory} 
+                onCategoryChange={handleCategoryChange} 
+            /> {/* Agrega el filtro de categorías */}
             <ul>
-                {articles.map(article => (
-                    <ArticleItem 
-                        key={article.idArticle} 
-                        article={article} 
-                        categories={categories} // Pasa las categorías
-                        onArticleUpdated={handleArticleUpdated}
-                        onArticleDeleted={handleArticleDeleted}
-                    />
-                ))}
+                {renderArticlesList()} 
             </ul>
         </div>
     );

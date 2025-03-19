@@ -9,6 +9,7 @@ import "./styles/styles.css";
 function App() {
     return (
         <Router>
+            <h1 style={{textAlign:"center"}}>Bienvenido a DEMAR</h1>
             <Navigation />
             <Routes>
                 <Route path="/register" element={<Register />} />
