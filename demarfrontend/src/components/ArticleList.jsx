@@ -37,11 +37,12 @@ const ArticleList = () => {
     };
 
     const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value); // Actualiza la categoría seleccionada
+        setSelectedCategory(event.target.value); 
     };
 
+
     const filteredArticles = selectedCategory
-        ? articles.filter(article => article.categoryId === selectedCategory) // Filtra por categoría
+        ? articles.filter(article => article.categoryId === Number(selectedCategory)) // Asegúrate de que ambos sean del mismo tipo
         : articles; // Si no hay categoría seleccionada, muestra todos los artículos
 
     const renderArticlesList = () => {
@@ -66,7 +67,7 @@ const ArticleList = () => {
                 categories={categories} 
                 selectedCategory={selectedCategory} 
                 onCategoryChange={handleCategoryChange} 
-            /> {/* Agrega el filtro de categorías */}
+            /> 
             <ul>
                 {renderArticlesList()} 
             </ul>
