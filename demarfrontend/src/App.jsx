@@ -22,8 +22,13 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+                <Route
+                    path="/articleList"
+                    element={
+                            <ArticleList />
+                    }/>
             </Routes>
-            <ArticleList />
+            
         </Router>
     );
 }

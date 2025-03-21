@@ -13,6 +13,7 @@ const Navigation = () => {
     return (
         <nav>
             <Link to="/dashboard">Dashboard</Link>
+            <Link to="/articleList">Articles</Link>
             { token ? (
                 <button onClick={handleLogout}>Logout</button>
             ) : (

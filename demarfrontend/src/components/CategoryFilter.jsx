@@ -5,7 +5,7 @@ import React from 'react';
 const CategoryFilter = ({ categories, selectedCategory, onCategoryChange }) => {
     return (
         <div>
-            <h3>Filtrar por Categoría</h3>
+
             <select value={selectedCategory} onChange={onCategoryChange}>
                 <option value="">Todas las categorías</option>
                 {categories.map(category => (

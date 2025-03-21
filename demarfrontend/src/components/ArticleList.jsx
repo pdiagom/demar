@@ -62,7 +62,7 @@ const ArticleList = () => {
 
     return (
         <div>
-            <h1>Lista de Artículos</h1>
+
             <CategoryFilter 
                 categories={categories} 
                 selectedCategory={selectedCategory} 
