@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import CategorySelect from './CategorySelect';
 
-const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted }) => {
+const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted, onAddToCart}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...article });
 
@@ -56,6 +56,7 @@ const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted }
                     <p>Categoría: {categoryName}</p> {/* Muestra el nombre de la categoría */}
                     <button onClick={() => setIsEditing(true)}>Editar</button>
                     <button onClick={handleDelete}>Eliminar</button>
+                    <button onClick={() => onAddToCart(article)}>Agregar al Carrito</button>
                 </div>
             )}
         </li>

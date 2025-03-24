@@ -1,13 +1,14 @@
+// ArticleList.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem';
-import CategoryFilter from './CategoryFilter'; // Asegúrate de importar tu componente de filtro de categorías
-import { getCategories } from '../services/categoryService'; 
+import CategoryFilter from './CategoryFilter';
+import { getCategories } from '../services/categoryService';
 
-const ArticleList = () => {
+const ArticleList = ({ onAddToCart }) => { // Recibe la función como prop
     const [articles, setArticles] = useState([]);
-    const [categories, setCategories] = useState([]); 
-    const [selectedCategory, setSelectedCategory] = useState(''); // Estado para la categoría seleccionada
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     const fetchArticles = async () => {
         const response = await axios.get('http://localhost:8000/demar/articles/');
@@ -16,7 +17,7 @@ const ArticleList = () => {
 
     const fetchCategories = async () => {
         try {
-            const data = await getCategories(); 
+            const data = await getCategories();
             setCategories(data);
         } catch (error) {
             console.error('Error al obtener las categorías:', error);
@@ -25,51 +26,36 @@ const ArticleList = () => {
 
     useEffect(() => {
         fetchArticles();
-        fetchCategories(); 
+        fetchCategories();
     }, []);
 
-    const handleArticleUpdated = (updatedArticle) => {
-        setArticles(articles.map(article => article.idArticle === updatedArticle.idArticle ? updatedArticle : article));
-    };
-
-    const handleArticleDeleted = (id) => {
-        setArticles(articles.filter(article => article.idArticle !== id)); 
-    };
-
-    const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value); 
-    };
-
-
     const filteredArticles = selectedCategory
-        ? articles.filter(article => article.categoryId === Number(selectedCategory)) // Asegúrate de que ambos sean del mismo tipo
-        : articles; // Si no hay categoría seleccionada, muestra todos los artículos
+        ? articles.filter(article => article.categoryId === Number(selectedCategory))
+        : articles;
 
     const renderArticlesList = () => {
         if (filteredArticles.length === 0) {
-            return <h3>No hay artículos disponibles</h3>; 
+            return <h3>No hay artículos disponibles</h3>;
         }
         return filteredArticles.map(article => (
-            <ArticleItem 
-                key={article.idArticle} 
-                article={article} 
-                categories={categories} 
-                onArticleUpdated={handleArticleUpdated}
-                onArticleDeleted={handleArticleDeleted}
+            <ArticleItem
+                key={article.idArticle}
+                article={article}
+                categories={categories}
+                onAddToCart={onAddToCart} // Pasar la función para agregar al carrito
             />
         ));
     };
 
     return (
         <div>
-
-            <CategoryFilter 
-                categories={categories} 
-                selectedCategory={selectedCategory} 
-                onCategoryChange={handleCategoryChange} 
-            /> 
+            <CategoryFilter
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onCategoryChange={(event) => setSelectedCategory(event.target.value)} 
+            />
             <ul>
-                {renderArticlesList()} 
+                {renderArticlesList()}
             </ul>
         </div>
     );
