@@ -1,5 +1,4 @@
 // Cart.js
-<<<<<<< HEAD
 import React, { useEffect } from 'react';
 import axios from 'axios';
 
@@ -26,11 +25,6 @@ const Cart = ({ cartItems, total, onRemoveFromCart, userId }) => {
         }
     };
 
-=======
-import React from 'react';
-
-const Cart = ({ cartItems, total, onRemoveFromCart }) => {
->>>>>>> 4b73ebad8f9678acc72a15805be2fbab2ca86766
     return (
         <div className="cart">
             <h2>Carrito de Compras</h2>
@@ -43,10 +37,7 @@ const Cart = ({ cartItems, total, onRemoveFromCart }) => {
                 ))}
             </ul>
             <h3>Total: ${total.toFixed(2)}</h3>
-<<<<<<< HEAD
             <button onClick={handleCheckout}>Proceder a la Compra</button>
-=======
->>>>>>> 4b73ebad8f9678acc72a15805be2fbab2ca86766
         </div>
     );
 };
