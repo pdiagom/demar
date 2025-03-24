@@ -1,7 +1,30 @@
 // Cart.js
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 
-const Cart = ({ cartItems, total, onRemoveFromCart }) => {
+const Cart = ({ cartItems, total, onRemoveFromCart, userId }) => {
+    const handleCheckout = async () => {
+        if (!userId) {
+            alert("Debes iniciar sesión para proceder con la compra.");
+            return; // Redirigir a la página de login si no estás autenticado
+        }
+
+        const cartData = {
+            cartItem: cartItems.map(item => item.idArticle), // Asumiendo que necesitas solo los IDs de los artículos
+            total,
+            date: new Date().toISOString().split('T')[0], // Formato de fecha YYYY-MM-DD
+            userId,
+        };
+
+        try {
+            const response = await axios.post(`http://localhost:8000/demar/cart/`, cartData);
+            console.log("Carrito guardado:", response.data);
+            // Aquí podrías redirigir al usuario a una página de confirmación o al carrito
+        } catch (error) {
+            console.error("Error al guardar el carrito:", error);
+        }
+    };
+
     return (
         <div className="cart">
             <h2>Carrito de Compras</h2>
@@ -14,6 +37,7 @@ const Cart = ({ cartItems, total, onRemoveFromCart }) => {
                 ))}
             </ul>
             <h3>Total: ${total.toFixed(2)}</h3>
+            <button onClick={handleCheckout}>Proceder a la Compra</button>
         </div>
     );
 };

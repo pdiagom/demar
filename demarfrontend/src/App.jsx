@@ -10,16 +10,15 @@ import Cart from "./components/Cart"; // Importa el componente Cart
 import "./styles/styles.css";
 
 function App() {
-    const [cartItems, setCartItems] = useState([]); // Estado para los artículos en el carrito
-    const [total, setTotal] = useState(0); // Estado para el total del carrito
+    const [cartItems, setCartItems] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [userId, setUserId] = useState(null); // Estado para el ID del usuario autenticado
 
-    // Función para agregar un artículo al carrito
     const addToCart = (article) => {
         setCartItems(prevItems => [...prevItems, article]);
         setTotal(prevTotal => prevTotal + article.price);
     };
 
-    // Función para eliminar un artículo del carrito
     const removeFromCart = (idArticle) => {
         const itemToRemove = cartItems.find(item => item.idArticle === idArticle);
         setCartItems(prevItems => prevItems.filter(item => item.idArticle !== idArticle));
@@ -32,7 +31,7 @@ function App() {
             <Navigation />
             <Routes>
                 <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<Login setUserId={setUserId} />} />
                 <Route
                     path="/dashboard"
                     element={
@@ -44,11 +43,11 @@ function App() {
                 <Route
                     path="/articleList"
                     element={
-                        <ArticleList onAddToCart={addToCart} /> // Pasar la función para agregar al carrito
+                        <ArticleList onAddToCart={addToCart} />
                     }
                 />
             </Routes>
-            <Cart cartItems={cartItems} total={total} onRemoveFromCart={removeFromCart} /> {/* Renderizar el carrito */}
+            <Cart cartItems={cartItems} total={total} onRemoveFromCart={removeFromCart} userId={userId} /> {/* Renderizar el carrito */}
         </Router>
     );
 }
