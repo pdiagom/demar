@@ -2,8 +2,8 @@ from django.urls import path
 from rest_framework import routers
 
 from demarapp.views import LoginView, RegisterView
-from .api import ArticleViewSet, CategoryViewSet, UserViewSet, OrderViewSet, CartViewSet, ReportViewSet
-
+from .views import ArticleViewSet, CategoryViewSet, OrderViewSet, CartViewSet, ReportViewSet
+from .api import UserViewSet
 router=routers.DefaultRouter()
 
 router.register(r'articles', ArticleViewSet, 'articles')
