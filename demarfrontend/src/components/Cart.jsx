@@ -10,7 +10,7 @@ const Cart = ({ cartItems, total, onRemoveFromCart, userId }) => {
         }
 
         const cartData = {
-            cartItem: cartItems.map(item => item.idArticle), // Asumiendo que necesitas solo los IDs de los artículos
+            cartItem: cartItems.map(item => item.idArticle), 
             total,
             date: new Date().toISOString().split('T')[0], // Formato de fecha YYYY-MM-DD
             userId,
@@ -19,7 +19,7 @@ const Cart = ({ cartItems, total, onRemoveFromCart, userId }) => {
         try {
             const response = await axios.post(`http://localhost:8000/demar/cart/`, cartData);
             console.log("Carrito guardado:", response.data);
-            // Aquí podrías redirigir al usuario a una página de confirmación o al carrito
+            
         } catch (error) {
             console.error("Error al guardar el carrito:", error);
         }
