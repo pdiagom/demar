@@ -36,7 +36,7 @@ const Cart = ({ cartItems, total, onRemoveFromCart, userId }) => {
                     </li>
                 ))}
             </ul>
-            <h3>Total: ${total.toFixed(2)}</h3>
+            <h3>Total: {total.toFixed(2)}€</h3>
             <button onClick={handleCheckout}>Proceder a la Compra</button>
         </div>
     );

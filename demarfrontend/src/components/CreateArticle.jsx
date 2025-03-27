@@ -12,6 +12,8 @@ const CreateArticle = ({ onArticleCreated }) => {
         categoryId: '', // Almacena la ID de la categoría seleccionada
     });
 
+    const [successMessage, setSuccessMessage] = useState('');
+    
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -23,13 +25,23 @@ const CreateArticle = ({ onArticleCreated }) => {
             console.log('Datos enviados:', formData);
             const response = await axios.post('http://localhost:8000/demar/articles/', formData);
             onArticleCreated(response.data); // Notifica el artículo creado
+            setSuccessMessage('Artículo creado correctamente!');
             setFormData({ name: '', numRef: '', description: '', price: '', stock: '', categoryId: '' }); // Reinicia el formulario
+            setTimeout(() => {
+                setSuccessMessage('');
+            }, 3000);
         } catch (error) {
             console.error('Error creando artículo:', error.response.data); // Para obtener más detalles
         }
     };
 
     return (
+        <div>
+        {successMessage && (
+            <div style={{ backgroundColor: '#d4edda', color: '#155724', padding: '10px', marginBottom: '10px', borderRadius: '5px' }}>
+                {successMessage}
+            </div>
+        )}
         <form onSubmit={handleSubmit}>
             <input type="text" name="name" placeholder="Nombre" value={formData.name} onChange={handleChange} required />
             <input type="text" name="numRef" placeholder="Número de Referencia" value={formData.numRef} onChange={handleChange} required />
@@ -39,6 +51,7 @@ const CreateArticle = ({ onArticleCreated }) => {
             <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: e.target.value })} required />
             <button type="submit">Crear Artículo</button>
         </form>
+        </div>
     );
 };
 

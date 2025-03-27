@@ -1,10 +1,11 @@
 // Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ setUserId }) => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
-
+    const navigate = useNavigate();
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCredentials({ ...credentials, [name]: value });
@@ -16,6 +17,7 @@ const Login = ({ setUserId }) => {
             const response = await axios.post('http://localhost:8000/demar/login/', credentials);
             localStorage.setItem("token", response.data.access);
             setUserId(response.data.userId); 
+            navigate('/dashboard');
         } catch (error) {
             console.error('Error en el inicio de sesión:', error);
         }
