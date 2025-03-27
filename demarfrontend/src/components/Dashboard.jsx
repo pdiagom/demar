@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"; // Asegúrate de importar useEffect y useState
 import CreateArticle from './CreateArticle';
 import ArticleItem from './ArticleItem';
+import CreateCategory from './CreateCategory'; // Importamos el nuevo componente
 import { getCategories } from '../services/categoryService'; // Asegúrate de importar esto
 
 const Dashboard = () => {
@@ -32,7 +33,7 @@ const Dashboard = () => {
             <h2>Dashboard</h2>
             <p>Esta es una ruta protegida.</p>
             <CreateArticle onArticleCreated={handleArticleCreated} />
-           
+            <CreateCategory /> 
         </div>
     );
 };
