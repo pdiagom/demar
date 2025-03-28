@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import CategorySelect from './CategorySelect';
 
-const ArticleItem = ({ article, categories, onAddToCart }) => {
+const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...article });
 
@@ -13,6 +13,7 @@ const ArticleItem = ({ article, categories, onAddToCart }) => {
     const handleAddToCart = () => {
         onAddToCart(article); // Llama a la función para agregar el artículo al carrito
     };
+
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -54,8 +55,12 @@ const ArticleItem = ({ article, categories, onAddToCart }) => {
                     <p>Precio: ${article.price}</p>
                     <p>Stock: {article.stock}</p>
                     <p>Categoría: {categoryName}</p>
-                    <button onClick={() => setIsEditing(true)}>Editar</button>
-                    <button onClick={handleDelete}>Eliminar</button>
+                    {user && user.role === 1 && ( // Verifica si el usuario es admin
+                        <>
+                            <button onClick={() => setIsEditing(true)}>Editar</button>
+                            <button onClick={handleDelete}>Eliminar</button>
+                        </>
+                    )}
                     <button onClick={handleAddToCart}>Agregar al Carrito</button>
                 </div>
             )}

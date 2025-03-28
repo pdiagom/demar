@@ -3,6 +3,7 @@ import { useState } from "react"; // Importa useState para manejar el estado
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import MaintenancePage from "./components/MaintenancePage"; // Importa el nuevo componente
 import PrivateRoute from "./components/PrivateRoute";
 import Navigation from "./components/Navigation";
 import ArticleList from "./components/ArticleList";
@@ -13,6 +14,7 @@ function App() {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
     const [userId, setUserId] = useState(null); // Estado para el ID del usuario autenticado
+    const [currentUser, setCurrentUser] = useState(null); // Estado para el usuario autenticado
 
     // Función para agregar un artículo al carrito
     const onAddToCart = (article) => {
@@ -35,19 +37,27 @@ function App() {
             <Navigation />
             <Routes>
                 <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login setUserId={setUserId} />} />
+                <Route 
+                    path="/login" 
+                    element={<Login setUserId={setUserId} setCurrentUser={setCurrentUser} />} 
+                />
                 <Route
                     path="/dashboard"
                     element={
-                        <PrivateRoute>
+                        currentUser && currentUser.role === 1 ? ( // Verifica si el usuario es administrador
                             <Dashboard />
-                        </PrivateRoute>
+                        ) : (
+                            <MaintenancePage /> // Muestra la página de mantenimiento si no es administrador
+                        )
                     }
                 />
                 <Route
                     path="/articleList"
                     element={
-                        <ArticleList onAddToCart={onAddToCart} /> // Pasar la función para agregar artículos al carrito
+                        <ArticleList 
+                            onAddToCart={onAddToCart} 
+                            currentUser={currentUser} // Pasar el usuario actual
+                        />
                     }
                 />
             </Routes>
@@ -56,6 +66,7 @@ function App() {
                 total={total}
                 onRemoveFromCart={removeFromCart}
                 userId={userId} 
+                currentUser={currentUser} // Pasar el usuario actual
             /> 
         </Router>
     );
