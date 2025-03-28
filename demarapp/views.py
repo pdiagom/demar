@@ -80,8 +80,22 @@ class CartItemCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         # Asegúrate de que el artículo se agregue al carrito del usuario
-        cart = Cart.objects.get(user=self.request.user)
+        cart = get_object_or_404(Cart, user=self.request.user)
         serializer.save(cart=cart)
+        
+class CartItemDeleteView(generics.DestroyAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Filtrar únicamente los artículos que pertenecen al carrito del usuario autenticado
+        return self.queryset.filter(cart__user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()  # Obtiene el objeto a eliminar
+        self.perform_destroy(instance)  # Elimina el objeto
+        return Response(status=status.HTTP_204_NO_CONTENT)  # Devuelve un estado 204 No Content
 
 # REPORTES (Report)
 class ReportViewSet(viewsets.ModelViewSet):

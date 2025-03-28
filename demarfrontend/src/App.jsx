@@ -15,7 +15,7 @@ function App() {
     const [userId, setUserId] = useState(null); // Estado para el ID del usuario autenticado
 
     // Función para agregar un artículo al carrito
-    const addToCart = (article) => {
+    const onAddToCart = (article) => {
         setCartItems(prevItems => [...prevItems, article]); // Agrega el artículo al array del carrito
         setTotal(prevTotal => prevTotal + article.price); // Actualiza el total
     };
@@ -47,7 +47,7 @@ function App() {
                 <Route
                     path="/articleList"
                     element={
-                        <ArticleList onAddToCart={addToCart} /> // Pasar la función para agregar artículos al carrito
+                        <ArticleList onAddToCart={onAddToCart} /> // Pasar la función para agregar artículos al carrito
                     }
                 />
             </Routes>
@@ -56,7 +56,7 @@ function App() {
                 total={total}
                 onRemoveFromCart={removeFromCart}
                 userId={userId} 
-            /> {/* Renderizar el carrito */}
+            /> 
         </Router>
     );
 }

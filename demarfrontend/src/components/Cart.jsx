@@ -1,28 +1,27 @@
-
-
 import React, { useState, useEffect } from 'react';
 import cartService from '../services/cartService'; // Importar el servicio
 
 const Cart = () => {
+    const [cartId, setCartId] = useState(1); // Aquí se establece el ID del carrito, ajusta según tu lógica
     const [cart, setCart] = useState({ items: [], total: 0 });
 
     // Cargar el carrito al montar el componente
     useEffect(() => {
         const fetchCart = async () => {
             try {
-                const data = await cartService.fetchCart(); // Usar el servicio
+                const data = await cartService.fetchCart(cartId); // Usar el servicio con cartId
                 setCart(data);
             } catch (error) {
                 console.error('Error fetching cart:', error);
             }
         };
         fetchCart();
-    }, []);
+    }, [cartId]); // Dependencia del cartId
 
     // Agregar artículos al carrito
     const addToCart = async (articleId, quantity) => {
         try {
-            const addedItem = await cartService.addToCart(articleId, quantity); // Usar el servicio
+            const addedItem = await cartService.addToCart(cartId, articleId, quantity); // Usar el servicio con cartId
             setCart(prevCart => ({
                 ...prevCart,
                 items: [...prevCart.items, addedItem],
@@ -36,7 +35,7 @@ const Cart = () => {
     // Eliminar artículos del carrito
     const removeFromCart = async (itemId) => {
         try {
-            await cartService.removeFromCart(itemId); // Usar el servicio
+            await cartService.removeFromCart(cartId, itemId); // Usar el servicio con cartId
             setCart(prevCart => ({
                 ...prevCart,
                 items: prevCart.items.filter(item => item.id !== itemId),
@@ -50,7 +49,7 @@ const Cart = () => {
     // Actualizar la cantidad de un artículo
     const updateQuantity = async (itemId, newQuantity) => {
         try {
-            const updatedItem = await cartService.updateQuantity(itemId, newQuantity); // Usar el servicio
+            const updatedItem = await cartService.updateQuantity(cartId, itemId, newQuantity); // Usar el servicio con cartId
             setCart(prevCart => {
                 const updatedItems = prevCart.items.map(item => {
                     if (item.id === itemId) {
@@ -65,8 +64,8 @@ const Cart = () => {
             console.error('Error updating quantity:', error);
         }
     };
+
     const handleProceedToCheckout = () => {
-        
         alert('Esta funcionalidad se implementará en el futuro.');
     };
 

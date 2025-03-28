@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import CategorySelect from './CategorySelect';
 
-const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted, onAddToCart}) => {
+const ArticleItem = ({ article, categories, onAddToCart }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...article });
 
@@ -10,10 +10,13 @@ const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted, 
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleAddToCart = () => {
+        onAddToCart(article); // Llama a la función para agregar el artículo al carrito
+    };
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, formData);
+            await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, formData);
             setIsEditing(false);
         } catch (error) {
             console.error('Error actualizando artículo:', error);
@@ -23,13 +26,11 @@ const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted, 
     const handleDelete = async () => {
         try {
             await axios.delete(`http://localhost:8000/demar/articles/${article.idArticle}/`);
-            onArticleDeleted(article.idArticle); // Notifica que se eliminó el artículo
         } catch (error) {
             console.error('Error eliminando artículo:', error);
         }
     };
 
-    // Encuentra el nombre de la categoría correspondiente usando categoryId
     const category = categories.find(cat => cat.idCategory === article.categoryId);
     const categoryName = category ? category.name : 'Categoría no encontrada';
 
@@ -50,12 +51,12 @@ const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted, 
                     <h2>{article.name}</h2>
                     <p>Referencia: {article.numRef}</p>
                     <p>Descripción: {article.description}</p>
-                    <p>Precio: {article.price}</p>
+                    <p>Precio: ${article.price}</p>
                     <p>Stock: {article.stock}</p>
-                    <p>Categoría: {categoryName}</p> {/* Muestra el nombre de la categoría */}
+                    <p>Categoría: {categoryName}</p>
                     <button onClick={() => setIsEditing(true)}>Editar</button>
                     <button onClick={handleDelete}>Eliminar</button>
-                    <button onClick={() => onAddToCart(article)}>Agregar al Carrito</button>
+                    <button onClick={handleAddToCart}>Agregar al Carrito</button>
                 </div>
             )}
         </li>

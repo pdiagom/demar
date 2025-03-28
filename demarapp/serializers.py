@@ -61,12 +61,17 @@ class CartItemSerializer(serializers.ModelSerializer):
         model = CartItem
         fields = ['id', 'article', 'quantity']
         
+    def validate_article(self, value):
+        if not Article.objects.filter(id=value['idArticle']).exists():
+            raise serializers.ValidationError("El artículo no existe.")
+        return value
+        
 class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True, read_only=True, source='items')
+    items = CartItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Cart
-        fields = ['idCart', 'total', 'date', 'user']
+        fields = ['idCart', 'total', 'date', 'user', 'items']
 
 
         

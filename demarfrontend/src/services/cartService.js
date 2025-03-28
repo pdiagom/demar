@@ -6,43 +6,42 @@ import axios from 'axios';
 const API_URL = "http://localhost:8000/demar/cart";
 
 const cartService = {
-    fetchCart: async () => {
-        const token = localStorage.getItem('token'); // Obtiene el token del almacenamiento local o de donde lo estés almacenando
-        const response = await axios.get(API_URL, {
+    fetchCart: async (cartId) => {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${API_URL}/${cartId}/`, {
             headers: {
-                Authorization:`Token ${token}`
+                Authorization: `Token ${token}`
             }
         });
         return response.data;
     },
 
-    addToCart: async (articleId, quantity) => {
+    addToCart: async (cartId, articleId, quantity) => {
         const token = localStorage.getItem('token');
-        const response = await axios.post(`${API_URL}items/`, {
-            article: { idArticle: articleId },
+        const response = await axios.post(`${API_URL}/${cartId}/items/${articleId}`, {
             quantity: quantity,
         }, {
             headers: {
-                Authorization: token ? `Token ${token}` : ''
+                Authorization: `Token ${token}`
             }
         });
         return response.data;
     },
 
-    removeFromCart: async (itemId) => {
+    removeFromCart: async (cartId, itemId) => {
         const token = localStorage.getItem('token');
-        await axios.delete(`${API_URL}items/${itemId}/`, {
+        await axios.delete(`${API_URL}/${cartId}/items/${itemId}/`, { // Añadir el ID del carrito a la URL
             headers: {
-                Authorization: token ? `Token ${token}` : ''
+                Authorization: `Token ${token}`
             }
         });
     },
 
-    updateQuantity: async (itemId, newQuantity) => {
+    updateQuantity: async (cartId, itemId, newQuantity) => {
         const token = localStorage.getItem('token');
-        const response = await axios.patch(`${API_URL}items/${itemId}/`, { quantity: newQuantity }, {
+        const response = await axios.patch(`${API_URL}/${cartId}/items/${itemId}/`, { quantity: newQuantity }, { // Añadir el ID del carrito a la URL
             headers: {
-                Authorization: token ? `Token ${token}` : ''
+                Authorization: `Token ${token}`
             }
         });
         return response.data;
