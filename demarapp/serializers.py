@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Article, Category, User, Order, Cart, Report
+from .models import Article, Category, User, Order, Cart,CartItem, Report
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -54,15 +54,22 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['idOrder', 'orderItem', 'total', 'date', 'status', 'paymentMethod', 'userId']
+class CartItemSerializer(serializers.ModelSerializer):
+    article = ArticleSerializer()  # Incluir información del artículo
 
+    class Meta:
+        model = CartItem
+        fields = ['id', 'article', 'quantity']
+        
 class CartSerializer(serializers.ModelSerializer):
-    cartItem = ArticleSerializer(many=True)  # Para incluir los artículos dentro del carrito
-    userId = UserSerializer()  # Para incluir los detalles del usuario que tiene el carrito
+    items = CartItemSerializer(many=True, read_only=True, source='items')
 
     class Meta:
         model = Cart
-        fields = ['idCart', 'cartItem', 'total', 'date', 'userId']
+        fields = ['idCart', 'total', 'date', 'user']
 
+
+        
 class ReportSerializer(serializers.ModelSerializer):
     userId = UserSerializer()  # Para incluir los detalles del usuario que creó el informe
 

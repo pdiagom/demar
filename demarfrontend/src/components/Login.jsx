@@ -16,7 +16,7 @@ const Login = ({ setUserId }) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8000/demar/login/', credentials);
-            localStorage.setItem("token", response.data.access);
+            localStorage.setItem("token", response.data.token);
             setUserId(response.data.userId); 
             navigate('/dashboard');
         } catch (error) {

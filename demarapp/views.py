@@ -2,10 +2,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework import status, generics
-from .models import Article, Category, User, Order, Cart, Report
+from .models import Article, Category, User, Order, Cart,CartItem, Report
 from .serializers import (
     ArticleSerializer, CategorySerializer, LoginSerializer, UserSerializer,
-    OrderSerializer, CartSerializer, ReportSerializer,RegisterSerializer
+    OrderSerializer, CartSerializer,CartItemSerializer, ReportSerializer,RegisterSerializer
 )
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
@@ -64,12 +64,24 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Order.objects.filter(user=self.request.user)  # Solo pedidos del usuario autenticado
 
 # CARRITO (Cart)
-class CartViewSet(viewsets.ModelViewSet):    
+class CartDetailView(generics.RetrieveUpdateAPIView):
+    queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)  # Solo el carrito del usuario autenticado
+        # Filtrar carrito por el usuario autenticado
+        return self.queryset.filter(user=self.request.user)
+
+class CartItemCreateView(generics.CreateAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        # Asegúrate de que el artículo se agregue al carrito del usuario
+        cart = Cart.objects.get(user=self.request.user)
+        serializer.save(cart=cart)
 
 # REPORTES (Report)
 class ReportViewSet(viewsets.ModelViewSet):

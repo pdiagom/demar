@@ -14,15 +14,19 @@ function App() {
     const [total, setTotal] = useState(0);
     const [userId, setUserId] = useState(null); // Estado para el ID del usuario autenticado
 
+    // Función para agregar un artículo al carrito
     const addToCart = (article) => {
-        setCartItems(prevItems => [...prevItems, article]);
-        setTotal(prevTotal => prevTotal + article.price);
+        setCartItems(prevItems => [...prevItems, article]); // Agrega el artículo al array del carrito
+        setTotal(prevTotal => prevTotal + article.price); // Actualiza el total
     };
 
+    // Función para eliminar un artículo del carrito
     const removeFromCart = (idArticle) => {
         const itemToRemove = cartItems.find(item => item.idArticle === idArticle);
-        setCartItems(prevItems => prevItems.filter(item => item.idArticle !== idArticle));
-        setTotal(prevTotal => prevTotal - itemToRemove.price);
+        if (itemToRemove) {
+            setCartItems(prevItems => prevItems.filter(item => item.idArticle !== idArticle)); // Elimina el artículo del carrito
+            setTotal(prevTotal => prevTotal - itemToRemove.price); // Actualiza el total
+        }
     };
 
     return (
@@ -43,11 +47,16 @@ function App() {
                 <Route
                     path="/articleList"
                     element={
-                        <ArticleList onAddToCart={addToCart} />
+                        <ArticleList onAddToCart={addToCart} /> // Pasar la función para agregar artículos al carrito
                     }
                 />
             </Routes>
-            <Cart cartItems={cartItems} total={total} onRemoveFromCart={removeFromCart} userId={userId} /> {/* Renderizar el carrito */}
+            <Cart
+                cartItems={cartItems}
+                total={total}
+                onRemoveFromCart={removeFromCart}
+                userId={userId} 
+            /> {/* Renderizar el carrito */}
         </Router>
     );
 }

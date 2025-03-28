@@ -73,14 +73,26 @@ class Order(models.Model):
     
 class Cart(models.Model):
     idCart = models.AutoField(primary_key=True)
-    cartItem = models.ManyToManyField(Article)
-    total = models.FloatField()
-    date = models.DateField()
-    userId = models.ForeignKey('User', on_delete=models.CASCADE)
+    total = models.FloatField(default=0.0)
+    date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    
+    def calculate_total(self):
+        total = sum(item.article.price * item.quantity for item in self.items.all())
+        self.total = total
+        self.save()
     
     def __str__(self):
         return str(self.idCart)
     
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)  
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)  
+    quantity = models.PositiveIntegerField(default=1)  
+
+    def __str__(self):
+        return f"{self.quantity} x {self.article.name} in Cart {self.cart.idCart}"   
+
 class Report(models.Model):
     idReport = models.AutoField(primary_key=True)
     description = models.TextField( null= False, blank= False)

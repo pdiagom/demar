@@ -14,7 +14,6 @@ const ArticleItem = ({ article, categories, onArticleUpdated, onArticleDeleted, 
         e.preventDefault();
         try {
             const response = await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, formData);
-            onArticleUpdated(response.data); // Notifica el artículo actualizado
             setIsEditing(false);
         } catch (error) {
             console.error('Error actualizando artículo:', error);
