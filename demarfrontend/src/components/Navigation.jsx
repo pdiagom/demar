@@ -8,7 +8,9 @@ const Navigation = () => {
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("currentUser");
+        
         navigate("/login");
+        window.location.reload();
     };
 
     return (

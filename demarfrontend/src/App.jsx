@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useState } from "react"; // Importa useState para manejar el estado
+import { useState, useEffect } from "react"; // Importa useEffect para manejar efectos secundarios
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import MaintenancePage from "./components/MaintenancePage"; // Importa el nuevo componente
-import PrivateRoute from "./components/PrivateRoute";
 import Navigation from "./components/Navigation";
+import PrivateRoute from "./components/PrivateRoute"; // Importa el componente de ruta privada
 import ArticleList from "./components/ArticleList";
 import Cart from "./components/Cart"; // Importa el componente Cart
 import "./styles/styles.css";
@@ -14,7 +14,13 @@ function App() {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
     const [userId, setUserId] = useState(null); // Estado para el ID del usuario autenticado
-    const [currentUser, setCurrentUser] = useState(null); // Estado para el usuario autenticado
+    const [currentUser, setCurrentUser] = useState(null); // Estado para el usuario actual
+    
+    // Usar useEffect para cargar el usuario actual desde localStorage
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        setCurrentUser(user);
+    }, [currentUser]); // Se ejecuta una vez al montar el componente
 
     // Función para agregar un artículo al carrito
     const onAddToCart = (article) => {
@@ -41,13 +47,16 @@ function App() {
                     path="/login" 
                     element={<Login setUserId={setUserId} setCurrentUser={setCurrentUser} />} 
                 />
+                
                 <Route
                     path="/dashboard"
                     element={
-                        currentUser && currentUser.role === 1 ? ( // Verifica si el usuario es administrador
-                            <Dashboard />
+                        currentUser && currentUser === 1 ? (
+                            <PrivateRoute><Dashboard /></PrivateRoute> 
+                            
                         ) : (
-                            <MaintenancePage /> // Muestra la página de mantenimiento si no es administrador
+                            <PrivateRoute><MaintenancePage /></PrivateRoute>
+                             // Muestra la página de mantenimiento si no es administrador
                         )
                     }
                 />

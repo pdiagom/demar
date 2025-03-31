@@ -20,7 +20,7 @@ const Login = ({ setUserId, setCurrentUser }) => {
         setUserId(response.data.userId); 
         setCurrentUser(response.data.user); // Establecer el usuario actual con el rol
         // Almacenar el usuario en localStorage
-        localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+        localStorage.setItem("currentUser", JSON.stringify(response.data.user.role));
         navigate('/dashboard');
     } catch (error) {
         console.error('Error en el inicio de sesión:', error);

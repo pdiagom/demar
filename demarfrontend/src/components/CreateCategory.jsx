@@ -22,11 +22,12 @@ const CreateCategory = () => {
             setSuccess('Categoría creada con éxito');
             setName('');
             setDescription('');
-
             // Limitar el mensaje de éxito a 3 segundos
             setTimeout(() => {
                 setSuccess(''); // Limpia el mensaje de éxito después de 3 segundos
+                window.location.reload(); // Recargar la página para ver la nueva categoría
             }, 3000);
+
         } catch (error) {
             setError('Error al crear la categoría');
 

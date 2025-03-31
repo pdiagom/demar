@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CategorySelect from './CategorySelect';
 
 const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...article });
+
+    // Efecto para sincronizar formData con los cambios en article
+    useEffect(() => {
+        setFormData({ ...article });
+    }, [article]);
 
     const handleEditChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,6 +24,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
         try {
             await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, formData);
             setIsEditing(false);
+            window.location.reload();
         } catch (error) {
             console.error('Error actualizando artículo:', error);
         }
@@ -27,6 +33,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const handleDelete = async () => {
         try {
             await axios.delete(`http://localhost:8000/demar/articles/${article.idArticle}/`);
+            window.location.reload();
         } catch (error) {
             console.error('Error eliminando artículo:', error);
         }
@@ -55,12 +62,12 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                     <p>Precio: ${article.price}</p>
                     <p>Stock: {article.stock}</p>
                     <p>Categoría: {categoryName}</p>
-                    {user && user.role === 1 && ( // Verifica si el usuario es admin
+                    {user && user === 1 && ( // Verifica si el usuario es admin
                         <>
                             <button onClick={() => setIsEditing(true)}>Editar</button>
                             <button onClick={handleDelete}>Eliminar</button>
                         </>
-                    )}
+                    )||""}
                     <button onClick={handleAddToCart}>Agregar al Carrito</button>
                 </div>
             )}
