@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
@@ -68,6 +69,30 @@ class Order(models.Model):
     paymentMethod = models.CharField(max_length=100)
     userId = models.ForeignKey('User', on_delete=models.CASCADE)
     
+    
+    STATUS_CHOICES = [
+        ('Pendiente', 'Pendiente'),
+        ('En Proceso', 'En Proceso'),
+        ('Completado', 'Completado'),
+        ('Cancelado', 'Cancelado'),
+    ]
+    
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='Pendiente')
+    @classmethod
+    def create_order(cls, cart):
+        order = cls.objects.create(
+            userId=cart.user,
+            total=cart.total,
+            date=timezone.now(),
+            status="Pendiente",  # O el estado que desees
+            paymentMethod="Tarjeta",  # Cambiar según el método de pago
+        )
+        order.orderItem.set(cart.items.all())
+        cart.items.all().delete()  # Vaciar el carrito después de crear el pedido
+        cart.total = 0.0  # Reiniciar total del carrito
+        cart.save()
+        return order
+    
     def __str__(self):
         return str(self.idOrder)
     
@@ -80,6 +105,13 @@ class Cart(models.Model):
     def calculate_total(self):
         total = sum(item.article.price * item.quantity for item in self.items.all())
         self.total = total
+        self.save()
+        
+    def checkout(self):
+        # Aquí iría la lógica de procesamiento de pago (no implementada aquí)
+        # Por simplicidad, solo vaciamos el carrito
+        self.items.all().delete()
+        self.total = 0.0
         self.save()
     
     def __str__(self):

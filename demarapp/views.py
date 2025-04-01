@@ -57,45 +57,42 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 # PEDIDOS (Order)
 class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Solo usuarios autenticados
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request):
+        cart = Cart.objects.get(user=request.user)
+        order = Order.create_order(cart)
+        serializer = self.get_serializer(order)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)  # Solo pedidos del usuario autenticado
-
+        return self.queryset.filter(userId=self.request.user)
 # CARRITO (Cart)
-class CartDetailView(generics.RetrieveUpdateAPIView):
+class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # Filtrar carrito por el usuario autenticado
         return self.queryset.filter(user=self.request.user)
 
-class CartItemCreateView(generics.CreateAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
+class CheckoutView(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        # Asegúrate de que el artículo se agregue al carrito del usuario
-        cart = get_object_or_404(Cart, user=self.request.user)
-        serializer.save(cart=cart)
-        
-class CartItemDeleteView(generics.DestroyAPIView):
+    def create(self, request):
+        cart = Cart.objects.get(user=request.user)
+        cart.checkout()
+        return Response({"message": "Compra procesada exitosamente."}, status=status.HTTP_200_OK)
+
+class CartItemViewSet(viewsets.ModelViewSet):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # Filtrar únicamente los artículos que pertenecen al carrito del usuario autenticado
         return self.queryset.filter(cart__user=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()  # Obtiene el objeto a eliminar
-        self.perform_destroy(instance)  # Elimina el objeto
-        return Response(status=status.HTTP_204_NO_CONTENT)  # Devuelve un estado 204 No Content
 
 # REPORTES (Report)
 class ReportViewSet(viewsets.ModelViewSet):

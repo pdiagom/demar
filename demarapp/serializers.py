@@ -48,12 +48,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    orderItem = ArticleSerializer(many=True)  # Para incluir los artículos dentro del pedido
-    userId = UserSerializer()  # Para incluir los detalles del usuario que hizo la orden
-
     class Meta:
         model = Order
-        fields = ['idOrder', 'orderItem', 'total', 'date', 'status', 'paymentMethod', 'userId']
+        fields = '__all__'
 class CartItemSerializer(serializers.ModelSerializer):
     article = ArticleSerializer()  # Incluir información del artículo
 
