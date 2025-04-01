@@ -59,7 +59,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                     <h2>{article.name}</h2>
                     <p>Referencia: {article.numRef}</p>
                     <p>Descripción: {article.description}</p>
-                    <p>Precio: ${article.price}</p>
+                    <p>Precio: {article.price}€</p>
                     <p>Stock: {article.stock}</p>
                     <p>Categoría: {categoryName}</p>
                     {user && user === 1 && ( // Verifica si el usuario es admin

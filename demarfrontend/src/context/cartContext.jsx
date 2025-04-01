@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useReducer } from 'react';
 
 // Crear el contexto
@@ -34,6 +33,7 @@ const cartReducer = (state, action) => {
                 };
             }
         case 'REMOVE_FROM_CART':
+            // Eliminar completamente el artículo del carrito
             const updatedItems = state.cartItems.filter(item => item.article.idArticle !== action.payload.idArticle);
             const itemToRemove = state.cartItems.find(item => item.article.idArticle === action.payload.idArticle);
             return {
@@ -41,6 +41,27 @@ const cartReducer = (state, action) => {
                 cartItems: updatedItems,
                 total: state.total - (itemToRemove ? itemToRemove.article.price * itemToRemove.quantity : 0),
             };
+        case 'DECREASE_QUANTITY':
+            // Disminuir la cantidad de un artículo
+            const itemIndex = state.cartItems.findIndex(item => item.article.idArticle === action.payload.idArticle);
+            if (itemIndex >= 0) {
+                const updatedCartItems = [...state.cartItems];
+                const item = updatedCartItems[itemIndex];
+                
+                // Si la cantidad es 1, eliminamos el artículo
+                if (item.quantity === 1) {
+                    return cartReducer(state, { type: 'REMOVE_FROM_CART', payload: item });
+                } else {
+                    // De lo contrario, disminuimos la cantidad
+                    item.quantity -= 0.5;
+                    return {
+                        ...state,
+                        cartItems: updatedCartItems,
+                        total: state.total - item.article.price,
+                    };
+                }
+            }
+            return state; // Si no se encuentra el artículo, devolvemos el estado actual
         case 'CLEAR_CART':
             return initialState;
         default:
