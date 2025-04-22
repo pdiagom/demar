@@ -5,6 +5,7 @@ import CategorySelect from './CategorySelect';
 const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...article });
+    const [newImage, setNewImage] = useState(null);
 
     // Efecto para sincronizar formData con los cambios en article
     useEffect(() => {
@@ -14,15 +15,33 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const handleEditChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
-
+    const handleImageChange = (e) => {
+        setNewImage(e.target.files[0]);
+    };
+    
     const handleAddToCart = () => {
         onAddToCart(article); // Llama a la función para agregar el artículo al carrito
     };
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
+        const updatedFormData = new FormData();
+        
+        // Añadir todos los campos de formData al FormData
+        Object.keys(formData).forEach(key => {
+            updatedFormData.append(key, formData[key]);
+        });
+        // Añadir la nueva imagen al FormData si existe
+        if (newImage) {
+            updatedFormData.append('image', newImage);
+        }
+
         try {
-            await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, formData);
+            await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, updatedFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Asegúrate de que el tipo de contenido es el correcto
+                },
+            });
             setIsEditing(false);
             window.location.reload();
         } catch (error) {
@@ -51,23 +70,28 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                     <textarea name="description" value={formData.description} onChange={handleEditChange} required></textarea>
                     <input type="number" name="price" value={formData.price} onChange={handleEditChange} required />
                     <input type="number" name="stock" value={formData.stock} onChange={handleEditChange} required />
+                    <input type="file" onChange={handleImageChange} accept="image/*" />
                     <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: parseInt(e.target.value, 10) })} required />
                     <button type="submit">Actualizar</button>
                 </form>
             ) : (
                 <div>
                     <h2>{article.name}</h2>
+                    {article.image && ( // Condición para mostrar la imagen solo si existe
+                        <img className="article" src={article.image} alt={article.name} />
+                    )}
                     <p>Referencia: {article.numRef}</p>
                     <p>Descripción: {article.description}</p>
                     <p>Precio: {article.price}€</p>
                     <p>Stock: {article.stock}</p>
                     <p>Categoría: {categoryName}</p>
+                    
                     {user && user === 1 && ( // Verifica si el usuario es admin
                         <>
                             <button onClick={() => setIsEditing(true)}>Editar</button>
                             <button onClick={handleDelete}>Eliminar</button>
                         </>
-                    )||""}
+                    )}
                     <button onClick={handleAddToCart}>Agregar al Carrito</button>
                 </div>
             )}

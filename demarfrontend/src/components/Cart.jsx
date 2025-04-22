@@ -25,10 +25,10 @@ const Cart = () => {
             {cartItems.length === 0 ? (
                 <p>Tu carrito está vacío.</p>
             ) : (
-                <div>
-                    <ul>
+                <div className='cart'>
+                    <ul className='carrito'>
                         {cartItems.map((item) => (
-                            <li key={item.article.idArticle}>
+                            <li className='articleItem' key={item.article.idArticle}>
                                 {item.article.name} - {item.article.price}€
                                 <div>
                                     <button onClick={() => handleDecrease(item.article)}>-</button>

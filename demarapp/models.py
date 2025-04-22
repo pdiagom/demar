@@ -47,7 +47,9 @@ class Article(models.Model):
     description = models.TextField()
     price = models.FloatField( null= False, blank= False)
     stock = models.IntegerField( null= False, blank= False)
+    image = models.ImageField(upload_to='media/articles/', null=True, blank=True)
     categoryId = models.ForeignKey('Category', on_delete=models.CASCADE)
+    
     
     def __str__(self):
         return str(self.idArticle)
@@ -84,7 +86,7 @@ class Order(models.Model):
             userId=cart.user,
             total=cart.total,
             date=timezone.now(),
-            status="Pendiente",  # O el estado que desees
+            status="Pendiente",  
             paymentMethod="Tarjeta",  # Cambiar según el método de pago
         )
         order.orderItem.set(cart.items.all())

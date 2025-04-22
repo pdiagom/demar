@@ -42,7 +42,7 @@ class LoginView(generics.GenericAPIView):
 # ARTÍCULOS (Article)
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
-    permission_classes = [permissions.AllowAny]  # Permitir acceso sin autenticación
+    permission_classes = [permissions.AllowAny]  
     serializer_class = ArticleSerializer
   
 

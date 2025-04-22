@@ -59,7 +59,12 @@ input, textarea, select {
 
 /* Listas */
 ul {
+    max-width: 90%;
+    justify-self: center;
     list-style-type: none; /* Sin viñetas */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 li {
@@ -67,5 +72,37 @@ li {
     border: 1px solid #007bff; /* Borde azul */
     border-radius: 5px; /* Bordes redondeados */
     padding: 15px; /* Espaciado interno */
+    margin-left: 20px;;
     margin-bottom: 10px; /* Espaciado inferior */
+    width: calc(20% - 20px);
+    display: flex;
+    align-items: end;
+
+}
+.article{
+     width: 100%;
+     max-width: 200px;
+     height: auto;
+     border-radius: 4px;
+     margin-bottom: 10px;
+}
+
+.carrito{
+    width: 90%;
+    justify-self: center;
+    list-style-type: none; /* Sin viñetas */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.articleItem{
+    background-color: #e7f0ff; /* Fondo azul claro para artículos */
+    border: 1px solid #007bff; /* Borde azul */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 15px; /* Espaciado interno */
+    margin-left: 20px;;
+    margin-bottom: 10px; /* Espaciado inferior */
+    width: 80%;
+    display: flex;
+    align-items: end;
 }
