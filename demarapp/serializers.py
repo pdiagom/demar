@@ -38,7 +38,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ['idArticle', 'name', 'numRef', 'description', 'price', 'stock', 'image', 'categoryId']
+        fields ='__all__'
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

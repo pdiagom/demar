@@ -14,32 +14,43 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
 
     const handleEditChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        
     };
+
     const handleImageChange = (e) => {
         setNewImage(e.target.files[0]);
     };
-    
+
     const handleAddToCart = () => {
-        onAddToCart(article); // Llama a la función para agregar el artículo al carrito
+        onAddToCart(article);
     };
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         const updatedFormData = new FormData();
-        
+
         // Añadir todos los campos de formData al FormData
         Object.keys(formData).forEach(key => {
+            if (key !== 'image') { // No añadir la imagen aquí, la añadiremos más tarde
             updatedFormData.append(key, formData[key]);
+            }
         });
-        // Añadir la nueva imagen al FormData si existe
+
+        // Solo añadir la nueva imagen al FormData si se ha cambiado
         if (newImage) {
             updatedFormData.append('image', newImage);
-        }
+          } else if (formData['image'] instanceof File) {
+            updatedFormData.append('image', formData['image']);
+          }
+          // Si no hay nueva imagen y la imagen existente no es un File, no la incluyas
+          
+
+        console.log('Datos a enviar:', Array.from(updatedFormData.entries()));
 
         try {
             await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, updatedFormData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Asegúrate de que el tipo de contenido es el correcto
+                    'Content-Type': 'multipart/form-data',
                 },
             });
             setIsEditing(false);
