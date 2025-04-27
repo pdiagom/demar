@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import Article, Category, User, Order, Cart,CartItem, Report
@@ -61,9 +62,21 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def create(self, request):
-        cart = Cart.objects.get(user=request.user)
+    @action(detail=False, methods=['post'])
+    def create_order_from_cart(self, request):
+        cart_id = request.data.get('cartId')
+        payment_method = request.data.get('paymentMethod')
+
+        try:
+            cart = Cart.objects.get(idCart=cart_id, user=request.user)
+        except Cart.DoesNotExist:
+            return Response({'error': 'Carrito no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Crear la orden usando tu método de clase
         order = Order.create_order(cart)
+        order.paymentMethod = payment_method
+        order.save()
+
         serializer = self.get_serializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -77,7 +90,29 @@ class CartViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+    @action(detail=False, methods=['post'])
+    def create_cart_with_items(self, request):
+        user = request.user
+        items = request.data.get('items', [])
+        
+        if not items:
+            return Response({'error': 'No hay artículos en el carrito.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Crear el carrito vacío
+        cart = Cart.objects.create(user=user)
+        
+        # Crear los items
+        for item in items:
+            CartItem.objects.create(
+                cart=cart,
+                article_id=item['article']['idArticle'],
+                quantity=item['quantity']
+            )
+        
+        # Calcular total
+        cart.calculate_total()
+        
+        return Response({'message': 'Carrito creado exitosamente.', 'cart_id': cart.idCart}, status=status.HTTP_201_CREATED)
 class CheckoutView(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 

@@ -9,6 +9,9 @@ import PrivateRoute from "./components/PrivateRoute"; // Importa el componente d
 import ArticleList from "./components/ArticleList";
 import Cart from "./components/Cart"; // Importa el componente Cart
 import "./styles/styles.css";
+import CheckoutPage from "./components/CheckOutPage";
+
+
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
@@ -47,7 +50,7 @@ function App() {
                     path="/login" 
                     element={<Login setUserId={setUserId} setCurrentUser={setCurrentUser} />} 
                 />
-                
+                <Route path="/checkout/:cartId" element={<CheckoutPage />} />
                 <Route
                     path="/dashboard"
                     element={

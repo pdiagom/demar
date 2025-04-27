@@ -46,6 +46,16 @@ const cartService = {
         });
         return response.data;
     },
+    saveCart: async (items) => {
+        const token = localStorage.getItem('token');
+        const response = await axios.post(`http://localhost:8000/demar/cart/create_cart_with_items/`, { items }, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        });
+        return response.data;
+    },
+    
 };
 
 export default cartService;

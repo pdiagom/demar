@@ -2,11 +2,13 @@
 
 import React from 'react';
 import { useCart } from '../context/cartContext';
-
+import cartService from '../services/cartService';
+import { useNavigate } from 'react-router-dom';
 const Cart = () => {
     const { state, dispatch } = useCart();
     const { cartItems, total } = state;
-
+    const navigate = useNavigate();
+    
     const handleIncrease = (article) => {
         dispatch({ type: 'ADD_TO_CART', payload: { article, quantity: 1 } });
     };
@@ -19,6 +21,17 @@ const Cart = () => {
         dispatch({ type: 'REMOVE_FROM_CART', payload: article });
     };
 
+    const handleSaveCart = async () => {
+        try {
+            const response = await cartService.saveCart(cartItems);
+            const cartId = response.cart_id;
+            alert('Carrito guardado exitosamente.');
+            navigate(`/checkout/${cartId}`); // Redirige al Checkout
+        } catch (error) {
+            console.error('Error al guardar el carrito:', error);
+            alert('Hubo un error al guardar el carrito.');
+        }
+    };
     return (
         <div className="cart-container">
             <h2>Carrito de Compras</h2>
@@ -40,6 +53,7 @@ const Cart = () => {
                         ))}
                     </ul>
                     <h3>Total: {total}€</h3>
+                    <button onClick={handleSaveCart}>Guardar Carrito</button>
                 </div>
             )}
         </div>
