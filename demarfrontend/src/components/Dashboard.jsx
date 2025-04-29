@@ -1,39 +1,34 @@
-import React, { useEffect, useState } from "react"; // Asegúrate de importar useEffect y useState
-import CreateArticle from './CreateArticle';
-import ArticleItem from './ArticleItem';
-import CreateCategory from './CreateCategory'; // Importamos el nuevo componente
-import { getCategories } from '../services/categoryService'; // Asegúrate de importar esto
+
+import React, { useEffect, useState } from 'react';
 
 const Dashboard = () => {
-    const [articles, setArticles] = useState([]); // Estado para los artículos
-    const [categories, setCategories] = useState([]); // Estado para las categorías
+    const [user, setUser] = useState(null);
 
-    // Función para manejar la creación de un nuevo artículo
-    const handleArticleCreated = (newArticle) => {
-        setArticles([...articles, newArticle]); // Añade el nuevo artículo a la lista
-    };
-
-    // Función para cargar las categorías
-    const fetchCategories = async () => {
-        try {
-            const data = await getCategories(); // Llama a tu servicio para obtener categorías
-            setCategories(data);
-        } catch (error) {
-            console.error('Error al obtener las categorías:', error);
-        }
-    };
-
-    // Cargar categorías al montar el componente
     useEffect(() => {
-        fetchCategories();
-    }, []); // Se ejecuta solo una vez al montar
+        const userData = JSON.parse(localStorage.getItem('currentUser'));
+        if (userData) {
+            setUser(userData);
+        }
+    }, []);
 
+    
     return (
-        <div>
-            <h2>Dashboard</h2>
-            <p>Esta es una ruta protegida.</p>
-            <CreateArticle onArticleCreated={handleArticleCreated} />
-            <CreateCategory /> 
+        <div className="dashboard">
+            <h2>Mi Perfil</h2>
+            {user ? (
+                <div>
+                    <p><strong>Nombre de usuario:</strong> {user.username}</p>
+                    <p><strong>Email:</strong> {user.email}</p>
+                    <p><strong>Nombre:</strong> {user.name}</p>
+                    <p><strong>Teléfono:</strong> {user.phone || 'No proporcionado'}</p>
+                    <p><strong>Dirección:</strong> {user.address || 'No proporcionada'}</p>
+                    <p><strong>Ciudad:</strong> {user.city || 'No especificada'}</p>
+                    <p><strong>País:</strong> {user.country || 'No especificado'}</p>
+                    <p><strong>Código postal:</strong> {user.postalCode || 'No especificado'}</p>
+                </div>
+            ) : (
+                <p>No hay información del usuario disponible.</p>
+            )}
         </div>
     );
 };

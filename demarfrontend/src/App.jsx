@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react"; // Importa useEffect para manejar efectos secundarios
 import Register from "./components/Register";
+import Admin from "./components/Admin";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import MaintenancePage from "./components/MaintenancePage"; // Importa el nuevo componente
@@ -11,77 +12,87 @@ import Cart from "./components/Cart"; // Importa el componente Cart
 import "./styles/styles.css";
 import CheckoutPage from "./components/CheckOutPage";
 
-
-
 function App() {
-    const [cartItems, setCartItems] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [userId, setUserId] = useState(null); // Estado para el ID del usuario autenticado
-    const [currentUser, setCurrentUser] = useState(null); // Estado para el usuario actual
-    
-    // Usar useEffect para cargar el usuario actual desde localStorage
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        setCurrentUser(user);
-    }, [currentUser]); // Se ejecuta una vez al montar el componente
+  const [cartItems, setCartItems] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [userId, setUserId] = useState(null); // Estado para el ID del usuario autenticado
+  const [currentUser, setCurrentUser] = useState(null); // Estado para el usuario actual
 
-    // Función para agregar un artículo al carrito
-    const onAddToCart = (article) => {
-        setCartItems(prevItems => [...prevItems, article]); // Agrega el artículo al array del carrito
-        setTotal(prevTotal => prevTotal + article.price); // Actualiza el total
-    };
+  // Usar useEffect para cargar el usuario actual desde localStorage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    setCurrentUser(user);
+  }, [currentUser]); // Se ejecuta una vez al montar el componente
 
-    // Función para eliminar un artículo del carrito
-    const removeFromCart = (idArticle) => {
-        const itemToRemove = cartItems.find(item => item.idArticle === idArticle);
-        if (itemToRemove) {
-            setCartItems(prevItems => prevItems.filter(item => item.idArticle !== idArticle)); // Elimina el artículo del carrito
-            setTotal(prevTotal => prevTotal - itemToRemove.price); // Actualiza el total
-        }
-    };
+  // Función para agregar un artículo al carrito
+  const onAddToCart = (article) => {
+    setCartItems((prevItems) => [...prevItems, article]); // Agrega el artículo al array del carrito
+    setTotal((prevTotal) => prevTotal + article.price); // Actualiza el total
+  };
 
-    return (
-        <Router>
-            <h1 style={{ textAlign: "center" }}>Bienvenido a DEMAR</h1>
-            <Navigation />
-            <Routes>
-                <Route path="/register" element={<Register />} />
-                <Route 
-                    path="/login" 
-                    element={<Login setUserId={setUserId} setCurrentUser={setCurrentUser} />} 
-                />
-                <Route path="/checkout/:cartId" element={<CheckoutPage />} />
-                <Route
-                    path="/dashboard"
-                    element={
-                        currentUser && currentUser === 1 ? (
-                            <PrivateRoute><Dashboard /></PrivateRoute> 
-                            
-                        ) : (
-                            <PrivateRoute><MaintenancePage /></PrivateRoute>
-                             // Muestra la página de mantenimiento si no es administrador
-                        )
-                    }
-                />
-                <Route
-                    path="/articleList"
-                    element={
-                        <ArticleList 
-                            onAddToCart={onAddToCart} 
-                            currentUser={currentUser} // Pasar el usuario actual
-                        />
-                    }
-                />
-            </Routes>
-            <Cart
-                cartItems={cartItems}
-                total={total}
-                onRemoveFromCart={removeFromCart}
-                userId={userId} 
-                currentUser={currentUser} // Pasar el usuario actual
-            /> 
-        </Router>
-    );
+  // Función para eliminar un artículo del carrito
+  const removeFromCart = (idArticle) => {
+    const itemToRemove = cartItems.find((item) => item.idArticle === idArticle);
+    if (itemToRemove) {
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => item.idArticle !== idArticle)
+      ); // Elimina el artículo del carrito
+      setTotal((prevTotal) => prevTotal - itemToRemove.price); // Actualiza el total
+    }
+  };
+
+  return (
+    <Router>
+      <h1 style={{ textAlign: "center" }}>Bienvenido a DEMAR</h1>
+      <Navigation />
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <Login setUserId={setUserId} setCurrentUser={setCurrentUser} />
+          }
+        />
+        <Route path="/checkout/:cartId" element={<CheckoutPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            currentUser && currentUser === 1 ? (
+              <PrivateRoute>
+                <Admin />
+              </PrivateRoute>
+            ) : (
+              <MaintenancePage />
+            )
+          }
+        />
+        <Route
+          path="/articleList"
+          element={
+            <ArticleList
+              onAddToCart={onAddToCart}
+              currentUser={currentUser} // Pasar el usuario actual
+            />
+          }
+        />
+      </Routes>
+      <Cart
+        cartItems={cartItems}
+        total={total}
+        onRemoveFromCart={removeFromCart}
+        userId={userId}
+        currentUser={currentUser} // Pasar el usuario actual
+      />
+    </Router>
+  );
 }
 
 export default App;
