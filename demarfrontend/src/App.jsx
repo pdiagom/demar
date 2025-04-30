@@ -11,6 +11,8 @@ import ArticleList from "./components/ArticleList";
 import Cart from "./components/Cart"; // Importa el componente Cart
 import "./styles/styles.css";
 import CheckoutPage from "./components/CheckOutPage";
+import PasswordResetRequest from "./components/PasswordResetRequest";
+import PasswordResetConfirm from "./components/PasswordResetConfirm";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -83,6 +85,9 @@ function App() {
             />
           }
         />
+        <Route path="/password-reset" exact component={PasswordResetRequest} />
+        <Route path="/password-reset-confirm" element={<PasswordResetConfirm />} />
+
       </Routes>
       <Cart
         cartItems={cartItems}

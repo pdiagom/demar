@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ setUserId, setCurrentUser }) => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
+    const [showPasswordReset, setShowPasswordReset] = useState(false);
+    const [email, setEmail] = useState('');
+    const [resetMessage, setResetMessage] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -31,41 +34,69 @@ const Login = ({ setUserId, setCurrentUser }) => {
     }
 };
 
-
-    return (
-        <div>
-            {errorMessage && (
-                <div style={{
-                    backgroundColor: 'lightcoral',
-                    color: 'white',
-                    padding: '10px',
-                    marginBottom: '20px',
-                    borderRadius: '5px',
-                }}>
-                    {errorMessage}
-                </div>
-            )}
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="username"
-                    value={credentials.username}
-                    onChange={handleChange}
-                    placeholder="Usuario"
-                    required
-                />
-                <input
-                    type="password"
-                    name="password"
-                    value={credentials.password}
-                    onChange={handleChange}
-                    placeholder="Contraseña"
-                    required
-                />
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-        </div>
-    );
+const handlePasswordResetRequest = async (e) => {
+    e.preventDefault();
+    try {
+        await axios.post('http://localhost:8000/demar/password_reset/', { email });
+        setResetMessage('Se ha enviado un correo con instrucciones para restablecer tu contraseña.');
+    } catch (error) {
+        setResetMessage('Hubo un error al procesar tu solicitud.');
+    }
 };
+
+return (
+    <div>
+        {errorMessage && (
+            <div style={{
+                backgroundColor: 'lightcoral',
+                color: 'white',
+                padding: '10px',
+                marginBottom: '20px',
+                borderRadius: '5px',
+            }}>
+                {errorMessage}
+            </div>
+        )}
+        {!showPasswordReset ? (
+            <>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        name="username"
+                        value={credentials.username}
+                        onChange={handleChange}
+                        placeholder="Usuario"
+                        required
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        value={credentials.password}
+                        onChange={handleChange}
+                        placeholder="Contraseña"
+                        required
+                    />
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+                <button onClick={() => setShowPasswordReset(true)}>Olvidé mi contraseña</button>
+            </>
+        ) : (
+            <form onSubmit={handlePasswordResetRequest}>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Ingresa tu correo electrónico"
+                    required
+                />
+                <button type="submit">Solicitar reset de contraseña</button>
+                <button onClick={() => setShowPasswordReset(false)}>Volver al login</button>
+                {resetMessage && <p>{resetMessage}</p>}
+            </form>
+        )}
+    </div>
+);
+};
+
 
 export default Login;

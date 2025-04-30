@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'demarapp',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders'
+    'corsheaders',
+    'django_rest_passwordreset'
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,8 @@ WSGI_APPLICATION = 'demar.wsgi.application'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # URL de tu frontend en React
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -130,6 +132,22 @@ USE_TZ = True
 
 # Configurar el modelo de usuario personalizado
 AUTH_USER_MODEL = 'demarapp.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'pabloalosno@gmail.com'
+EMAIL_HOST_PASSWORD = 'wqcn yroi qxdn paxe'
+
+
+DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+    "CLASS": "django_rest_passwordreset.tokens.RandomStringTokenGenerator",
+    "OPTIONS": {
+        "min_length": 20,
+        "max_length": 30
+    }
+}
 
 # Configurar autenticación por defecto
 REST_FRAMEWORK = {

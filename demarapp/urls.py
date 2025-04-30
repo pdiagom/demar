@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from rest_framework import routers
 from demarapp.views import LoginView, RegisterView
 from .views import ArticleViewSet, CheckoutView, OrderViewSet, ReportViewSet,CartItemViewSet, CategoryViewSet,CartViewSet, UserProfileView
@@ -18,6 +18,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('checkout/', CheckoutView.as_view({'post': 'create'}), name='checkout'),
     path('users/me/', UserProfileView.as_view(), name='user_profile'),
+    path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
 
 urlpatterns += router.urls
