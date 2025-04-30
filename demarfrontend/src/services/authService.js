@@ -69,3 +69,27 @@ export const getCurrentUser = async () => {
         throw error;
     }
 };
+// En authService.js
+
+export const updateUser = async (userData) => {
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("No hay token de autenticación");
+        }
+
+        const response = await fetch(`${API_URL}users/me/`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+        return await handleResponse(response);
+    } catch (error) {
+        console.error("Error al actualizar datos del usuario:", error);
+        throw error;
+    }
+};
+

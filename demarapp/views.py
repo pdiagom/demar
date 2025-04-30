@@ -14,6 +14,7 @@ from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, RegisterSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 # USUARIOS (Users)
 User = get_user_model()
 class RegisterView(generics.CreateAPIView):
@@ -38,13 +39,19 @@ class LoginView(generics.GenericAPIView):
             return Response({"token": token.key, "user": UserSerializer(user).data}, status=status.HTTP_200_OK)
         return Response({"error": "Credenciales inválidas"}, status=status.HTTP_400_BAD_REQUEST)
 
-class CurrentUserView(APIView):
+class UserProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
+    def put(self, request):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 # ARTÍCULOS (Article)
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()

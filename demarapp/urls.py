@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework import routers
 from demarapp.views import LoginView, RegisterView
-from .views import ArticleViewSet, CheckoutView, CurrentUserView, OrderViewSet, ReportViewSet,CartItemViewSet, CategoryViewSet,CartViewSet
+from .views import ArticleViewSet, CheckoutView, OrderViewSet, ReportViewSet,CartItemViewSet, CategoryViewSet,CartViewSet, UserProfileView
 from .api import UserViewSet
 
 router = routers.DefaultRouter()
@@ -16,8 +16,8 @@ router.register(r'cart-items', CartItemViewSet)
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
-     path('checkout/', CheckoutView.as_view({'post': 'create'}), name='checkout'),
-      path('users/me/', CurrentUserView.as_view(), name='current_user'),
+    path('checkout/', CheckoutView.as_view({'post': 'create'}), name='checkout'),
+    path('users/me/', UserProfileView.as_view(), name='user_profile'),
 ]
 
 urlpatterns += router.urls
