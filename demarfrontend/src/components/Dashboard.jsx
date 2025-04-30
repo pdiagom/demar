@@ -1,17 +1,29 @@
-
 import React, { useEffect, useState } from 'react';
+import { getCurrentUser } from '../services/authService';
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem('currentUser'));
-        if (userData) {
-            setUser(userData);
-        }
+        const fetchUserData = async () => {
+            try {
+                const userData = await getCurrentUser();
+                setUser(userData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
     }, []);
 
-    
+    if (loading) return <p>Cargando datos del usuario...</p>;
+    if (error) return <p>Error: {error}</p>;
+
     return (
         <div className="dashboard">
             <h2>Mi Perfil</h2>

@@ -48,3 +48,24 @@ export const login = async (credentials) => {
         throw error; // Lanza el error para que pueda ser manejado en el componente
     }
 };
+
+export const getCurrentUser = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("No hay token de autenticación");
+        }
+
+        const response = await fetch(`${API_URL}users/me/`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`,  // Nota: Usamos 'Token' en lugar de 'Bearer'
+                "Content-Type": "application/json",
+            },
+        });
+        return await handleResponse(response);
+    } catch (error) {
+        console.error("Error al obtener datos del usuario actual:", error);
+        throw error;
+    }
+};
