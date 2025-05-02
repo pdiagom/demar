@@ -69,7 +69,18 @@ export const getCurrentUser = async () => {
         throw error;
     }
 };
-// En authService.js
+export const checkUserExists = async (username, email) => {
+    // Esta es una implementación simulada. En un caso real, harías una llamada a tu API.
+    const response = await fetch(`${API_URL}check-user/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, email }),
+    });
+    return response.json();
+  };
+  
 
 export const updateUser = async (userData) => {
     try {

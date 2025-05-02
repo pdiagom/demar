@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from demarapp.views import LoginView, RegisterView
-from .views import ArticleViewSet, CheckoutView, OrderViewSet, ReportViewSet,CartItemViewSet, CategoryViewSet,CartViewSet, UserProfileView
+from .views import ArticleViewSet, CheckUserExistsView, CheckoutView, OrderViewSet, ReportViewSet,CartItemViewSet, CategoryViewSet,CartViewSet, UserProfileView
 from .api import UserViewSet
 
 router = routers.DefaultRouter()
@@ -19,6 +19,7 @@ urlpatterns = [
     path('checkout/', CheckoutView.as_view({'post': 'create'}), name='checkout'),
     path('users/me/', UserProfileView.as_view(), name='user_profile'),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path('check-user/', CheckUserExistsView.as_view(), name='check_user'),
 ]
 
 urlpatterns += router.urls

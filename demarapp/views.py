@@ -17,6 +17,19 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 # USUARIOS (Users)
 User = get_user_model()
+
+class CheckUserExistsView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        email = request.data.get('email')
+
+        username_exists = User.objects.filter(username=username).exists() if username else False
+        email_exists = User.objects.filter(email=email).exists() if email else False
+
+        return Response({
+            'usernameExists': username_exists,
+            'emailExists': email_exists
+        }, status=status.HTTP_200_OK)
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
