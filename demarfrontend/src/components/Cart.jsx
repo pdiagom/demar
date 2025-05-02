@@ -25,7 +25,6 @@ const Cart = () => {
         try {
             const response = await cartService.saveCart(cartItems);
             const cartId = response.cart_id;
-            alert('Carrito guardado exitosamente.');
             navigate(`/checkout/${cartId}`); // Redirige al Checkout
         } catch (error) {
             console.error('Error al guardar el carrito:', error);

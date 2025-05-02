@@ -55,6 +55,20 @@ const cartService = {
         });
         return response.data;
     },
+    getCartDetails: async (cartId) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get(`${API_URL}/${cartId}/`, {
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching cart details:', error.response ? error.response.data : error.message);
+            throw error;
+        }
+    },
     
 };
 
