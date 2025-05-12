@@ -87,6 +87,21 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    @action(detail=True, methods=['put'])
+    def update_status(self, request, pk=None):
+        print(f"Received request to update status for order {pk}")
+        print(f"Request data: {request.data}")
+        order = self.get_object()
+        new_status = request.data.get('status')
+        if new_status:
+            order.status = new_status
+            order.save()
+            serializer = self.get_serializer(order)
+            print(f"Order {pk} updated successfully to status {new_status}")
+            return Response(serializer.data)
+        else:
+            print(f"Failed to update order {pk}: no status provided")
+            return Response({'status': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
     @action(detail=False, methods=['post'])
     def create_order_from_cart(self, request):
         cart_id = request.data.get('cartId')
@@ -106,7 +121,17 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = Order.create_order(cart, shipping_data)
         serializer = self.get_serializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def all_orders(self, request):
+        orders = Order.objects.all()
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):
         return self.queryset.filter(userId=self.request.user)
