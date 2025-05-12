@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import orderService from '../services/orderService';
 import cartService from '../services/cartService';
+import { getCurrentUser } from '../services/authService'; 
 
 const CheckoutPage = () => {
     const { cartId } = useParams();
@@ -19,40 +20,51 @@ const CheckoutPage = () => {
         cvv: ''
     });
 
-    useEffect(() => {
-        const fetchCartDetails = async () => {
-            try {
-                const details = await cartService.getCartDetails(cartId);
-                setCartDetails(details);
-            } catch (error) {
-                console.error('Error fetching cart details:', error);
-                alert('Error al cargar los detalles del carrito');
-            }
-        };
+   useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const [cartDetails, userData] = await Promise.all([
+                cartService.getCartDetails(cartId),
+                getCurrentUser() // Implementa este método en userService
+            ]);
+            setCartDetails(cartDetails);
+            setFormData(prevState => ({
+                ...prevState,
+                shippingAddress: userData.address || '',
+                city: userData.city || '',
+                postalCode: userData.postalCode || '',
+                country: userData.country || ''
+            }));
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            alert('Error al cargar los datos');
+        }
+    };
 
-        fetchCartDetails();
-    }, [cartId]);
+    fetchData();
+}, [cartId]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const orderData = {
-                cartId,
-                ...formData,
-                total: cartDetails.total
-            };
-            const order = await orderService.createOrderFromCart(orderData);
-            alert('¡Pedido realizado con éxito!');
-            navigate('/orders');
-        } catch (error) {
-            console.error('Error al crear el pedido:', error);
-            alert('Hubo un error al procesar el pedido.');
-        }
-    };
+    e.preventDefault();
+    try {
+        const orderData = {
+            cartId,
+            ...formData,
+            total: cartDetails.total
+        };
+        const order = await orderService.createOrderFromCart(orderData);
+        alert('¡Pedido realizado con éxito!');
+        navigate('/orders');
+    } catch (error) {
+        console.error('Error al crear el pedido:', error);
+        alert('Hubo un error al procesar el pedido.');
+    }
+};
+
 
     if (!cartDetails) {
         return <div>Cargando detalles del carrito...</div>;

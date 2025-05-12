@@ -66,8 +66,12 @@ class Order(models.Model):
     idOrder = models.AutoField(primary_key=True)
     orderItem = models.ManyToManyField(Article)
     total = models.FloatField()
-    date = models.DateField()
+    date = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=100)
+    shippingAddress = models.TextField(blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    postalCode = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
     paymentMethod = models.CharField(max_length=100)
     userId = models.ForeignKey('User', on_delete=models.CASCADE)
     
@@ -81,17 +85,24 @@ class Order(models.Model):
     
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='Pendiente')
     @classmethod
-    def create_order(cls, cart):
+    def create_order(cls, cart, shipping_data):
         order = cls.objects.create(
             userId=cart.user,
             total=cart.total,
-            date=timezone.now(),
-            status="Pendiente",  
-            paymentMethod="Tarjeta",  # Cambiar según el método de pago
+            status="Pendiente",
+            paymentMethod=shipping_data['paymentMethod'],
+            shippingAddress=shipping_data['shippingAddress'],
+            city=shipping_data['city'],
+            postalCode=shipping_data['postalCode'],
+            country=shipping_data['country']
         )
-        order.orderItem.set(cart.items.all())
-        cart.items.all().delete()  # Vaciar el carrito después de crear el pedido
-        cart.total = 0.0  # Reiniciar total del carrito
+        # Extraer los artículos de los CartItems y asignarlos a la orden
+        articles = [item.article for item in cart.items.all()]
+        order.orderItem.set(articles)
+        
+        # Vaciar el carrito después de crear el pedido
+        cart.items.all().delete()
+        cart.total = 0.0
         cart.save()
         return order
     

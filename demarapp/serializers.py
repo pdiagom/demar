@@ -48,6 +48,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    date = serializers.DateTimeField()
+    
     class Meta:
         model = Order
         fields = '__all__'

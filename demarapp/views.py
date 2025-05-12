@@ -90,20 +90,23 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def create_order_from_cart(self, request):
         cart_id = request.data.get('cartId')
-        payment_method = request.data.get('paymentMethod')
+        shipping_data = {
+            'paymentMethod': request.data.get('paymentMethod'),
+            'shippingAddress': request.data.get('shippingAddress'),
+            'city': request.data.get('city'),
+            'postalCode': request.data.get('postalCode'),
+            'country': request.data.get('country')
+        }
 
         try:
             cart = Cart.objects.get(idCart=cart_id, user=request.user)
         except Cart.DoesNotExist:
             return Response({'error': 'Carrito no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Crear la orden usando tu método de clase
-        order = Order.create_order(cart)
-        order.paymentMethod = payment_method
-        order.save()
-
+        order = Order.create_order(cart, shipping_data)
         serializer = self.get_serializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
     def get_queryset(self):
         return self.queryset.filter(userId=self.request.user)
