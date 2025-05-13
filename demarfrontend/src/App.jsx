@@ -13,6 +13,7 @@ import "./styles/styles.css";
 import CheckoutPage from "./components/CheckoutPage";
 import PasswordResetRequest from "./components/PasswordResetRequest";
 import PasswordResetConfirm from "./components/PasswordResetConfirm";
+import Superuser from "./components/SuperUser"; 
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -70,6 +71,18 @@ function App() {
             currentUser && currentUser === 1 ? (
               <PrivateRoute>
                 <Admin />
+              </PrivateRoute>
+            ) : (
+              <MaintenancePage />
+            )
+          }
+        />
+        <Route
+          path="/superuser"
+          element={
+            currentUser && currentUser === 2 ? (
+              <PrivateRoute>
+                <Superuser />
               </PrivateRoute>
             ) : (
               <MaintenancePage />

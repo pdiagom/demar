@@ -18,6 +18,7 @@ const Navigation = () => {
         <nav>
             <Link to="/dashboard">Dashboard</Link>
             {currentUser===1?(<Link to="/admin">Admin</Link>):("")}
+            {currentUser===2?(<Link to="/superuser">Superuser</Link>):("")}
             <Link to="/articleList">Articles</Link>
             { token ? (
                 <button onClick={handleLogout}>Logout</button>

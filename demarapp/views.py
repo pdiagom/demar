@@ -203,6 +203,20 @@ class CartItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(cart__user=self.request.user)
 
+
+
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 # REPORTES (Report)
 class ReportViewSet(viewsets.ModelViewSet):
     serializer_class = ReportSerializer
