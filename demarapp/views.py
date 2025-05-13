@@ -89,19 +89,16 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['put'])
     def update_status(self, request, pk=None):
-        print(f"Received request to update status for order {pk}")
-        print(f"Request data: {request.data}")
         order = self.get_object()
         new_status = request.data.get('status')
         if new_status:
             order.status = new_status
             order.save()
             serializer = self.get_serializer(order)
-            print(f"Order {pk} updated successfully to status {new_status}")
             return Response(serializer.data)
         else:
-            print(f"Failed to update order {pk}: no status provided")
-            return Response({'status': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': 'failed', 'message': 'Invalid or no status provided'}, 
+                            status=status.HTTP_400_BAD_REQUEST)
     @action(detail=False, methods=['post'])
     def create_order_from_cart(self, request):
         cart_id = request.data.get('cartId')

@@ -20,6 +20,7 @@ urlpatterns = [
     path('users/me/', UserProfileView.as_view(), name='user_profile'),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('check-user/', CheckUserExistsView.as_view(), name='check_user'),
+     path('orders/<int:pk>/update_status/', OrderViewSet.as_view({'put': 'update_status'}), name='update_status'),
 ]
 
 urlpatterns += router.urls

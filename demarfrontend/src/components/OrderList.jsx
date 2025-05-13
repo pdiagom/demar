@@ -20,13 +20,13 @@ const OrderList = () => {
         }
     };
 
-    const handleStatusChange = async (orderId, newStatus) => {
-    console.log(`Attempting to update order ${orderId} to status ${newStatus}`);
+   const handleStatusChange = async (idOrder, newStatus) => {
+    console.log(`Attempting to update order ${idOrder} to status ${newStatus}`);
     try {
-        const updatedOrder = await orderService.updateOrderStatus(orderId, newStatus);
+        const updatedOrder = await orderService.updateOrderStatus(idOrder, newStatus);
         console.log('Order updated successfully:', updatedOrder);
         setOrders(orders.map(order => 
-            order.idOrder === orderId ? {...order, status: newStatus} : order
+            order.idOrder === idOrder ? updatedOrder : order
         ));
         setEditingOrder(null);
     } catch (error) {
@@ -35,11 +35,11 @@ const OrderList = () => {
     }
 };
 
-    const handleDeleteOrder = async (orderId) => {
+    const handleDeleteOrder = async (idOrder) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este pedido?')) {
             try {
-                await orderService.deleteOrder(orderId);
-                setOrders(orders.filter(order => order.idOrder !== orderId));
+                await orderService.deleteOrder(idOrder);
+                setOrders(orders.filter(order => order.idOrder !== idOrder));
             } catch (error) {
                 console.error('Error al eliminar el pedido:', error);
                 setError('No se pudo eliminar el pedido. Por favor, intente de nuevo.');

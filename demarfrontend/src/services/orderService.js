@@ -77,11 +77,11 @@ const orderService = {
       throw error;
     }
   },
-  updateOrderStatus: async (orderId, newStatus) => {
+  updateOrderStatus: async (idOrder, newStatus) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
-        `${API_URL}/update_status/${orderId}/`,
+        `${API_URL}/${idOrder}/update_status/`,
         { status: newStatus },
         {
           headers: {
@@ -107,6 +107,7 @@ const orderService = {
           Authorization: `Token ${token}`,
         },
       });
+      return true; // Indicar éxito
     } catch (error) {
       console.error(
         "Error deleting order:",

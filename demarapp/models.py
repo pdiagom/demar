@@ -67,7 +67,6 @@ class Order(models.Model):
     orderItem = models.ManyToManyField(Article)
     total = models.FloatField()
     date = models.DateTimeField(default=timezone.now)
-    status = models.CharField(max_length=100)
     shippingAddress = models.TextField(blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     postalCode = models.CharField(max_length=100, blank=True, null=True)
