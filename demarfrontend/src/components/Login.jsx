@@ -77,8 +77,9 @@ return (
                         required
                     />
                     <button type="submit">Iniciar Sesión</button>
+                    <button onClick={() => setShowPasswordReset(true)}>Olvidé mi contraseña</button>
                 </form>
-                <button onClick={() => setShowPasswordReset(true)}>Olvidé mi contraseña</button>
+                
             </>
         ) : (
             <form onSubmit={handlePasswordResetRequest}>
@@ -89,7 +90,7 @@ return (
                     placeholder="Ingresa tu correo electrónico"
                     required
                 />
-                <button type="submit">Solicitar reset de contraseña</button>
+                <button type="submit">Solicitar cambio de contraseña</button>
                 <button onClick={() => setShowPasswordReset(false)}>Volver al login</button>
                 {resetMessage && <p>{resetMessage}</p>}
             </form>

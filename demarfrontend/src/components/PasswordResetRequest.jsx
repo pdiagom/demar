@@ -40,7 +40,7 @@ const PasswordResetRequest = () => {
                     placeholder="Ingresa tu correo electrónico"
                     required
                 />
-                <button type="submit">Solicitar reset de contraseña</button>
+                <button type="submit">Solicitar cambio de contraseña</button>
             </form>
             {message && (
                 <p className={isSuccess ? 'success' : ''}>{message}</p>

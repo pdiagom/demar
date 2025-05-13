@@ -139,7 +139,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'pabloalosno@gmail.com'
 EMAIL_HOST_PASSWORD = 'wqcn yroi qxdn paxe'
-
+DEFAULT_FROM_EMAIL = 'DEMAR <demar-no-reply@gmail.com>'
 
 DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
     "CLASS": "django_rest_passwordreset.tokens.RandomStringTokenGenerator",
