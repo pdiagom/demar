@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Article, Category, User, Order, Cart,CartItem, Report
+from .models import Article, Category, OrderItem, User, Order, Cart,CartItem, Report
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -47,12 +47,21 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 
+class OrderItemSerializer(serializers.ModelSerializer):
+    article_name = serializers.CharField(source='article.name', read_only=True)
+    article_price = serializers.FloatField(source='article.price', read_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = ['article', 'article_name', 'article_price', 'quantity']
+
 class OrderSerializer(serializers.ModelSerializer):
-    date = serializers.DateTimeField()
-    
+    items = OrderItemSerializer(many=True, read_only=True)
+
     class Meta:
         model = Order
         fields = '__all__'
+
 class CartItemSerializer(serializers.ModelSerializer):
     article = ArticleSerializer()  # Incluir información del artículo
 

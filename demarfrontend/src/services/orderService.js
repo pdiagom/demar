@@ -46,7 +46,7 @@ const orderService = {
   getUserOrders: async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`${API_URL}/user_orders/`, {
+      const response = await axios.get(`${API_URL}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -60,28 +60,28 @@ const orderService = {
       throw error;
     }
   },
+
   getAllOrders: async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(`${API_URL}/all_orders/`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error(
-        "Error fetching all orders:",
-        error.response ? error.response.data : error.message
-      );
-      throw error;
-    }
-  },
-  updateOrderStatus: async (idOrder, newStatus) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(`${API_URL}/all_orders/`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    console.log("Orders received:", response.data);  // Log para depuración
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all orders:", error);
+    throw error;
+  }
+},
+
+  updateOrderStatus: async (orderId, newStatus) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
-        `${API_URL}/${idOrder}/update_status/`,
+        `${API_URL}/${orderId}/update_status/`,
         { status: newStatus },
         {
           headers: {
@@ -116,6 +116,31 @@ const orderService = {
       throw error;
     }
   },
+
+  // Nuevo método para obtener los items de un pedido específico
+  getOrderItems: async (orderId) => {
+  const token = localStorage.getItem("token");
+  try {
+    console.log(`Fetching items for order ${orderId}`);
+    const response = await axios.get(`${API_URL}/${orderId}/items/`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    console.log("Order items received:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching order items:", error);
+    if (error.response) {
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response headers:", error.response.headers);
+    }
+    throw error;
+  }
+},
+
+
 };
 
 export default orderService;

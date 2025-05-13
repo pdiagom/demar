@@ -91,7 +91,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     def update_status(self, request, pk=None):
         order = self.get_object()
         new_status = request.data.get('status')
-        if new_status:
+        if new_status and new_status in dict(Order.STATUS_CHOICES):
             order.status = new_status
             order.save()
             serializer = self.get_serializer(order)
@@ -99,6 +99,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             return Response({'status': 'failed', 'message': 'Invalid or no status provided'}, 
                             status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=False, methods=['post'])
     def create_order_from_cart(self, request):
         cart_id = request.data.get('cartId')
@@ -119,10 +120,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    @action(detail=False, methods=['get'])
     def all_orders(self, request):
-        orders = Order.objects.all()
-        serializer = self.get_serializer(orders, many=True)
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
@@ -131,7 +132,24 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):
-        return self.queryset.filter(userId=self.request.user)
+        queryset = self.queryset.prefetch_related('items__article')
+        return queryset
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    @action(detail=True, methods=['get'])
+    def items(self, request, pk=None):
+        order = self.get_object()
+        items = order.items.all()
+        serializer = OrderItemSerializer(items, many=True)
+        return Response(serializer.data)
 # CARRITO (Cart)
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()

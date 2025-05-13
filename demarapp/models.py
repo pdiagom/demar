@@ -64,7 +64,7 @@ class Category(models.Model):
             
 class Order(models.Model):
     idOrder = models.AutoField(primary_key=True)
-    orderItem = models.ManyToManyField(Article)
+    orderItems = models.ManyToManyField(Article, through='OrderItem')
     total = models.FloatField()
     date = models.DateTimeField(default=timezone.now)
     shippingAddress = models.TextField(blank=True, null=True)
@@ -74,7 +74,6 @@ class Order(models.Model):
     paymentMethod = models.CharField(max_length=100)
     userId = models.ForeignKey('User', on_delete=models.CASCADE)
     
-    
     STATUS_CHOICES = [
         ('Pendiente', 'Pendiente'),
         ('En Proceso', 'En Proceso'),
@@ -83,6 +82,7 @@ class Order(models.Model):
     ]
     
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='Pendiente')
+
     @classmethod
     def create_order(cls, cart, shipping_data):
         order = cls.objects.create(
@@ -95,9 +95,13 @@ class Order(models.Model):
             postalCode=shipping_data['postalCode'],
             country=shipping_data['country']
         )
-        # Extraer los artículos de los CartItems y asignarlos a la orden
-        articles = [item.article for item in cart.items.all()]
-        order.orderItem.set(articles)
+        # Crear OrderItems a partir de los CartItems
+        for cart_item in cart.items.all():
+            OrderItem.objects.create(
+                order=order,
+                article=cart_item.article,
+                quantity=cart_item.quantity
+            )
         
         # Vaciar el carrito después de crear el pedido
         cart.items.all().delete()
@@ -107,6 +111,16 @@ class Order(models.Model):
     
     def __str__(self):
         return str(self.idOrder)
+
+    
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', related_name='items', on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.article.name} in Order {self.order.idOrder}"
+
     
 class Cart(models.Model):
     idCart = models.AutoField(primary_key=True)
@@ -120,8 +134,6 @@ class Cart(models.Model):
         self.save()
         
     def checkout(self):
-        # Aquí iría la lógica de procesamiento de pago (no implementada aquí)
-        # Por simplicidad, solo vaciamos el carrito
         self.items.all().delete()
         self.total = 0.0
         self.save()
