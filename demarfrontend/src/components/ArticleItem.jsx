@@ -97,7 +97,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                     <p>Stock: {article.stock}</p>
                     <p>Categoría: {categoryName}</p>
                     
-                    {(user === 1 || user=== 2) && ( // Verifica si el usuario es admin
+                    {(user === 1 || user=== 2) && ( // Verifica si el usuario es admin o superuser
                         <>
                             <button onClick={() => setIsEditing(true)}>Editar</button>
                             <button onClick={handleDelete}>Eliminar</button>
