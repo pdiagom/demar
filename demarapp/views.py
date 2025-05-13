@@ -6,7 +6,7 @@ from rest_framework import status, generics
 from .models import Article, Category, User, Order, Cart,CartItem, Report
 from .serializers import (
     ArticleSerializer, CategorySerializer, LoginSerializer, UserSerializer,
-    OrderSerializer, CartSerializer,CartItemSerializer, ReportSerializer,RegisterSerializer
+    OrderSerializer, CartSerializer,CartItemSerializer, ReportSerializer,RegisterSerializer, OrderItemSerializer
 )
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
