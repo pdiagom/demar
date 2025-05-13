@@ -9,7 +9,7 @@ const CreateArticle = ({ onArticleCreated }) => {
         description: '',
         price: '',
         stock: '',
-        categoryId: '', // Almacena la ID de la categoría seleccionada
+        categoryId: '', 
         image: null,
     });
 
@@ -17,9 +17,9 @@ const CreateArticle = ({ onArticleCreated }) => {
     
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        // Maneja la carga de archivos para el campo de imagen
+        
         if (name === 'image') {
-            setFormData({ ...formData, image: files[0] }); // Solo guardamos el primer archivo
+            setFormData({ ...formData, image: files[0] }); 
         } else {
             setFormData({ ...formData, [name]: value });
         }
@@ -27,38 +27,32 @@ const CreateArticle = ({ onArticleCreated }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formDataToSend = new FormData(); // Usamos FormData para enviar archivos
-        // Añadimos cada campo del estado a FormData
+        const formDataToSend = new FormData();
         Object.keys(formData).forEach((key) => {
             formDataToSend.append(key, formData[key]);
         });
 
         try {
-            // Asegúrate de que formData tenga todos los datos correctos
-            console.log('Datos enviados:', formData);
             const response = await axios.post('http://localhost:8000/demar/articles/', formDataToSend, {
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Especificamos que estamos enviando datos de formulario con archivos
+                    'Content-Type': 'multipart/form-data',
                 },
             });
-            onArticleCreated(response.data); // Notifica el artículo creado
+            onArticleCreated(response.data); 
             setSuccessMessage('Artículo creado correctamente!');
-            setFormData({ name: '', numRef: '', description: '', price: '', stock: '', categoryId: '', image: null }); // Reinicia el formulario
+            setFormData({ name: '', numRef: '', description: '', price: '', stock: '', categoryId: '', image: null }); 
             setTimeout(() => {
                 setSuccessMessage('');
             }, 3000);
         } catch (error) {
-            console.error('Error creando artículo:', error.response.data); // Para obtener más detalles
+            console.error('Error creando artículo:', error.response.data); 
         }
     };
 
     return (
-        <div>
-        {successMessage && (
-            <div style={{ backgroundColor: '#d4edda', color: '#155724', padding: '10px', marginBottom: '10px', borderRadius: '5px' }}>
-                {successMessage}
-            </div>
-        )}
+        <div className="create-article">
+        <h2>Crear Artículo</h2>
+         {successMessage && <div className="success-message">{successMessage}</div>}
         <form onSubmit={handleSubmit}>
             <input type="text" name="name" placeholder="Nombre" value={formData.name} onChange={handleChange} required />
             <input type="text" name="numRef" placeholder="Número de Referencia" value={formData.numRef} onChange={handleChange} required />
@@ -67,7 +61,7 @@ const CreateArticle = ({ onArticleCreated }) => {
             <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} required />
             <input type="file" name="image" accept="image/*" onChange={handleChange} required />
             <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: e.target.value })} required />
-            <button type="submit">Crear Artículo</button>
+            <button type="submit" className="btn-primary">Crear Artículo</button>
         </form>
         </div>
     );

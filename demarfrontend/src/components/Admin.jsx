@@ -40,7 +40,7 @@ const Admin = () => {
     };
 
     if (loading) {
-        return <div>Cargando...</div>;
+        return <div className="loading">Cargando...</div>;
     }
 
     if (!isAdmin) {

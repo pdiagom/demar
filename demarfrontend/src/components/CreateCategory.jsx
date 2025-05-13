@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createCategory } from '../services/categoryService'; // Importamos el servicio
+import { createCategory } from '../services/categoryService'; 
 
 const CreateCategory = () => {
     const [name, setName] = useState('');
@@ -8,7 +8,7 @@ const CreateCategory = () => {
     const [success, setSuccess] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+        e.preventDefault(); 
         setError('');
         setSuccess('');
 
@@ -18,42 +18,29 @@ const CreateCategory = () => {
         };
 
         try {
-            await createCategory(newCategory); // Llamar a la función para crear la categoría
+            await createCategory(newCategory); 
             setSuccess('Categoría creada con éxito');
             setName('');
             setDescription('');
-            // Limitar el mensaje de éxito a 3 segundos
             setTimeout(() => {
-                setSuccess(''); // Limpia el mensaje de éxito después de 3 segundos
-                window.location.reload(); // Recargar la página para ver la nueva categoría
+                setSuccess('');
+                window.location.reload(); 
             }, 3000);
 
         } catch (error) {
             setError('Error al crear la categoría');
-
-            // Limitar el mensaje de error a 3 segundos
             setTimeout(() => {
-                setError(''); // Limpia el mensaje de error después de 3 segundos
+                setError('');
             }, 3000);
         }
     };
 
     return (
-        <div>
+        <div className="create-category">
             <h2>Crear Categoría</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && (
-                <p style={{
-                    backgroundColor: '#d4edda',
-                    color: '#155724',
-                    padding: '10px',
-                    marginBottom: '10px',
-                    borderRadius: '5px'
-                }}>
-                    {success}
-                </p>
-            )}
-            <form onSubmit={handleSubmit}>
+            {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
+            <form onSubmit={handleSubmit} className="category-form">
                 <div>
                     <label htmlFor="name">Nombre:</label>
                     <input
@@ -73,7 +60,7 @@ const CreateCategory = () => {
                         required
                     />
                 </div>
-                <button type="submit">Crear Categoría</button>
+                <button type="submit" className="btn-primary">Crear Categoría</button>
             </form>
         </div>
     );

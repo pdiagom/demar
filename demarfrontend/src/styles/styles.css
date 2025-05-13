@@ -30,7 +30,7 @@ a {
 }
 
 a:hover {
-    background-color: rgba(30, 210, 198, 0.467);
+    background-color: rgba(225, 227, 235, 0.467);
     padding: 10px;
     border-radius: 12px;
 }
@@ -378,3 +378,5 @@ li {
     margin-bottom: 5px;
     border-radius: 4px;
 }
+
+
