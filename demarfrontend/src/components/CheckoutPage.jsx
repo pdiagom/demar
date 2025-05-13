@@ -8,12 +8,15 @@ const CheckoutPage = () => {
     const { cartId } = useParams();
     const navigate = useNavigate();
     const [cartDetails, setCartDetails] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [formData, setFormData] = useState({
         shippingAddress: '',
         city: '',
         postalCode: '',
         country: '',
         paymentMethod: 'Tarjeta',
+        nCuenta: '',
         cardNumber: '',
         cardHolder: '',
         expiryDate: '',
@@ -21,6 +24,13 @@ const CheckoutPage = () => {
     });
 
    useEffect(() => {
+     if (errorMessage) {
+        const timer = setTimeout(() => {
+            setErrorMessage('');
+        }, 5000); // El mensaje desaparecerá después de 5 segundos
+
+        return () => clearTimeout(timer);
+    }
     const fetchData = async () => {
         try {
             const [cartDetails, userData] = await Promise.all([
@@ -37,7 +47,6 @@ const CheckoutPage = () => {
             }));
         } catch (error) {
             console.error('Error fetching data:', error);
-            alert('Error al cargar los datos');
         }
     };
 
@@ -57,11 +66,12 @@ const CheckoutPage = () => {
             total: cartDetails.total
         };
         const order = await orderService.createOrderFromCart(orderData);
-        alert('¡Pedido realizado con éxito!');
-        navigate('/orders');
+        setCartDetails(null); // Limpiar los detalles del carrito
+     
+        navigate('/articleList', { state: { orderSuccess: true } });
     } catch (error) {
         console.error('Error al crear el pedido:', error);
-        alert('Hubo un error al procesar el pedido.');
+        setErrorMessage('Hay algún dato erróneo en el pedido. Por favor, verifique la información.');
     }
 };
 
@@ -73,14 +83,20 @@ const CheckoutPage = () => {
     return (
         <div className="checkout-container">
             <h2>Finalizar Compra</h2>
+            {errorMessage && (
+            <div className="error-message">
+                {errorMessage}
+            </div>
+        )}
             <div className="cart-summary">
                 <h3>Resumen del Carrito</h3>
-                <p>Total: ${cartDetails.total}</p>
+                <p>Artículos:</p>
                 <ul>
                     {cartDetails.items.map(item => (
-                        <li key={item.id}>{item.name} - Cantidad: {item.quantity}</li>
+                        <li key={item.id}>{item.article.name} - Cantidad: {item.quantity}</li>
                     ))}
-                </ul>
+                </ul> 
+                <p>Total: ${cartDetails.total}</p>
             </div>
             <form onSubmit={handleSubmit}>
                 <h3>Dirección de Envío</h3>
@@ -128,6 +144,18 @@ const CheckoutPage = () => {
                     <option value="PayPal">PayPal</option>
                 </select>
 
+                {formData.paymentMethod === 'Transferencia' && (
+                    <div className="card-details">
+                        <input
+                            type="text"
+                            name="nCuenta"
+                            placeholder="Número de cuenta"
+                            value={formData.nCuenta}
+                            onChange={handleChange}
+                            required
+                        />
+                        </div>
+                    )}
                 {formData.paymentMethod === 'Tarjeta' && (
                     <div className="card-details">
                         <input

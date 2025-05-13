@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
 import ArticleItem from "./ArticleItem";
 import CategoryFilter from "./CategoryFilter";
 import { getCategories } from "../services/categoryService";
@@ -10,6 +11,8 @@ const ArticleList = ({ currentUser }) => {
     const [articles, setArticles] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
+     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const location = useLocation();
 
     const fetchArticles = async () => {
         try {
@@ -32,7 +35,14 @@ const ArticleList = ({ currentUser }) => {
     useEffect(() => {
         fetchArticles();
         fetchCategories();
-    }, []);
+         if (location.state && location.state.orderSuccess) {
+            setShowSuccessMessage(true);
+            // Ocultar el mensaje después de 5 segundos
+            setTimeout(() => setShowSuccessMessage(false), 5000);
+            window.history.replaceState({}, document.title);
+        }
+    }, [location]);
+
 
     const filteredArticles = selectedCategory
         ? articles.filter((article) => article.categoryId === Number(selectedCategory))
@@ -65,6 +75,11 @@ const ArticleList = ({ currentUser }) => {
                 selectedCategory={selectedCategory}
                 onCategoryChange={(event) => setSelectedCategory(event.target.value)}
             />
+             {showSuccessMessage && (
+                <div className="success-message">
+                    Pedido realizado con éxito
+                </div>
+            )}
             <ul>{renderArticlesList()}</ul>
         </div>
     );
