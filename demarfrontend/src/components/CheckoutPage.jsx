@@ -3,11 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import orderService from '../services/orderService';
 import cartService from '../services/cartService';
 import { getCurrentUser } from '../services/authService'; 
+import { useCart } from '../context/cartContext';
 
 const CheckoutPage = () => {
     const { cartId } = useParams();
     const navigate = useNavigate();
     const [cartDetails, setCartDetails] = useState(null);
+    const { dispatch } = useCart();
     const [errorMessage, setErrorMessage] = useState('');
 
     const [formData, setFormData] = useState({
@@ -66,8 +68,10 @@ const CheckoutPage = () => {
             total: cartDetails.total
         };
         const order = await orderService.createOrderFromCart(orderData);
-        setCartDetails(null); // Limpiar los detalles del carrito
-     
+
+        dispatch({ type: 'CLEAR_CART' });
+        
+        setCartDetails(null);     
         navigate('/articleList', { state: { orderSuccess: true } });
     } catch (error) {
         console.error('Error al crear el pedido:', error);
