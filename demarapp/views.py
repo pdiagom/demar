@@ -99,7 +99,13 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             return Response({'status': 'failed', 'message': 'Invalid or no status provided'}, 
                             status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=False, methods=['get'])
+    def user_orders(self, request):
+        user_orders = self.queryset.filter(userId=request.user.id)
+        serializer = self.get_serializer(user_orders, many=True)
+        return Response(serializer.data)
 
+    
     @action(detail=False, methods=['post'])
     def create_order_from_cart(self, request):
         cart_id = request.data.get('cartId')

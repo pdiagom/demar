@@ -10,7 +10,7 @@ import PrivateRoute from "./components/PrivateRoute"; // Importa el componente d
 import ArticleList from "./components/ArticleList";
 import Cart from "./components/Cart"; // Importa el componente Cart
 import "./styles/styles.css";
-import CheckoutPage from "./components/CheckOutPage";
+import CheckoutPage from "./components/CheckoutPage";
 import PasswordResetRequest from "./components/PasswordResetRequest";
 import PasswordResetConfirm from "./components/PasswordResetConfirm";
 

@@ -46,7 +46,7 @@ const orderService = {
   getUserOrders: async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`${API_URL}/`, {
+      const response = await axios.get(`${API_URL}/user_orders/`, {
         headers: {
           Authorization: `Token ${token}`,
         },

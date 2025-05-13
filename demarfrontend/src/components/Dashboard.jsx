@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { getCurrentUser, updateUser } from '../services/authService';
-
+import orderService from '../services/orderService';
+import Modal from './Modal';
 const Dashboard = () => {
+    const [activeTab, setActiveTab] = useState('profile');
     const [user, setUser] = useState(null);
+    const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editedUser, setEditedUser] = useState({});
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         fetchUserData();
+        fetchUserOrders();
     }, []);
 
     const fetchUserData = async () => {
@@ -22,6 +28,33 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const fetchUserOrders = async () => {
+        try {
+            const userOrders = await orderService.getUserOrders();
+            setOrders(userOrders);
+        } catch (err) {
+            setError('Error al cargar los pedidos');
+        }
+    };
+
+    const handleShowOrderDetails = async (orderId) => {
+        try {
+            setLoading(true);
+            const orderDetails = await orderService.getOrderDetails(orderId);
+            const orderItems = await orderService.getOrderItems(orderId);
+            setSelectedOrder({ ...orderDetails, items: orderItems });
+            setShowModal(true);
+        } catch (err) {
+            setError('Error al cargar los detalles del pedido');
+        } finally {
+            setLoading(false);
+        }
+    };
+        const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedOrder(null);
     };
 
     const handleEdit = () => {
@@ -51,12 +84,28 @@ const Dashboard = () => {
             setLoading(false);
         }
     };
+    
+    const handleCancelOrder = async (orderId) => {
+        try {
+            await orderService.updateOrderStatus(orderId, 'Cancelado');
+            fetchUserOrders(); // Actualiza la lista de pedidos
+        } catch (err) {
+            setError('Error al cancelar el pedido');
+        }
+    };
 
     if (loading) return <p>Cargando datos del usuario...</p>;
     if (error) return <p>Error: {error}</p>;
 
     return (
         <div className="dashboard">
+            <h2>Mi Panel</h2>
+            <div className="dashboard-menu">
+                <button onClick={() => setActiveTab('profile')}>Mi Perfil</button>
+                <button onClick={() => setActiveTab('orders')}>Mis Pedidos</button>
+            </div>
+            {activeTab === 'profile' && (
+                <div className="profile-section">
             <h2>Mi Perfil</h2>
             {user && (
                 <>
@@ -112,6 +161,58 @@ const Dashboard = () => {
                     )}
                 </>
             )}
+        </div>
+    )}
+      {activeTab === 'orders' && (
+                <div className="orders-section">
+                    <h3>Mis Pedidos</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Pedido</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.map(order => (
+                                <tr key={order.idOrder}>
+                                    <td>{order.idOrder}</td>
+                                    <td>{new Date(order.date).toLocaleDateString()}</td>
+                                    <td>{order.total}€</td>
+                                    <td>{order.status}</td>
+                                    <td>
+                                        <button onClick={() => handleShowOrderDetails(order.idOrder)}>Ver Detalles</button>
+                                        {order.status === 'Pendiente' && (
+                                            <button onClick={() => handleCancelOrder(order.idOrder)}>Cancelar Pedido</button>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+           <Modal show={showModal} onClose={handleCloseModal}>
+                {selectedOrder && (
+                    <div className="order-details">
+                        <h4>Detalles del Pedido #{selectedOrder.idOrder}</h4>
+                        <p>Fecha: {new Date(selectedOrder.date).toLocaleDateString()}</p>
+                        <p>Estado: {selectedOrder.status}</p>
+                        <p>Total: {selectedOrder.total}€</p>
+                        <h5>Artículos:</h5>
+                        <ul>
+                            {selectedOrder.items.map((item, index) => (
+                                <li key={index}>
+                                    {item.article_name} - Cantidad: {item.quantity} - Precio: {item.article_price}€
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 };
