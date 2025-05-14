@@ -38,7 +38,7 @@ const CreateArticle = ({ onArticleCreated }) => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            onArticleCreated(response.data); 
+            //onArticleCreated(response.data); 
             setSuccessMessage('Artículo creado correctamente!');
             setFormData({ name: '', numRef: '', description: '', price: '', stock: '', categoryId: '', image: null }); 
             setTimeout(() => {
