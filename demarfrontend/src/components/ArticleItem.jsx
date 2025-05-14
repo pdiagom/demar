@@ -96,7 +96,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                     <p>Precio: {article.price}€</p>
                     <p>Stock: {article.stock}</p>
                     <p>Categoría: {categoryName}</p>
-                    
+                    <div className="button-container">
                     {(user === 1 || user=== 2) && ( // Verifica si el usuario es admin o superuser
                         <>
                             <button onClick={() => setIsEditing(true)}>Editar</button>
@@ -104,6 +104,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                         </>
                     )}
                     <button onClick={handleAddToCart}>Agregar al Carrito</button>
+                    </div>
                 </div>
             )}
         </li>
