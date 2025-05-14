@@ -59,6 +59,7 @@ select {
   padding: 10px;
   width: 100%;
   margin-bottom: 10px;
+  resize: none;
 }
 
 /* Listas */
@@ -102,17 +103,7 @@ li {
   flex-wrap: wrap;
 }
 
-.articleItem {
-  background-color: #ffe7e7;
-  border: 1px solid #ff0000;
-  border-radius: 5px;
-  padding: 15px;
-  margin-left: 20px;
-  margin-bottom: 10px;
-  width: 80%;
-  display: flex;
-  align-items: end;
-}
+
 
 /* --- Reset básico --- */
 * {
@@ -193,16 +184,32 @@ select {
 }
 
 .articleItem {
+  background-color: #ffe7e7;
+  border: 1px solid #ff0000;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  width: 80%;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #ffcece;
+  min-height: 60px; /* Ajusta este valor según necesites */
 }
 
-.articleItem:last-child {
-  border-bottom: none;
+.articleItem > * {
+  margin-right: 10px; /* Espacio entre elementos */
 }
+
+.articleItem > *:last-child {
+  margin-right: 0; /* Elimina el margen del último elemento */
+}
+
+.articleItem button {
+  white-space: nowrap; /* Evita que los botones se partan en varias líneas */
+}
+
 
 .cart h3 {
   margin-top: 20px;

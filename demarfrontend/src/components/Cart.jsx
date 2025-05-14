@@ -60,11 +60,11 @@ const Cart = () => {
                         {cartItems.map((item) => (
                             <li className='articleItem' key={item.article.idArticle}>
                                 {item.article.name} - {item.article.price}€
-                                <div>
+                                
                                     <button onClick={() => handleDecrease(item.article)}>-</button>
                                     <span>{item.quantity}</span>
                                     <button onClick={() => handleIncrease(item.article)}>+</button>
-                                </div>
+                                
                                 <button onClick={() => handleRemove(item.article)}>Eliminar</button>
                             </li>
                         ))}
