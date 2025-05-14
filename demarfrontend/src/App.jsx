@@ -14,6 +14,7 @@ import CheckoutPage from "./components/CheckoutPage";
 import PasswordResetRequest from "./components/PasswordResetRequest";
 import PasswordResetConfirm from "./components/PasswordResetConfirm";
 import Superuser from "./components/SuperUser"; 
+import headerImage from '../../media/media/demar1.png';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -46,7 +47,7 @@ function App() {
 
   return (
     <Router>
-      <h1 style={{ textAlign: "center" }}>Bienvenido a DEMAR</h1>
+      <img src={headerImage} alt="DEMAR Header" className="headerStyle" />
       <Navigation />
       <Routes>
         <Route path="/register" element={<Register />} />
