@@ -21,17 +21,20 @@ const Superuser = () => {
                 return <CreateArticle />;
         }
     };
+    const getButtonClass = (tabName) => {
+        return activeTab === tabName ? 'active' : '';
+    };
 
     return (
-        <div className="superuser-dashboard">
-            <h2>Dashboard de Superusuario</h2>
-            <nav className="superuser-nav">
-                <button onClick={() => setActiveTab('articles')}>Crear Artículo</button>
-                <button onClick={() => setActiveTab('categories')}>Crear Categoría</button>
-                <button onClick={() => setActiveTab('orders')}>Ver Pedidos</button>
-                <button onClick={() => setActiveTab('users')}>Gestionar Usuarios</button>
+        <div className="admin-dashboard">
+            <h2>Menu de Superusuario</h2>
+            <nav className="admin-nav">
+                <button className={getButtonClass('articles')} onClick={() => setActiveTab('articles')}>Crear Artículo</button>
+                <button className={getButtonClass('categories')} onClick={() => setActiveTab('categories')}>Crear Categoría</button>
+                <button className={getButtonClass('orders')} onClick={() => setActiveTab('orders')}>Ver Pedidos</button>
+                <button className={getButtonClass('users')} onClick={() => setActiveTab('users')}>Gestionar Usuarios</button>
             </nav>
-            <div className="superuser-content">
+            <div className="admin-content">
                 {renderContent()}
             </div>
         </div>

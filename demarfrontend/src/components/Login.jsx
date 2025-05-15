@@ -45,7 +45,7 @@ const handlePasswordResetRequest = async (e) => {
 };
 
 return (
-    <div>
+    <div className='login-container'>
         {errorMessage && (
             <div style={{
                 backgroundColor: 'lightcoral',

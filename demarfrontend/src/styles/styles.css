@@ -24,8 +24,8 @@ h3 {
 a {
   color: #ff0000;
   text-decoration: none;
-  margin-left: 10%;
-  margin-bottom: 2%;
+
+
   padding: 10px;
 }
 
@@ -35,6 +35,12 @@ a:hover {
   border-radius: 12px;
 }
 
+nav{
+  
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 /* Botones */
 button {
   background-color: #ff0000;
@@ -45,6 +51,7 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 
 button:hover {
   background-color: #b30000;
@@ -447,4 +454,25 @@ li p {
     justify-content: space-between;
     align-items: center;
     min-height: 60px; /* Ajusta este valor según necesites */
+}
+.login-container {
+  margin-left:2.5% ;
+  width: 95%;
+  display: flex;
+  align-items: center;
+}
+.login-container form {
+  width: 100%;
+  margin: auto;
+}
+
+.register-container {
+  margin-left:2.5% ;
+  width: 95%;
+  display: flex;
+  align-items: center;
+}
+.register-container form {
+  width: 100%;
+  margin: auto;
 }
