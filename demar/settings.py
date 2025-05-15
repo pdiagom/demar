@@ -88,11 +88,11 @@ CORS_ALLOW_ALL_ORIGINS = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'demar_zjx1',
+        'NAME': 'demar',
         'USER': 'root',
-        'PASSWORD': 'qmAhyCMZhNahivbuM6jQzekOY8CkE72y',
-        'HOST': 'dpg-d0ip9lbe5dus739rb0ug-a',  # O la IP del servidor de MySQL
-        'PORT': '5432',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',  # O la IP del servidor de MySQL
+        'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
