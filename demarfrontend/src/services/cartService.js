@@ -48,7 +48,7 @@ const cartService = {
     },
     saveCart: async (items) => {
         const token = localStorage.getItem('token');
-        const response = await axios.post(`http://localhost:8000/demar/cart/create_cart_with_items/`, { items }, {
+        const response = await axios.post(`https://demar.onrender.com/demar/cart/create_cart_with_items/`, { items }, {
             headers: {
                 Authorization: `Token ${token}`
             }
