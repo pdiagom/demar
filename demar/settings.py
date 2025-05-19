@@ -193,5 +193,5 @@ import os
 
 # Añade esta línea para servir archivos estáticos en desarrollo
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media' )  # Cambia 'media' a la carpeta donde deseas almacenar las imágenes
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/media' )  # Cambia 'media' a la carpeta donde deseas almacenar las imágenes
 
