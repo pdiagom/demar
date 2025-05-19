@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'demar.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "demar-gray.vercel.app",
+    "https://demar-gray.vercel.app",
 # URL de tu frontend en React
 ]
 CORS_ALLOW_ALL_ORIGINS = False
