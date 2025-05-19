@@ -191,9 +191,15 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
+INSTALLED_APPS += ['storages']
 
-# Añade esta línea para servir archivos estáticos en desarrollo
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-MEDIA_ROOT = os.path.join(STATIC_URL, 'media' )  # Cambia 'media' a la carpeta donde deseas almacenar las imágenes
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'demar-media'  # usa tu nombre de bucket
+AWS_S3_REGION_NAME = 'eu-north-1'  # cambia si usaste otra región
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_QUERYSTRING_AUTH = False  # Hace que las URLs no tengan tokens temporales
 
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
