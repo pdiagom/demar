@@ -94,14 +94,11 @@ CORS_ALLOW_ALL_ORIGINS = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT', '3306'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        'NAME': 'railway',
+        'USER': 'root',
+        'PASSWORD': 'OlKMLaFPZwhbnbWSercWBOLQnOjMHGtJ',
+        'HOST': 'gondola.proxy.rlwy.net',
+        'PORT': '18393',
     }
 }
 
