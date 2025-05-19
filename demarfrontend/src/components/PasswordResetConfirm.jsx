@@ -33,7 +33,7 @@ const PasswordResetConfirm = () => {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:8000/demar/password_reset/confirm/', {
+            const response = await axios.post('https://demar.onrender.com/demar/password_reset/confirm/', {
                 token: token,
                 password: password
             });

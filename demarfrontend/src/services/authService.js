@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/demar/";
+const API_URL = "https://demar.onrender.com/demar/";
 
 // Función auxiliar para manejar respuestas
 const handleResponse = async (response) => {

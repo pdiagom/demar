@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = "http://localhost:8000/demar/users/";
+const API_URL = "https://demar.onrender.com/demar/users/";
 
 const userService = {
     getAllUsers: async () => {

@@ -33,7 +33,7 @@ const CreateArticle = ({ onArticleCreated }) => {
         });
 
         try {
-            const response = await axios.post('http://localhost:8000/demar/articles/', formDataToSend, {
+            const response = await axios.post('https://demar.onrender.com/demar/articles/', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

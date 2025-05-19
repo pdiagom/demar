@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/demar/orders";
+const API_URL = "https://demar.onrender.com/demar/orders";
 
 const orderService = {
   createOrderFromCart: async (orderData) => {

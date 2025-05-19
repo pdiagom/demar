@@ -48,7 +48,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
         console.log('Datos a enviar:', Array.from(updatedFormData.entries()));
 
         try {
-            await axios.put(`http://localhost:8000/demar/articles/${article.idArticle}/`, updatedFormData, {
+            await axios.put(`https://demar.onrender.com/demar/articles/${article.idArticle}/`, updatedFormData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -62,7 +62,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8000/demar/articles/${article.idArticle}/`);
+            await axios.delete(`https://demar.onrender.com/demar/articles/${article.idArticle}/`);
             window.location.reload();
         } catch (error) {
             console.error('Error eliminando artículo:', error);

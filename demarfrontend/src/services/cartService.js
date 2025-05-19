@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // Configurar la URL base si es necesario
-const API_URL = "http://localhost:8000/demar/cart";
+const API_URL = "https://demar.onrender.com/demar/cart";
 
 const cartService = {
     fetchCart: async (cartId) => {

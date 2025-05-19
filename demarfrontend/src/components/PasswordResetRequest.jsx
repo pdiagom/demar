@@ -20,7 +20,7 @@ const PasswordResetRequest = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/demar/password_reset/', { email });
+            await axios.post('https://demar.onrender.com/demar/password_reset/', { email });
             setMessage('Se ha enviado un correo con instrucciones para restablecer tu contraseña.');
             setIsSuccess(true);
         } catch (error) {

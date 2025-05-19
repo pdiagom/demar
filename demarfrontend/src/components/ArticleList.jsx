@@ -16,7 +16,7 @@ const ArticleList = ({ currentUser }) => {
 
     const fetchArticles = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/demar/articles/");
+            const response = await axios.get("https://demar.onrender.com/demar/articles/");
             setArticles(response.data);
         } catch (error) {
             console.error("Error al obtener los artículos:", error);
