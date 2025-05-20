@@ -6,7 +6,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { setIsLoading } = useLoading()
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({});
@@ -14,8 +14,17 @@ const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    fetchUserData();
-    fetchUserOrders();
+    const fetchData = async () => {
+     setIsLoading(true);
+      try {
+        await Promise.all([fetchUserData(), fetchUserOrders()]);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
   }, []);
 
   const fetchUserData = async () => {

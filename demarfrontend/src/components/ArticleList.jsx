@@ -8,6 +8,7 @@ import { useCart } from '../context/cartContext'; // Importa el hook useCart
 
 const ArticleList = ({ currentUser }) => {
     const { dispatch } = useCart(); // Accede a dispatch del contexto
+    const { setIsLoading } = useLoading()
     const [articles, setArticles] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -15,21 +16,25 @@ const ArticleList = ({ currentUser }) => {
     const location = useLocation();
 
     const fetchArticles = async () => {
+        setIsLoading(true); // Inicia la carga
         try {
             const response = await axios.get("https://demar.onrender.com/demar/articles/");
             setArticles(response.data);
         } catch (error) {
             console.error("Error al obtener los artículos:", error);
         }
+        setIsLoading(false); // Finaliza la carga
     };
 
     const fetchCategories = async () => {
+        setIsLoading(true); // Inicia la carga
         try {
             const data = await getCategories();
             setCategories(data);
         } catch (error) {
             console.error("Error al obtener las categorías:", error);
         }
+        setIsLoading(false); // Finaliza la carga
     };
 
     useEffect(() => {

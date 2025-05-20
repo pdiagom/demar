@@ -15,6 +15,8 @@ import PasswordResetRequest from "./components/PasswordResetRequest";
 import PasswordResetConfirm from "./components/PasswordResetConfirm";
 import Superuser from "./components/SuperUser"; 
 import headerImage from '../../media/media/demar1.png';
+import { LoadingProvider } from "./context/loadingContext"; // Importa el contexto de carga
+import GlobalSpinner from "./components/GlobalSpinner"; // Importa el componente de spinner global
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -46,6 +48,7 @@ function App() {
   };
 
   return (
+    <LoadingProvider>
     <Router>
       <img src={headerImage} alt="DEMAR Header" className="headerStyle" />
       <Navigation />
@@ -110,7 +113,9 @@ function App() {
         userId={userId}
         currentUser={currentUser} // Pasar el usuario actual
       />
+      <GlobalSpinner/>
     </Router>
+    </LoadingProvider>
   );
 }
 
