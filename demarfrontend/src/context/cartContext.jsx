@@ -18,7 +18,7 @@ const cartReducer = (state, action) => {
             if (existingItemIndex >= 0) {
                 // Si el artículo ya está en el carrito, aumenta la cantidad
                 const updatedCartItems = [...state.cartItems];
-                updatedCartItems[existingItemIndex].quantity += 0.5;
+                updatedCartItems[existingItemIndex].quantity += 1;
                 return {
                     ...state,
                     cartItems: updatedCartItems,
@@ -53,7 +53,7 @@ const cartReducer = (state, action) => {
                     return cartReducer(state, { type: 'REMOVE_FROM_CART', payload: item });
                 } else {
                     // De lo contrario, disminuimos la cantidad
-                    item.quantity -= 0.5;
+                    item.quantity -= 1;
                     return {
                         ...state,
                         cartItems: updatedCartItems,
