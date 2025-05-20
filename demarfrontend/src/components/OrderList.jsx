@@ -12,6 +12,7 @@ const OrderList = () => {
 
   useEffect(() => {
     fetchOrders();
+    fetchOrderStats();
   }, []);
 
   const fetchOrders = async () => {
