@@ -92,10 +92,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         image = self.request.data.get('image')
         if image:
-            format, imgstr = image.split(';base64,')
-            ext = format.split('/')[-1]
-            data = ContentFile(base64.b64decode(imgstr), name=f'temp.{ext}')
-            serializer.save(image=data)
+            
+            serializer.save(image=image)
         else:
             serializer.save()
   
