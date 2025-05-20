@@ -148,7 +148,7 @@ getOrderStats: async () => {
                 Authorization: `Token ${token}`,
             },
         });
-        console.log("Order stats received:", response.data); // Log para depuración
+
         return response.data;
     } catch (error) {
         console.error('Error fetching order stats:', error);

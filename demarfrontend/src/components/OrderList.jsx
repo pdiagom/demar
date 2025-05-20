@@ -41,7 +41,7 @@ const OrderList = () => {
         }
     };
 
-  const handleStatusChange = async (idOrder, newStatus) => {
+   const handleStatusChange = async (idOrder, newStatus) => {
     try {
       const updatedOrder = await orderService.updateOrderStatus(
         idOrder,
@@ -53,6 +53,18 @@ const OrderList = () => {
         )
       );
       setEditingOrder(null);
+      
+      // Actualizar las estadísticas localmente
+      setOrderStats(prevStats => {
+        const oldStatus = orders.find(order => order.idOrder === idOrder).status;
+        return {
+          ...prevStats,
+          [oldStatus]: prevStats[oldStatus] - 1,
+          [newStatus]: prevStats[newStatus] + 1
+        };
+      });
+
+ 
     } catch (error) {
       setError(
         "No se pudo actualizar el estado del pedido. Por favor, intente de nuevo."
