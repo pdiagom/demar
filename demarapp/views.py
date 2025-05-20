@@ -1,4 +1,6 @@
 from io import BytesIO
+import os
+import uuid
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework import viewsets, permissions,status
@@ -81,11 +83,31 @@ class ArticleViewSet(viewsets.ModelViewSet):
     
    
     def create(self, request, *args, **kwargs):
+        return self.handle_image_upload(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        return self.handle_image_upload(request, *args, **kwargs, update=True)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.image:
+            self.delete_image_from_s3(instance.image)
+        return super().destroy(request, *args, **kwargs)
+
+    def handle_image_upload(self, request, *args, **kwargs):
+        update = kwargs.pop('update', False)
+        
         logger.info(f"Received data: {request.data}")
         logger.info(f"Received files: {request.FILES}")
         
         image_file = request.FILES.get('image')
         image_url = request.data.get('image')
+
+        if update:
+            instance = self.get_object()
+            old_image_url = instance.image
+        else:
+            old_image_url = None
 
         if image_file:
             try:
@@ -94,8 +116,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
                                   aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
                                   region_name=settings.AWS_S3_REGION_NAME)
                 
+                # Generar un nombre de archivo único
+                file_name = self.generate_unique_filename(image_file.name)
+                
                 file_content = BytesIO(image_file.read())
-                file_name = f"media/articles/{image_file.name}"
                 
                 s3.upload_fileobj(
                     file_content,
@@ -108,27 +132,86 @@ class ArticleViewSet(viewsets.ModelViewSet):
                 
                 s3_file_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{file_name}"
                 request.data['image'] = s3_file_url
+
+                # Si estamos actualizando, eliminar la imagen anterior
+                if update and old_image_url:
+                    self.delete_old_image(old_image_url)
             
             except Exception as e:
                 logger.error(f"Error uploading image to S3: {str(e)}")
                 return Response({"error": f"S3 upload failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         elif image_url:
-            # Si es una URL, no necesitamos hacer nada más
-            pass
+            # Si es una URL y estamos actualizando, verificar si ha cambiado
+            if update and old_image_url and old_image_url != image_url:
+                self.delete_old_image(old_image_url)
         else:
-            # Si no hay imagen, establecemos el campo como None
+            # Si no hay imagen y estamos actualizando, eliminar la imagen anterior
+            if update and old_image_url:
+                self.delete_old_image(old_image_url)
             request.data['image'] = None
         
-        serializer = self.get_serializer(data=request.data)
+        if update:
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+        else:
+            serializer = self.get_serializer(data=request.data)
+
         if serializer.is_valid():
             instance = serializer.save()
-            logger.info(f"Article created: {instance}")
+            logger.info(f"Article {'updated' if update else 'created'}: {instance}")
             logger.info(f"Image field: {instance.image}")
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK if update else status.HTTP_201_CREATED)
         else:
             logger.error(f"Serializer errors: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def generate_unique_filename(self, original_filename):
+        """
+        Genera un nombre de archivo único añadiendo un UUID.
+        """
+        name, ext = os.path.splitext(original_filename)
+        return f"articles/{name}_{uuid.uuid4().hex}{ext}"
     
+    def delete_image_from_s3(self, image_url):
+        """
+        Elimina la imagen de S3.
+        """
+        try:
+            s3 = boto3.client('s3',
+                              aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                              region_name=settings.AWS_S3_REGION_NAME)
+            
+            # Extraer el nombre del archivo de la URL
+            file_name = image_url.split('/')[-1]
+            
+            s3.delete_object(
+                Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                Key=f"articles/{file_name}"
+            )
+            logger.info(f"Image deleted from S3: {file_name}")
+        except Exception as e:
+            logger.error(f"Error deleting image from S3: {str(e)}")
+
+    def delete_old_image(self, old_image_url):
+        """
+        Elimina la imagen anterior de S3.
+        """
+        try:
+            s3 = boto3.client('s3',
+                              aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                              region_name=settings.AWS_S3_REGION_NAME)
+            
+            # Extraer el nombre del archivo de la URL
+            old_file_name = old_image_url.split('/')[-1]
+            
+            s3.delete_object(
+                Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                Key=f"articles/{old_file_name}"
+            )
+            logger.info(f"Old image deleted from S3: {old_file_name}")
+        except Exception as e:
+            logger.error(f"Error deleting old image from S3: {str(e)}")
     def perform_create(self, serializer):
         image = self.request.data.get('image')
         if image:
