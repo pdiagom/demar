@@ -89,7 +89,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'demar.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
     "https://demar-gray.vercel.app",
 # URL de tu frontend en React
 ]
