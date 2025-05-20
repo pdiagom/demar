@@ -36,6 +36,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class ArticleSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
+    
     class Meta:
         model = Article
         fields ='__all__'
