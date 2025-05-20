@@ -1,4 +1,3 @@
-import traceback
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
@@ -79,30 +78,16 @@ class ArticleViewSet(viewsets.ModelViewSet):
     parser_classes = [MultiPartParser, FormParser]
     
    
-    import traceback
-import logging
-
-logger = logging.getLogger(__name__)
-
-class ArticleViewSet(viewsets.ModelViewSet):
-    # ... other code ...
-
     def create(self, request, *args, **kwargs):
-        try:
-            logger.info(f"Received data: {request.data}")
-            serializer = self.get_serializer(data=request.data)
-            if serializer.is_valid():
-                logger.info("Serializer is valid")
-                self.perform_create(serializer)
-                logger.info("Article created successfully")
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            logger.error(f"Serializer errors: {serializer.errors}")
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            logger.error(f"Error creating article: {str(e)}")
-            logger.error(traceback.format_exc())
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        logger.info(f"Received data: {request.data}")
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            logger.info("Serializer is valid")
+            self.perform_create(serializer)
+            logger.info("Article created successfully")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        logger.error(f"Serializer errors: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def perform_create(self, serializer):
         image = self.request.data.get('image')
