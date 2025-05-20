@@ -72,6 +72,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]  
     serializer_class = ArticleSerializer
     parser_classes = [MultiPartParser, FormParser]
+    
+    @action(detail=False, methods=['post'])
     def post(self, request):
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid():
