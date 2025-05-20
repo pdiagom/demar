@@ -47,7 +47,7 @@ class Article(models.Model):
     description = models.TextField()
     price = models.FloatField( null= False, blank= False)
     stock = models.IntegerField( null= False, blank= False)
-    image = models.ImageField(upload_to='media/articles/', null=True, blank=True)
+    image = models.FileField(upload_to='media/articles/', null=True, blank=True)
     categoryId = models.ForeignKey('Category', on_delete=models.CASCADE)
     
     

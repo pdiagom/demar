@@ -41,6 +41,12 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields ='__all__'
+        
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.image and not instance.image.name.startswith('http'):
+            representation['image'] = instance.image.url
+        return representation
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

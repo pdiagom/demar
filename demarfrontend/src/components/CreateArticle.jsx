@@ -26,29 +26,31 @@ const CreateArticle = ({ onArticleCreated }) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const formDataToSend = new FormData();
-        Object.keys(formData).forEach((key) => {
+    e.preventDefault();
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+        if (key === 'image' && formData[key] instanceof File) {
             formDataToSend.append(key, formData[key]);
-        });
-
-        try {
-            const response = await axios.post('https://demar.onrender.com/demar/articles/', formDataToSend, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            //onArticleCreated(response.data); 
-            setSuccessMessage('Artículo creado correctamente!');
-            setFormData({ name: '', numRef: '', description: '', price: '', stock: '', categoryId: '', image: null }); 
-            setTimeout(() => {
-                setSuccessMessage('');
-            }, 3000);
-        } catch (error) {
-            console.error('Error creando artículo:', error.response.data); 
+        } else {
+            formDataToSend.append(key, formData[key]);
         }
-    };
+    });
 
+    try {
+        const response = await axios.post('https://demar.onrender.com/demar/articles/', formDataToSend, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        setSuccessMessage('Artículo creado correctamente!');
+        setFormData({ name: '', numRef: '', description: '', price: '', stock: '', categoryId: '', image: null }); 
+        setTimeout(() => {
+            setSuccessMessage('');
+        }, 3000);
+    } catch (error) {
+        console.error('Error creando artículo:', error.response?.data || error.message); 
+    }
+};
     return (
         <div className="create-article">
         <h2>Crear Artículo</h2>
