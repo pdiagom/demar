@@ -60,7 +60,7 @@ const Register = () => {
           error = "Las contraseñas no coinciden";
         }
         break;
-      // Puedes agregar más validaciones para otros campos aquí
+
     }
     return error;
   };
@@ -115,7 +115,7 @@ const Register = () => {
         {Object.entries(formData).map(([key, value]) => (
           <div key={key}>
             <input
-              type={key.includes('password') ? 'password' : 'text'}
+              type={key.includes('password')|| key.includes('confirmPassword') ? 'password' : 'text'}
               name={key}
               placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
               onChange={handleChange}
