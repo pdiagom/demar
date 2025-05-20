@@ -209,7 +209,7 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.eu-north-1.amazonaws.com'
 AWS_QUERYSTRING_AUTH = False  # Hace que las URLs no tengan tokens temporales
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_FILE_OVERWRITE = False
-AWS_LOCATION = 'media/articles'
+
 
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/articles/'
 
