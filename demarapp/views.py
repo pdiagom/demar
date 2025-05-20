@@ -99,7 +99,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
             file_content = BytesIO(image_file.read())
             
             # Generar un nombre único para el archivo
-            file_name = f"articles/{image_file.name}"
+            file_name = f"media/articles/{image_file.name}"
             
             # Subir el archivo a S3
             s3.upload_fileobj(
