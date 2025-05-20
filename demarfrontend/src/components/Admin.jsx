@@ -12,21 +12,22 @@ const Admin = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const { setIsLoading } = useLoading();
 
-    useEffect(() => {
+     useEffect(() => {
         const checkAdminStatus = async () => {
-            setIsLoading(true);
+            setIsLoading(true); // Inicia la carga
             try {
                 const user = await getCurrentUser();
-                setIsAdmin(user.role === 1);
+                console.log('User:', user);
+                setIsAdmin(user.role === 1 || user.role === '1'); // Verifica si el usuario es admin o superadmin
             } catch (error) {
                 console.error('Error checking admin status:', error);
             } finally {
-                setIsLoading(false);
+                setIsLoading(false); // Finaliza la carga
             }
         };
 
         checkAdminStatus();
-    }, [setIsLoading]);
+    }, [setIsLoading]); // Añade setIsLoading como dependencia
 
     const renderContent = () => {
         switch(activeTab) {
