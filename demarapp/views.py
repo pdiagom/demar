@@ -1,3 +1,4 @@
+from io import BytesIO
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework import viewsets, permissions,status
@@ -94,12 +95,15 @@ class ArticleViewSet(viewsets.ModelViewSet):
                           region_name=settings.AWS_S3_REGION_NAME)
         
         try:
+            # Crear una copia del archivo en memoria
+            file_content = BytesIO(image_file.read())
+            
             # Generar un nombre único para el archivo
             file_name = f"articles/{image_file.name}"
             
             # Subir el archivo a S3
             s3.upload_fileobj(
-                image_file,
+                file_content,
                 settings.AWS_STORAGE_BUCKET_NAME,
                 file_name,
                 ExtraArgs={'ACL': 'public-read'}
