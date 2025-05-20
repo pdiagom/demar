@@ -73,9 +73,9 @@ class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     parser_classes = [MultiPartParser, FormParser]
     
-    @action(detail=False, methods=['post'])
-    def post(self, request):
-        serializer = ArticleSerializer(data=request.data)
+   
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
