@@ -19,7 +19,7 @@ const Admin = () => {
         const checkAdminStatus = async () => {
             setIsLoading(true); // Inicia la carga
             try {
-                const user = localStorage.currentUser;
+                const user = JSON.parse(localStorage.getItem("currentUser"));
                 setIsAdmin(user === 1);
             } catch (error) {
                 console.error('Error checking admin status:', error);
