@@ -16,6 +16,10 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.core.files.base import ContentFile
+import base64
+import logging
+logger = logging.getLogger(__name__)
 # USUARIOS (Users)
 User = get_user_model()
 
@@ -75,11 +79,25 @@ class ArticleViewSet(viewsets.ModelViewSet):
     
    
     def create(self, request, *args, **kwargs):
+        logger.info(f"Received data: {request.data}")
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            logger.info("Serializer is valid")
+            self.perform_create(serializer)
+            logger.info("Article created successfully")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        logger.error(f"Serializer errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def perform_create(self, serializer):
+        image = self.request.data.get('image')
+        if image:
+            format, imgstr = image.split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'temp.{ext}')
+            serializer.save(image=data)
+        else:
+            serializer.save()
   
 
 
