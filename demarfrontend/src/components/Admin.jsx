@@ -20,7 +20,7 @@ const Admin = () => {
             setIsLoading(true); // Inicia la carga
             try {
                 const user = await getCurrentUser();
-                setIsAdmin(user.role === 1);
+                setIsAdmin(user === 1);
             } catch (error) {
                 console.error('Error checking admin status:', error);
             } finally {
