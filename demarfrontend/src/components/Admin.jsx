@@ -7,6 +7,7 @@ import { getCurrentUser } from '../services/authService';
 import { Navigate } from 'react-router-dom';
 import { useLoading } from '../context/loadingContext'; // Importa el hook useLoading
 
+
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('articles');
     const [isAdmin, setIsAdmin] = useState(false);

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getCurrentUser, updateUser } from "../services/authService";
 import orderService from "../services/orderService";
 import Modal from "./Modal";
+import { useLoading } from "../context/loadingContext";
+
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [user, setUser] = useState(null);
