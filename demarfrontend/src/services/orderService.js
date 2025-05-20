@@ -140,16 +140,27 @@ const orderService = {
   }
 },
 
-getOrderStats : async () => {
+getOrderStats: async () => {
+    const token = localStorage.getItem("token");
     try {
-        const response = await axios.get(`${API_URL}/order_stats/`);
+        const response = await axios.get(`${API_URL}/order_stats/`, {
+            headers: {
+                Authorization: `Token ${token}`,
+            },
+        });
+        console.log("Order stats received:", response.data); // Log para depuración
         return response.data;
     } catch (error) {
         console.error('Error fetching order stats:', error);
+        if (error.response) {
+            console.error("Response data:", error.response.data);
+            console.error("Response status:", error.response.status);
+            console.error("Response headers:", error.response.headers);
+        }
         throw error;
     }
-
 },
+
 
 
 };
