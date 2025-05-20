@@ -169,7 +169,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         Genera un nombre de archivo único añadiendo un UUID.
         """
         name, ext = os.path.splitext(original_filename)
-        return f"articles/{name}_{uuid.uuid4().hex}{ext}"
+        return f"media/articles/{name}_{uuid.uuid4().hex}{ext}"
     
     def delete_image_from_s3(self, image_url):
         """
