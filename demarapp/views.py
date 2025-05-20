@@ -81,28 +81,53 @@ class ArticleViewSet(viewsets.ModelViewSet):
    
     def create(self, request, *args, **kwargs):
         logger.info(f"Received data: {request.data}")
-        serializer = self.get_serializer(data=request.data)
+        logger.info(f"Received files: {request.FILES}")
         
+        image_file = request.FILES.get('image')
+        if not image_file:
+            return Response({"error": "No image file provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Configurar el cliente S3
         s3 = boto3.client('s3',
                           aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                           aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
                           region_name=settings.AWS_S3_REGION_NAME)
         
         try:
-            s3.put_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                          Key='test.txt',
-                          Body='This is a test file')
-            logger.info("Test file uploaded successfully to S3")
+            # Generar un nombre único para el archivo
+            file_name = f"articles/{image_file.name}"
+            
+            # Subir el archivo a S3
+            s3.upload_fileobj(
+                image_file,
+                settings.AWS_STORAGE_BUCKET_NAME,
+                file_name,
+                ExtraArgs={'ACL': 'public-read'}
+            )
+            
+            logger.info(f"Image uploaded successfully to S3: {file_name}")
+            
+            # Generar la URL del archivo subido
+            s3_file_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{file_name}"
+            
+            # Actualizar los datos de la solicitud con la URL de S3
+            mutable_data = request.data.copy()
+            mutable_data['image'] = s3_file_url
+            
+            # Crear el artículo con la URL de la imagen
+            serializer = self.get_serializer(data=mutable_data)
+            if serializer.is_valid():
+                instance = serializer.save()
+                logger.info(f"Article created: {instance}")
+                logger.info(f"Image field: {instance.image}")
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                logger.error(f"Serializer errors: {serializer.errors}")
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         except Exception as e:
-            logger.error(f"Error uploading test file to S3: {str(e)}")
-            return Response({"error": f"S3 test upload failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        if serializer.is_valid():
-            logger.info("Serializer is valid")
-            self.perform_create(serializer)
-            logger.info("Article created successfully")
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        logger.error(f"Serializer errors: {serializer.errors}")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            logger.error(f"Error uploading image to S3: {str(e)}")
+            return Response({"error": f"S3 upload failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def perform_create(self, serializer):
         image = self.request.data.get('image')
