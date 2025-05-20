@@ -142,7 +142,7 @@ const orderService = {
 
 getOrderStats : async () => {
     try {
-        const response = await axios.get('/api/orders/order_stats/');
+        const response = await axios.get(`${API_URL}/orders/order_stats/`);
         return response.data;
     } catch (error) {
         console.error('Error fetching order stats:', error);
