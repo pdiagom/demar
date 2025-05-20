@@ -10,24 +10,25 @@ import { Navigate } from 'react-router-dom';
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('articles');
     const [isAdmin, setIsAdmin] = useState(false);
+    const [loading, setLoading] = useState(true);
     const { setIsLoading } = useLoading();
 
-     useEffect(() => {
+    useEffect(() => {
         const checkAdminStatus = async () => {
-            setIsLoading(true); // Inicia la carga
+            setIsLoading(true);
             try {
                 const user = await getCurrentUser();
-                console.log('User:', user);
-                setIsAdmin(user.role === 1 || user.role === '1'); // Verifica si el usuario es admin o superadmin
+                setIsAdmin(user.role === 1);
             } catch (error) {
                 console.error('Error checking admin status:', error);
             } finally {
-                setIsLoading(false); // Finaliza la carga
+                setLoading(false);
+                setIsLoading(false);
             }
         };
 
         checkAdminStatus();
-    }, [setIsLoading]); // Añade setIsLoading como dependencia
+    }, []);
 
     const renderContent = () => {
         switch(activeTab) {
@@ -42,7 +43,9 @@ const Admin = () => {
         }
     };
 
-    
+    if (loading) {
+        return <div className="loading">Cargando...</div>;
+    }
 
     if (!isAdmin) {
         return <Navigate to="/" replace />;
