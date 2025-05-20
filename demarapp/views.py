@@ -308,7 +308,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def order_stats(self, request):
         stats = Order.objects.values('status').annotate(count=Count('status'))
-        result = {item['status']: item['count'] for item in stats}
+        result = {
+            'Pendiente': 0,
+            'En Proceso': 0,
+            'Completado': 0,
+            'Cancelado': 0
+        }
+        for item in stats:
+            result[item['status']] = item['count']
+        return Response(result)
         return Response(result)
 # CARRITO (Cart)
 class CartViewSet(viewsets.ModelViewSet):

@@ -148,6 +148,7 @@ getOrderStats : async () => {
         console.error('Error fetching order stats:', error);
         throw error;
     }
+
 },
 
 

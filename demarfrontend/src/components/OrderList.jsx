@@ -4,7 +4,12 @@ import Modal from "./Modal";
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
-  const [orderStats, setOrderStats] = useState({});
+   const [orderStats, setOrderStats] = useState({
+        Pendiente: 0,
+        'En Proceso': 0,
+        Completado: 0,
+        Cancelado: 0
+    });
   const [editingOrder, setEditingOrder] = useState(null);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -27,14 +32,14 @@ const OrderList = () => {
     }
   };
 
-  const fetchOrderStats = async () => {
-    try {
-      const stats = await orderService.getOrderStats();
-      setOrderStats(stats);
-    } catch (error) {
-      console.error("Error al obtener las estadísticas de pedidos:", error);
-    }
-  };
+   const fetchOrderStats = async () => {
+        try {
+            const stats = await orderService.getOrderStats();
+            setOrderStats(stats);
+        } catch (error) {
+            console.error('Error al obtener las estadísticas de pedidos:', error);
+        }
+    };
 
   const handleStatusChange = async (idOrder, newStatus) => {
     try {
@@ -85,12 +90,24 @@ const OrderList = () => {
   return (
     <div className="orders-section">
       <h3>Resumen de Pedidos</h3>
-      <div className="order-stats">
-        <p>Completados: {orderStats.Completado || 0}</p>
-        <p>Pendientes: {orderStats.Pendiente || 0}</p>
-        <p>En Proceso: {orderStats["En Proceso"] || 0}</p>
-        <p>Cancelados: {orderStats.Cancelado || 0}</p>
-      </div>
+            <div className="order-stats">
+                <div className="stat-item">
+                    <span className="stat-label">Pendientes:</span>
+                    <span className="stat-value">{orderStats.Pendiente}</span>
+                </div>
+                <div className="stat-item">
+                    <span className="stat-label">En Proceso:</span>
+                    <span className="stat-value">{orderStats['En Proceso']}</span>
+                </div>
+                <div className="stat-item">
+                    <span className="stat-label">Completados:</span>
+                    <span className="stat-value">{orderStats.Completado}</span>
+                </div>
+                <div className="stat-item">
+                    <span className="stat-label">Cancelados:</span>
+                    <span className="stat-value">{orderStats.Cancelado}</span>
+                </div>
+            </div>
       <h3>Lista de Todos los Pedidos</h3>
       <table className="orders-table">
         <thead>

@@ -476,3 +476,27 @@ li p {
   width: 100%;
   margin: auto;
 }
+
+.order-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.2em;
+    color: #007bff;
+}
