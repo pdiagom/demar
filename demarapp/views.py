@@ -186,7 +186,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
             
             s3.delete_object(
                 Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                Key=f"articles/{file_name}"
+                Key=f"media/articles/{file_name}"
             )
             logger.info(f"Image deleted from S3: {file_name}")
         except Exception as e:
@@ -207,7 +207,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
             
             s3.delete_object(
                 Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                Key=f"articles/{old_file_name}"
+                Key=f"media/articles/{old_file_name}"
             )
             logger.info(f"Old image deleted from S3: {old_file_name}")
         except Exception as e:
