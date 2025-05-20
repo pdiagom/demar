@@ -140,6 +140,16 @@ const orderService = {
   }
 },
 
+getOrderStats : async () => {
+    try {
+        const response = await axios.get('/api/orders/order_stats/');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching order stats:', error);
+        throw error;
+    }
+},
+
 
 };
 

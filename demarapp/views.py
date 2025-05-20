@@ -20,7 +20,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from django.db.models import Count
 import logging
 import boto3
 logger = logging.getLogger(__name__)
@@ -305,6 +305,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         items = order.items.all()
         serializer = OrderItemSerializer(items, many=True)
         return Response(serializer.data)
+    @action(detail=False, methods=['get'])
+    def order_stats(self, request):
+        stats = Order.objects.values('status').annotate(count=Count('status'))
+        result = {item['status']: item['count'] for item in stats}
+        return Response(result)
 # CARRITO (Cart)
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
