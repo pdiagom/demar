@@ -5,31 +5,26 @@ import CreateCategory from './CreateCategory';
 import OrderList from './OrderList';
 import { getCurrentUser } from '../services/authService';
 import { Navigate } from 'react-router-dom';
-import { useLoading } from '../context/loadingContext'; // Importa el hook useLoading
-
 
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('articles');
     const [isAdmin, setIsAdmin] = useState(false);
-       
-    
-    const { setIsLoading } = useLoading(); // Usa el hook useLoading
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const checkAdminStatus = async () => {
-            setIsLoading(true); // Inicia la carga
             try {
-                const user = JSON.parse(localStorage.getItem("currentUser"));
-                setIsAdmin(user === 1);
+                const user = await getCurrentUser();
+                setIsAdmin(user.role === 1);
             } catch (error) {
                 console.error('Error checking admin status:', error);
             } finally {
-                setIsLoading(false); // Finaliza la carga
+                setLoading(false);
             }
         };
 
         checkAdminStatus();
-    }, [setIsLoading]);
+    }, []);
 
     const renderContent = () => {
         switch(activeTab) {
@@ -44,7 +39,9 @@ const Admin = () => {
         }
     };
 
-
+    if (loading) {
+        return <div className="loading">Cargando...</div>;
+    }
 
     if (!isAdmin) {
         return <Navigate to="/" replace />;
