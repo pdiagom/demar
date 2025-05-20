@@ -37,7 +37,7 @@ const Login = ({ setUserId, setCurrentUser }) => {
 const handlePasswordResetRequest = async (e) => {
     e.preventDefault();
     try {
-        await axios.post('http://localhost:8000/demar/password_reset/', { email });
+        await axios.post('https://demar.onrender.com/demar/password_reset/', { email });
         setResetMessage('Se ha enviado un correo con instrucciones para restablecer tu contraseña.');
     } catch (error) {
         setResetMessage('Hubo un error al procesar tu solicitud.');
