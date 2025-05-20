@@ -15,6 +15,7 @@ from .serializers import UserSerializer, RegisterSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 # USUARIOS (Users)
 User = get_user_model()
 
@@ -70,6 +71,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     permission_classes = [permissions.AllowAny]  
     serializer_class = ArticleSerializer
+    parser_classes = [MultiPartParser, FormParser]
+    def post(self, request):
+        serializer = ArticleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
 
 
