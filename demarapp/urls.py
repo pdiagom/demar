@@ -22,6 +22,7 @@ urlpatterns = [
     path('check-user/', CheckUserExistsView.as_view(), name='check_user'),
     path('orders/all_orders/', OrderViewSet.as_view({'get': 'all_orders'}), name='all_orders'),
     path('orders/<int:pk>/items/', OrderViewSet.as_view({'get': 'items'}), name='order-items'),
+    path('orders/order_stats/', OrderViewSet.as_view({'get': 'order_stats'}), name='order-stats'),
     path('users/', UserListView.as_view(), name='user-list'),
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
 ]
