@@ -95,7 +95,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
                                   region_name=settings.AWS_S3_REGION_NAME)
                 
                 file_content = BytesIO(image_file.read())
-                file_name = f"articles/{image_file.name}"
+                file_name = f"media/articles/{image_file.name}"
                 
                 s3.upload_fileobj(
                     file_content,
