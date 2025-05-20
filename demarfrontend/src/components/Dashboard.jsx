@@ -37,7 +37,7 @@ const Dashboard = () => {
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -52,7 +52,7 @@ const Dashboard = () => {
 
   const handleShowOrderDetails = async (orderId) => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       const orderDetails = await orderService.getOrderDetails(orderId);
       const orderItems = await orderService.getOrderItems(orderId);
       setSelectedOrder({ ...orderDetails, items: orderItems });
@@ -60,7 +60,7 @@ const Dashboard = () => {
     } catch (err) {
       setError("Error al cargar los detalles del pedido");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
   const handleCloseModal = () => {
@@ -84,7 +84,7 @@ const Dashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     try {
       const updatedUser = await updateUser(editedUser);
       setUser(updatedUser);
@@ -92,7 +92,7 @@ const Dashboard = () => {
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -105,7 +105,7 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) return <p>Cargando datos del usuario...</p>;
+
   if (error) return <p>Error: {error}</p>;
 
   return (
