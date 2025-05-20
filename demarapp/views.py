@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, permissions
+from django.conf import settings
+from rest_framework import viewsets, permissions,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, generics
@@ -16,9 +17,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.core.files.base import ContentFile
-import base64
+
 import logging
+import boto3
 logger = logging.getLogger(__name__)
 # USUARIOS (Users)
 User = get_user_model()
@@ -81,6 +82,20 @@ class ArticleViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         logger.info(f"Received data: {request.data}")
         serializer = self.get_serializer(data=request.data)
+        
+        s3 = boto3.client('s3',
+                          aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                          aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                          region_name=settings.AWS_S3_REGION_NAME)
+        
+        try:
+            s3.put_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                          Key='test.txt',
+                          Body='This is a test file')
+            logger.info("Test file uploaded successfully to S3")
+        except Exception as e:
+            logger.error(f"Error uploading test file to S3: {str(e)}")
+            return Response({"error": f"S3 test upload failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         if serializer.is_valid():
             logger.info("Serializer is valid")
             self.perform_create(serializer)
