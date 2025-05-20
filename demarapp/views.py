@@ -95,7 +95,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
                                   region_name=settings.AWS_S3_REGION_NAME)
                 
                 file_content = BytesIO(image_file.read())
-                file_name = f"media/articles/{image_file.name}"
+                file_name = f"articles/{image_file.name}"
                 
                 s3.upload_fileobj(
                     file_content,
@@ -112,6 +112,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 logger.error(f"Error uploading image to S3: {str(e)}")
                 return Response({"error": f"S3 upload failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        elif image_url:
+            # Si es una URL, no necesitamos hacer nada más
+            pass
+        else:
+            # Si no hay imagen, establecemos el campo como None
+            request.data['image'] = None
         
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():

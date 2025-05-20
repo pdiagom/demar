@@ -32,7 +32,7 @@ const CreateArticle = ({ onArticleCreated }) => {
         if (key === 'image' && formData[key] instanceof File) {
             formDataToSend.append(key, formData[key]);
         } else {
-            formDataToSend.append(key, formData[key]);
+            formDataToSend.append(key, formData[key] || '');
         }
     });
 

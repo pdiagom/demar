@@ -42,10 +42,19 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields ='__all__'
         
+    def to_internal_value(self, data):
+        if data.get('image') and isinstance(data['image'], str):
+            # Si es una URL, no lo proceses como un archivo
+            self.fields['image'] = serializers.URLField(required=False, allow_null=True)
+        return super().to_internal_value(data)
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        if instance.image and not instance.image.name.startswith('http'):
-            representation['image'] = instance.image.url
+        if instance.image:
+            if isinstance(instance.image, str):
+                representation['image'] = instance.image
+            else:
+                representation['image'] = instance.image.url
         return representation
 
 class CategorySerializer(serializers.ModelSerializer):
