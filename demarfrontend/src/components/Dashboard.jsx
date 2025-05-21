@@ -55,7 +55,7 @@ const Dashboard = () => {
       setIsLoading(true);
       const orderDetails = await orderService.getOrderDetails(orderId);
       const orderItems = await orderService.getOrderItems(orderId);
-      setSelectedOrder({ ...orderDetails, items: orderItems });
+      setSelectedOrder({ ...orderDetails.order, items: orderItems });
       setShowModal(true);
     } catch (err) {
       setError("Error al cargar los detalles del pedido");
