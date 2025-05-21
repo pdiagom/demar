@@ -4,7 +4,7 @@ import uuid
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework import viewsets, permissions,status
-from rest_framework.request import Request
+
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, generics
@@ -166,15 +166,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
         else:
             # Si no hay imagen y no estamos actualizando, establecer como None
             mutable_data['image'] = None
-    
-        # Crear una nueva instancia de Request con los datos mutables
-        new_request = Request(request)
-        new_request._full_data = mutable_data
 
         if update:
-            serializer = self.get_serializer(instance, data=new_request.data, partial=True)
+            serializer = self.get_serializer(instance, data=mutable_data, partial=True)
         else:
-            serializer = self.get_serializer(data=new_request.data)
+            serializer = self.get_serializer(data=mutable_data)
 
         if serializer.is_valid():
             instance = serializer.save()
@@ -184,7 +180,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         else:
             logger.error(f"Serializer errors: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+            
     def generate_unique_filename(self, original_filename):
         """
         Genera un nombre de archivo único añadiendo un UUID.
