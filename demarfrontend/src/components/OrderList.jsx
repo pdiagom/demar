@@ -191,7 +191,7 @@ const OrderList = () => {
                     className="btn-primary"
                     onClick={() => handleShowItems(order.idOrder)}
                   >
-                    Ver Artículos
+                    Ver Detalle
                   </button>
                 </div>
               </td>
