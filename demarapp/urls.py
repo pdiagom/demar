@@ -21,6 +21,7 @@ urlpatterns = [
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('check-user/', CheckUserExistsView.as_view(), name='check_user'),
     path('orders/all_orders/', OrderViewSet.as_view({'get': 'all_orders'}), name='all_orders'),
+    path('orders/<int:pk>/items/', OrderViewSet.as_view({'get': 'items'}), name='order-items'),
     path('orders/<int:pk>/details/', OrderViewSet.as_view({'get': 'details'}), name='order-details'),
     path('orders/order_stats/', OrderViewSet.as_view({'get': 'order_stats'}), name='order-stats'),
     path('users/', UserListView.as_view(), name='user-list'),

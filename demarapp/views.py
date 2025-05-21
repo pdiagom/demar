@@ -312,6 +312,12 @@ class OrderViewSet(viewsets.ModelViewSet):
         }
         
         return Response(response_data)
+    @action(detail=True, methods=['get'])
+    def items(self, request, pk=None):
+        order = self.get_object()
+        items = order.items.all()
+        serializer = OrderItemSerializer(items, many=True)
+        return Response(serializer.data)
     @action(detail=False, methods=['get'])
     def order_stats(self, request):
         stats = Order.objects.values('status').annotate(count=Count('status'))
@@ -324,7 +330,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         for item in stats:
             result[item['status']] = item['count']
         return Response(result)
-        return Response(result)
+
 # CARRITO (Cart)
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()

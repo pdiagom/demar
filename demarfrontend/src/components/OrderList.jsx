@@ -13,7 +13,8 @@ const OrderList = () => {
   const [editingOrder, setEditingOrder] = useState(null);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState([]);
+  const [selectedOrderItems, setSelectedOrderItems] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     fetchOrders();
