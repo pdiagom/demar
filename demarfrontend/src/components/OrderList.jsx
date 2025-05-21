@@ -13,7 +13,7 @@ const OrderList = () => {
   const [editingOrder, setEditingOrder] = useState(null);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
+  const [statusFilter, setStatusFilter] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
@@ -41,6 +41,9 @@ const OrderList = () => {
             console.error('Error al obtener las estadísticas de pedidos:', error);
         }
     };
+const handleStatusFilterChange = (e) => {
+  setStatusFilter(e.target.value);
+};
 
    const handleStatusChange = async (idOrder, newStatus) => {
     try {
@@ -99,6 +102,10 @@ const OrderList = () => {
     );
   }
 };
+const filteredOrders = statusFilter
+  ? orders.filter(order => order.status === statusFilter)
+  : orders;
+
 
   if (error) {
     return <div className="error-message">{error}</div>;
@@ -126,7 +133,15 @@ const OrderList = () => {
                 </div>
             </div>
       <h3>Lista de Todos los Pedidos</h3>
-       
+       <div className="filter-container">
+  <select value={statusFilter} onChange={handleStatusFilterChange}>
+    <option value="">Todos los estados</option>
+    <option value="Pendiente">Pendiente</option>
+    <option value="En Proceso">En Proceso</option>
+    <option value="Completado">Completado</option>
+    <option value="Cancelado">Cancelado</option>
+  </select>
+</div>
       <table className="orders-table">
         <thead>
           <tr>
@@ -140,7 +155,7 @@ const OrderList = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {filteredOrders.map((order) => (
             <tr key={order.idOrder}>
               <td data-label="ID Pedido">{order.idOrder}</td>
               <td data-label="Usuario">{order.userId}</td>
