@@ -736,3 +736,152 @@ img {
     margin-left: 0;
   }
 }
+
+@media (max-width: 768px) {
+  .orders-table td {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .orders-table td button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .orders-table td:last-child {
+    border-bottom: 1px solid #ffcece;
+    padding-bottom: 10px;
+  }
+
+  .orders-table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .orders-table thead {
+    display: none;
+  }
+
+  .orders-table tr {
+    margin-bottom: 10px;
+    display: block;
+    border: 1px solid #ffcece;
+  }
+
+  .orders-table td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .orders-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+  }
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-group button {
+  margin-bottom: 5px;
+}
+
+@media (min-width: 769px) {
+  .button-group {
+    flex-direction: row;
+  }
+
+  .button-group button {
+    margin-right: 5px;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-menu {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard-menu button {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .profile-section,
+  .orders-section {
+    padding: 10px;
+  }
+
+  .edit-form div {
+    margin-bottom: 15px;
+  }
+
+  .edit-form input {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .orders-table {
+    font-size: 0.9em;
+  }
+
+  .orders-table thead {
+    display: none;
+  }
+
+  .orders-table, .orders-table tbody, .orders-table tr, .orders-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .orders-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #ffcece;
+  }
+
+  .orders-table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .orders-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .orders-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .orders-table td button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}

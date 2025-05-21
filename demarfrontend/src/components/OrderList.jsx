@@ -121,6 +121,7 @@ const OrderList = () => {
                 </div>
             </div>
       <h3>Lista de Todos los Pedidos</h3>
+       <h3>Lista de Todos los Pedidos</h3>
       <table className="orders-table">
         <thead>
           <tr>
@@ -136,11 +137,11 @@ const OrderList = () => {
         <tbody>
           {orders.map((order) => (
             <tr key={order.idOrder}>
-              <td>{order.idOrder}</td>
-              <td>{order.userId}</td>
-              <td>{order.paymentMethod}</td>
-              <td>{order.total}€</td>
-              <td>
+              <td data-label="ID Pedido">{order.idOrder}</td>
+              <td data-label="Usuario">{order.userId}</td>
+              <td data-label="Método de pago">{order.paymentMethod}</td>
+              <td data-label="Total">{order.total}€</td>
+              <td data-label="Estado">
                 {editingOrder === order.idOrder ? (
                   <select
                     value={order.status}
@@ -157,35 +158,37 @@ const OrderList = () => {
                   order.status
                 )}
               </td>
-              <td>{new Date(order.date).toLocaleDateString()}</td>
-              <td>
-                {editingOrder === order.idOrder ? (
+              <td data-label="Fecha">{new Date(order.date).toLocaleDateString()}</td>
+              <td data-label="Acciones">
+                <div className="button-group">
+                  {editingOrder === order.idOrder ? (
+                    <button
+                      className="btn-primary"
+                      onClick={() => setEditingOrder(null)}
+                    >
+                      Guardar
+                    </button>
+                  ) : (
+                    <button
+                      className="btn-secondary"
+                      onClick={() => setEditingOrder(order.idOrder)}
+                    >
+                      Editar
+                    </button>
+                  )}
+                  <button
+                    className="btn-danger"
+                    onClick={() => handleDeleteOrder(order.idOrder)}
+                  >
+                    Eliminar
+                  </button>
                   <button
                     className="btn-primary"
-                    onClick={() => setEditingOrder(null)}
+                    onClick={() => handleShowItems(order.idOrder)}
                   >
-                    Guardar
+                    Ver Artículos
                   </button>
-                ) : (
-                  <button
-                    className="btn-secondary"
-                    onClick={() => setEditingOrder(order.idOrder)}
-                  >
-                    Editar
-                  </button>
-                )}
-                <button
-                  className="btn-danger"
-                  onClick={() => handleDeleteOrder(order.idOrder)}
-                >
-                  Eliminar
-                </button>
-                <button
-                  className="btn-primary"
-                  onClick={() => handleShowItems(order.idOrder)}
-                >
-                  Ver Artículos
-                </button>
+                </div>
               </td>
             </tr>
           ))}
