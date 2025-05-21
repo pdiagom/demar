@@ -141,7 +141,11 @@ const orderService = {
 },
 getOrderDetails : async (orderId) => {
   try {
-    const response = await axios.get(`${API_URL}/${orderId}/details/`);
+    const response = await axios.get(`${API_URL}/${orderId}/details/`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching order details:', error);
