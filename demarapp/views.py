@@ -108,10 +108,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
     def handle_image_upload(self, request, *args, **kwargs):
         update = kwargs.pop('update', False)
-        
+    
         logger.info(f"Received data: {request.data}")
         logger.info(f"Received files: {request.FILES}")
-        
+    
         image_file = request.FILES.get('image')
         image_url = request.data.get('image')
 
@@ -124,31 +124,31 @@ class ArticleViewSet(viewsets.ModelViewSet):
         if image_file:
             try:
                 s3 = boto3.client('s3',
-                                  aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                                  aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                                  region_name=settings.AWS_S3_REGION_NAME)
-                
+                              aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                              region_name=settings.AWS_S3_REGION_NAME)
+            
                 # Generar un nombre de archivo único
                 file_name = self.generate_unique_filename(image_file.name)
-                
+            
                 file_content = BytesIO(image_file.read())
-                
+            
                 s3.upload_fileobj(
                     file_content,
                     settings.AWS_STORAGE_BUCKET_NAME,
                     file_name,
                     ExtraArgs={'ACL': 'public-read'}
                 )
-                
+            
                 logger.info(f"Image uploaded successfully to S3: {file_name}")
-                
+            
                 s3_file_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{file_name}"
                 request.data['image'] = s3_file_url
 
                 # Si estamos actualizando, eliminar la imagen anterior
                 if update and old_image_url:
                     self.delete_old_image(old_image_url)
-            
+        
             except Exception as e:
                 logger.error(f"Error uploading image to S3: {str(e)}")
                 return Response({"error": f"S3 upload failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -156,12 +156,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
             # Si es una URL y estamos actualizando, verificar si ha cambiado
             if update and old_image_url and old_image_url != image_url:
                 self.delete_old_image(old_image_url)
+        elif update:
+            # Si no se proporciona una nueva imagen y estamos actualizando, mantener la imagen existente
+            request.data['image'] = old_image_url
         else:
-            # Si no hay imagen y estamos actualizando, eliminar la imagen anterior
-            if update and old_image_url:
-                self.delete_old_image(old_image_url)
+            # Si no hay imagen y no estamos actualizando, establecer como None
             request.data['image'] = None
-        
+    
         if update:
             serializer = self.get_serializer(instance, data=request.data, partial=True)
         else:
@@ -175,6 +176,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         else:
             logger.error(f"Serializer errors: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def generate_unique_filename(self, original_filename):
         """
