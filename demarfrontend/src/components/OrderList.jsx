@@ -121,7 +121,7 @@ const OrderList = () => {
                 </div>
             </div>
       <h3>Lista de Todos los Pedidos</h3>
-       <h3>Lista de Todos los Pedidos</h3>
+       
       <table className="orders-table">
         <thead>
           <tr>

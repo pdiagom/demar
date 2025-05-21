@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
-  const { setIsLoading } = useLoading()
+  const { setIsLoading } = useLoading();
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({});
@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-     setIsLoading(true);
+      setIsLoading(true);
       try {
         await Promise.all([fetchUserData(), fetchUserOrders()]);
       } catch (err) {
@@ -25,7 +25,7 @@ const Dashboard = () => {
       } finally {
         setIsLoading(false);
       }
-    }
+    };
     fetchData();
   }, []);
 
@@ -105,10 +105,9 @@ const Dashboard = () => {
     }
   };
 
-
   if (error) return <p>Error: {error}</p>;
 
-    return (
+  return (
     <div className="dashboard container">
       <div className="dashboard-menu">
         <button
@@ -131,7 +130,78 @@ const Dashboard = () => {
             <>
               {isEditing ? (
                 <form onSubmit={handleSubmit} className="edit-form">
-                  {/* ... (campos del formulario sin cambios) */}
+                  <div>
+                    <label>Nombre de usuario:</label>
+                    <input
+                      type="text"
+                      name="username"
+                      value={editedUser.username}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Email:</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={editedUser.email}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Nombre:</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={editedUser.name}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Teléfono:</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={editedUser.phone || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Dirección:</label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={editedUser.address || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Ciudad:</label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={editedUser.city || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>País:</label>
+                    <input
+                      type="text"
+                      name="country"
+                      value={editedUser.country || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Código postal:</label>
+                    <input
+                      type="text"
+                      name="postalCode"
+                      value={editedUser.postalCode || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
                   <div className="form-actions">
                     <button type="submit" className="btn-primary">
                       Guardar cambios
@@ -147,8 +217,37 @@ const Dashboard = () => {
                 </form>
               ) : (
                 <div className="user-info">
-                  {/* ... (información del usuario sin cambios) */}
-                  <button onClick={handleEdit} className="btn-primary">Editar perfil</button>
+                  <p>
+                    <strong>Nombre de usuario:</strong> {user.username}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                  <p>
+                    <strong>Nombre:</strong> {user.name}
+                  </p>
+                  <p>
+                    <strong>Teléfono:</strong>{" "}
+                    {user.phone || "No proporcionado"}
+                  </p>
+                  <p>
+                    <strong>Dirección:</strong>{" "}
+                    {user.address || "No proporcionada"}
+                  </p>
+                  <p>
+                    <strong>Ciudad:</strong> {user.city || "No especificada"}
+                  </p>
+                  <p>
+                    <strong>País:</strong> {user.country || "No especificado"}
+                  </p>
+                  <p>
+                    <strong>Código postal:</strong>{" "}
+                    {user.postalCode || "No especificado"}
+                  </p>
+
+                  <button onClick={handleEdit} className="btn-primary">
+                    Editar perfil
+                  </button>
                 </div>
               )}
             </>
@@ -172,10 +271,13 @@ const Dashboard = () => {
               {orders.map((order) => (
                 <tr key={order.idOrder}>
                   <td data-label="ID Pedido">{order.idOrder}</td>
-                  <td data-label="Fecha">{new Date(order.date).toLocaleDateString()}</td>
+                  <td data-label="Fecha">
+                    {new Date(order.date).toLocaleDateString()}
+                  </td>
                   <td data-label="Total">{order.total}€</td>
                   <td data-label="Estado">{order.status}</td>
                   <td data-label="Acciones">
+                    <div className="button-group">
                     <button
                       onClick={() => handleShowOrderDetails(order.idOrder)}
                       className="btn-primary"
@@ -183,13 +285,14 @@ const Dashboard = () => {
                       Ver Detalles
                     </button>
                     {order.status === "Pendiente" && (
-                      <button 
+                      <button
                         onClick={() => handleCancelOrder(order.idOrder)}
                         className="btn-secondary"
                       >
                         Cancelar Pedido
                       </button>
                     )}
+                    </div>
                   </td>
                 </tr>
               ))}
