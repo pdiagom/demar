@@ -487,7 +487,10 @@ li p {
     padding: 15px;
     border-radius: 5px;
 }
-
+img {
+  max-width: 100%;
+  height: auto;
+}
 .stat-item {
     text-align: center;
 }
@@ -503,10 +506,89 @@ li p {
     color: #007bff;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
+
+.users-table th,
+.users-table td {
+  border: 1px solid #ffcece;
+  padding: 12px;
+  text-align: left;
+}
+
+.users-table th {
+  background-color: #fff0f0;
+  font-weight: bold;
+}
+
+.user-management form {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #fff0f0;
+  border-radius: 5px;
+}
+
+.user-management form input,
+.user-management form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 576px) {
+  .user-management form {
+    padding: 10px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .users-table {
+    font-size: 0.9em;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 8px;
+  }
+
+  .users-table thead {
+    display: none;
+  }
+
+  .users-table, .users-table tbody, .users-table tr, .users-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .users-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #ffcece;
+  }
+
+  .users-table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .users-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+}
+
+
+
 @media (max-width: 768px) {
   nav {
     flex-direction: column;
@@ -514,6 +596,12 @@ img {
   }
   
   nav a {
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 576px) {
+  button {
+    width: 100%;
     margin-bottom: 10px;
   }
 }
@@ -630,5 +718,21 @@ img {
     width: 100%;
     margin-right: 0;
     margin-bottom: 10px;
+  }
+}
+@media (max-width: 576px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cart-item-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .cart-item-actions button {
+    margin-left: 0;
   }
 }
