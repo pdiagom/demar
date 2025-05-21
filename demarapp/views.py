@@ -50,15 +50,27 @@ class LoginView(generics.GenericAPIView):
         return LoginSerializer
     
     def post(self, request, *args, **kwargs):
-        username = request.data.get("username")
+        username_or_email = request.data.get("username")
         password = request.data.get("password")
-        print(username)
-        print(password)
-        user = authenticate(request, username=username, password=password)
-        print(user)
+
+        # Intenta autenticar con el nombre de usuario
+        user = authenticate(request, username=username_or_email, password=password)
+
+        # Si falla, intenta autenticar con el correo electrónico
+        if user is None:
+            try:
+                user_obj = User.objects.get(email=username_or_email)
+                user = authenticate(request, username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                user = None
+
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key, "user": UserSerializer(user).data}, status=status.HTTP_200_OK)
+            return Response({
+                "token": token.key,
+                "user": UserSerializer(user).data
+            }, status=status.HTTP_200_OK)
+        
         return Response({"error": "Credenciales inválidas"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileView(APIView):

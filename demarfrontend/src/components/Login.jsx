@@ -65,7 +65,7 @@ return (
                         name="username"
                         value={credentials.username}
                         onChange={handleChange}
-                        placeholder="Usuario"
+                        placeholder="Usuario o correo electrónico"
                         required
                     />
                     <input
