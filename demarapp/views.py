@@ -4,6 +4,7 @@ import uuid
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework import viewsets, permissions,status
+from rest_framework.request import Request
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, generics
@@ -112,8 +113,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
         logger.info(f"Received data: {request.data}")
         logger.info(f"Received files: {request.FILES}")
     
+        # Crear una copia mutable de los datos de la solicitud
+        mutable_data = request.data.copy()
+    
         image_file = request.FILES.get('image')
-        image_url = request.data.get('image')
+        image_url = mutable_data.get('image')
 
         if update:
             instance = self.get_object()
@@ -143,7 +147,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
                 logger.info(f"Image uploaded successfully to S3: {file_name}")
             
                 s3_file_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{file_name}"
-                request.data['image'] = s3_file_url
+                mutable_data['image'] = s3_file_url
 
                 # Si estamos actualizando, eliminar la imagen anterior
                 if update and old_image_url:
@@ -158,15 +162,19 @@ class ArticleViewSet(viewsets.ModelViewSet):
                 self.delete_old_image(old_image_url)
         elif update:
             # Si no se proporciona una nueva imagen y estamos actualizando, mantener la imagen existente
-            request.data['image'] = old_image_url
+            mutable_data['image'] = old_image_url
         else:
             # Si no hay imagen y no estamos actualizando, establecer como None
-            request.data['image'] = None
+            mutable_data['image'] = None
     
+        # Crear una nueva instancia de Request con los datos mutables
+        new_request = Request(request)
+        new_request._full_data = mutable_data
+
         if update:
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer = self.get_serializer(instance, data=new_request.data, partial=True)
         else:
-            serializer = self.get_serializer(data=request.data)
+            serializer = self.get_serializer(data=new_request.data)
 
         if serializer.is_valid():
             instance = serializer.save()
@@ -176,8 +184,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         else:
             logger.error(f"Serializer errors: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
+        
     def generate_unique_filename(self, original_filename):
         """
         Genera un nombre de archivo único añadiendo un UUID.
