@@ -139,7 +139,15 @@ const orderService = {
     throw error;
   }
 },
-
+getOrderDetails : async (orderId) => {
+  try {
+    const response = await axios.get(`${API_URL}/orders/${orderId}/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    throw error;
+  }
+},
 getOrderStats: async () => {
     const token = localStorage.getItem("token");
     try {
