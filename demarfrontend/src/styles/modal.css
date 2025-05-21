@@ -13,9 +13,9 @@
 
 .modal-content {
     background-color: white;
-    padding: 30px;
+    padding: 20px;
     border-radius: 10px;
-    width: 90%;
+    width: 95%;
     max-width: 800px;
     max-height: 90vh;
     overflow-y: auto;
@@ -35,8 +35,8 @@
 }
 
 .modal-content h4 {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-bottom: 15px;
     color: #333;
     text-align: center;
 }
@@ -48,17 +48,16 @@
 }
 
 .modal-content li {
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 10px;
-    padding: 15px;
+    padding: 10px;
     background-color: #f8f8f8;
     border-radius: 5px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    min-height: 100px;
-    min-width: 600px;
+    align-items: flex-start;
+    min-height: auto;
 }
 
 .modal-content li:last-child {
@@ -66,24 +65,58 @@
 }
 
 .modal-content li .item-details {
-    flex-grow: 1;
+    width: 100%;
+    margin-bottom: 5px;
 }
 
 .modal-content li .item-price {
     font-weight: bold;
-    margin-left: 20px;
 }
 
 .modal-content li button {
-    margin-left: 10px;
+    margin-top: 10px;
     padding: 5px 10px;
     background-color: #ff0000;
     color: white;
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    width: 100%;
 }
 
 .modal-content li button:hover {
     background-color: #cc0000;
+}
+
+@media (min-width: 768px) {
+    .modal-content {
+        padding: 30px;
+    }
+
+    .modal-content h4 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .modal-content li {
+        font-size: 16px;
+        flex-direction: row;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .modal-content li .item-details {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .modal-content li .item-price {
+        margin-left: 20px;
+    }
+
+    .modal-content li button {
+        margin-top: 0;
+        margin-left: 10px;
+        width: auto;
+    }
 }
