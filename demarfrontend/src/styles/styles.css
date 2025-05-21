@@ -122,9 +122,11 @@ li {
 /* --- Contenedores generales --- */
 .container {
   max-width: 1200px;
+  width: 95%;
   margin: 0 auto;
   padding: 20px;
 }
+
 
 /* --- Títulos --- */
 h1,
@@ -499,4 +501,134 @@ li p {
 .stat-value {
     font-size: 1.2em;
     color: #007bff;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  nav a {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 1200px) {
+  li {
+    width: calc(25% - 20px);
+  }
+}
+
+@media (max-width: 992px) {
+  li {
+    width: calc(33.33% - 20px);
+  }
+}
+
+@media (max-width: 768px) {
+  li {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 576px) {
+  li {
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  h3 {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 576px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Previene el zoom en iOS */
+  }
+
+  .login-container,
+  .register-container {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .orders-table {
+    font-size: 0.9em;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .orders-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .order-stats {
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    width: 50%;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-menu {
+    flex-wrap: wrap;
+  }
+
+  .dashboard-menu button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .admin-nav {
+    flex-direction: column;
+  }
+
+  .admin-nav button {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
 }
