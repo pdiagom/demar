@@ -83,14 +83,15 @@ const OrderList = () => {
     }
   };
 
-  const handleShowItems = async (orderId) => {
+    const handleShowItems = async (orderId) => {
     try {
+      const orderDetails = await orderService.getOrderDetails(orderId);
       const items = await orderService.getOrderItems(orderId);
-      setSelectedOrderItems(items);
+      setSelectedOrder({...orderDetails, items});
       setShowModal(true);
     } catch (error) {
       setError(
-        "No se pudieron cargar los artículos del pedido. Por favor, intente de nuevo."
+        "No se pudieron cargar los detalles del pedido. Por favor, intente de nuevo."
       );
     }
   };
@@ -195,18 +196,29 @@ const OrderList = () => {
         </tbody>
       </table>
 
-      <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <div className="order-details">
-          <h4>Artículos del Pedido</h4>
-          <ul className="order-items">
-            {selectedOrderItems.map((item, index) => (
-              <li key={index}>
-                {item.article_name} - Cantidad: {item.quantity} - Precio:{" "}
-                {item.article_price}€
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Modal show={showModal} onClose={() => setShowModal(false)}>
+        {selectedOrder && (
+          <div className="order-details">
+            <h4>Detalles del Pedido #{selectedOrder.idOrder}</h4>
+            <p><strong>Fecha:</strong> {new Date(selectedOrder.date).toLocaleDateString()}</p>
+            <p><strong>Estado:</strong> {selectedOrder.status}</p>
+            <p><strong>Total:</strong> {selectedOrder.total}€</p>
+            <p><strong>Método de pago:</strong> {selectedOrder.paymentMethod}</p>
+            <h5>Dirección de envío:</h5>
+            <p>{selectedOrder.shippingAddress}</p>
+            <p>{selectedOrder.city}, {selectedOrder.postalCode}</p>
+            <p>{selectedOrder.country}</p>
+            <h5>Artículos:</h5>
+            <ul className="order-items">
+              {selectedOrder.items.map((item, index) => (
+                <li key={index}>
+                  {item.article_name} - Cantidad: {item.quantity} - Precio:{" "}
+                  {item.article_price}€
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </Modal>
     </div>
   );
