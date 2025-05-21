@@ -300,11 +300,18 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     @action(detail=True, methods=['get'])
-    def items(self, request, pk=None):
+    def details(self, request, pk=None):
         order = self.get_object()
+        order_serializer = OrderSerializer(order)
         items = order.items.all()
-        serializer = OrderItemSerializer(items, many=True)
-        return Response(serializer.data)
+        items_serializer = OrderItemSerializer(items, many=True)
+        
+        response_data = {
+            'order': order_serializer.data,
+            'items': items_serializer.data
+        }
+        
+        return Response(response_data)
     @action(detail=False, methods=['get'])
     def order_stats(self, request):
         stats = Order.objects.values('status').annotate(count=Count('status'))

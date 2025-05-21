@@ -141,7 +141,7 @@ const orderService = {
 },
 getOrderDetails : async (orderId) => {
   try {
-    const response = await axios.get(`${API_URL}/orders/${orderId}/`);
+    const response = await axios.get(`${API_URL}/${orderId}/details/`);
     return response.data;
   } catch (error) {
     console.error('Error fetching order details:', error);
