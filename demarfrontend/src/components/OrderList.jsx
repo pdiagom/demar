@@ -13,7 +13,7 @@ const OrderList = () => {
   const [editingOrder, setEditingOrder] = useState(null);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedOrderItems, setSelectedOrderItems] = useState([]);
+  
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
@@ -85,17 +85,20 @@ const OrderList = () => {
   };
 
     const handleShowItems = async (orderId) => {
-    try {
-      const orderDetails = await orderService.getOrderDetails(orderId);
-      const items = await orderService.getOrderItems(orderId);
-      setSelectedOrder({...orderDetails, items});
-      setShowModal(true);
-    } catch (error) {
-      setError(
-        "No se pudieron cargar los detalles del pedido. Por favor, intente de nuevo."
-      );
-    }
-  };
+  try {
+    const orderData = await orderService.getOrderDetails(orderId);
+    setSelectedOrder({
+      ...orderData.order,
+      items: orderData.items
+    });
+    setShowModal(true);
+  } catch (error) {
+    console.error("Error al cargar los detalles del pedido:", error);
+    setError(
+      "No se pudieron cargar los detalles del pedido. Por favor, intente de nuevo."
+    );
+  }
+};
 
   if (error) {
     return <div className="error-message">{error}</div>;
