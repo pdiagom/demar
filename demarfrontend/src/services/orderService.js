@@ -140,6 +140,7 @@ const orderService = {
   }
 },
 getOrderDetails : async (orderId) => {
+  const token = localStorage.getItem("token");
   try {
     const response = await axios.get(`${API_URL}/${orderId}/details/`, {
       headers: {
