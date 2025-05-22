@@ -17,6 +17,9 @@ const ArticleList = ({ currentUser }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const location = useLocation();
+  const [priceRange, setPriceRange] = useState({ min: 0, max: Infinity });
+  const [searchTerm, setSearchTerm] = useState('');
+
 
   const fetchArticles = async () => {
     setIsLoading(true); // Inicia la carga
