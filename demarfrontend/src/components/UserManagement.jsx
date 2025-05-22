@@ -53,11 +53,11 @@ const UserManagement = () => {
 
     const getRoleText = (role) => {
     switch (role) {
-      case "0":
+      case 0:
         return "Usuario";
-      case "1":
+      case 1:
         return "Administrador";
-      case "2":
+      case 2:
         return "Gestor";
       default:
         return "Desconocido";
