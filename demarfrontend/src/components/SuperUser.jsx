@@ -27,7 +27,7 @@ const Superuser = () => {
 
     return (
         <div className="admin-dashboard">
-            <h2>Menu de Superusuario</h2>
+            <h2>Menu de Gestor</h2>
             <nav className="admin-nav">
                 <button className={getButtonClass('articles')} onClick={() => setActiveTab('articles')}>Crear Artículo</button>
                 <button className={getButtonClass('categories')} onClick={() => setActiveTab('categories')}>Crear Categoría</button>

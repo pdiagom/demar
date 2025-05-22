@@ -51,6 +51,19 @@ const UserManagement = () => {
     }
   };
 
+    const getRoleText = (role) => {
+    switch (role) {
+      case "0":
+        return "Usuario";
+      case "1":
+        return "Administrador";
+      case "2":
+        return "Gestor";
+      default:
+        return "Desconocido";
+    }
+  };
+
   return (
     <div className="user-management">
       <h2>Gestión de Usuarios</h2>
@@ -71,7 +84,7 @@ const UserManagement = () => {
               <td data-label="ID">{user.id}</td>
               <td data-label="Nombre de Usuario">{user.username}</td>
               <td data-label="Email">{user.email}</td>
-              <td data-label="Rol">{user.role}</td>
+              <td data-label="Rol">{getRoleText(user.role)}</td>
               <td data-label="Acciones">
                 <button onClick={() => handleEdit(user)}>Editar</button>
                 <button onClick={() => handleDelete(user.id)}>Eliminar</button>
@@ -99,7 +112,7 @@ const UserManagement = () => {
           <select name="role" value={editingUser.role} onChange={handleChange}>
             <option value="0">Usuario</option>
             <option value="1">Administrador</option>
-            <option value="2">Superusuario</option>
+            <option value="2">Gestor</option>
           </select>
           <button type="submit">Guardar Cambios</button>
           <button type="button" onClick={() => setEditingUser(null)}>
