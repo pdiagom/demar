@@ -88,7 +88,7 @@ const handleSearch = (term) => {
   };
 
       return (
-    <div className="article-list-container">
+    <div>
       <div className="filters-container">
         <div className="main-filters">
           <div className="search-category-filters">
