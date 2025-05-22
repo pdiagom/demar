@@ -7,7 +7,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const [formData, setFormData] = useState({ ...article });
     const [newImage, setNewImage] = useState(null);
 
-    // Efecto para sincronizar formData con los cambios en article
+    // Efecto para sincronizar formData con los cambios en articulos
     useEffect(() => {
         setFormData({ ...article });
     }, [article]);
