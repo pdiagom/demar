@@ -950,7 +950,7 @@ img {
 }
 
 .price-filter input {
-  width: 80px;
+  width: 200px;
 }
 
 @media (max-width: 768px) {
