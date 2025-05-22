@@ -974,19 +974,53 @@ img {
 @media (max-width: 768px) {
   .main-filters {
     flex-direction: column;
+    align-items: center;
+  }
+
+  .search-category-filters {
+    width: 100%;
+    margin-left: 0;
+    align-items: center;
+  }
+
+  .search-bar,
+  .category-filter {
+    width: 100%;
   }
 
   .price-filter {
-    flex-direction: row;
-    flex-wrap: wrap;
+    width: 100%;
+    margin-right: 0;
+    align-items: center;
+  }
+
+  .price-filter form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .price-filter input {
-    width: calc(50% - 5px);
+    width: 100%;
+    margin-bottom: 10px;
   }
 
   .price-filter button {
     width: 100%;
-    margin-top: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .search-category-filters,
+  .price-filter {
+    width: 90%;
+  }
+
+  .search-bar input,
+  .category-filter select,
+  .price-filter input,
+  .price-filter button {
+    font-size: 14px;
   }
 }
