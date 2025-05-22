@@ -61,11 +61,11 @@ const Cart = () => {
                             <li className='articleItem' key={item.article.idArticle}>
                                 {item.article.name} - {item.article.price}€
                                 
-                                    <button onClick={() => handleDecrease(item.article)}>-</button>
+                                    <button className='cart-button' onClick={() => handleDecrease(item.article)}>-</button>
                                     <span>{item.quantity}</span>
-                                    <button onClick={() => handleIncrease(item.article)}>+</button>
+                                    <button className='cart-button' onClick={() => handleIncrease(item.article)}>+</button>
                                 
-                                <button onClick={() => handleRemove(item.article)}>Eliminar</button>
+                                <button className='cart-button remove-button' onClick={() => handleRemove(item.article)}>Eliminar</button>
                             </li>
                         ))}
                     </ul>

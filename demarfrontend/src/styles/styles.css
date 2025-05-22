@@ -885,3 +885,43 @@ img {
     margin-bottom: 5px;
   }
 }
+
+
+.cart-button {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+
+.remove-button {
+  padding: 8px 10px;
+}
+
+@media (max-width: 576px) {
+  .articleItem {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .articleItem > *:first-child {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .cart-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .remove-button {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  .articleItem > button {
+    flex: 0 0 auto;
+  }
+
+  .articleItem > span {
+    margin: 0 5px;
+  }
+}
