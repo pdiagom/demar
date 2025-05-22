@@ -10,20 +10,20 @@ const PriceFilter = ({ onPriceChange }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="price-filter" onSubmit={handleSubmit}>
       <input
         type="number"
-        placeholder="Precio mínimo"
+        placeholder="Min €"
         value={min}
         onChange={(e) => setMin(e.target.value)}
       />
       <input
         type="number"
-        placeholder="Precio máximo"
+        placeholder="Max €"
         value={max}
         onChange={(e) => setMax(e.target.value)}
       />
-      <button type="submit">Aplicar filtro</button>
+      <button type="submit">Filtrar</button>
     </form>
   );
 };

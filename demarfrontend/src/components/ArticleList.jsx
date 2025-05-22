@@ -87,15 +87,17 @@ const handleSearch = (term) => {
     ));
   };
 
-  return (
-    <div>
-      <SearchBar onSearch={handleSearch} />
+    return (
+    <div className="article-list-container">
+      <div className="filters-container">
+        <SearchBar onSearch={handleSearch} />
+        <PriceFilter onPriceChange={setPriceRange} />
+      </div>
       <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={(event) => setSelectedCategory(event.target.value)}
       />
-      <PriceFilter onPriceChange={setPriceRange} />
       {showSuccessMessage && (
         <div className="success-message">Pedido realizado con éxito</div>
       )}
