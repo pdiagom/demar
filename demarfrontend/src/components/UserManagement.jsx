@@ -5,6 +5,7 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
   const [error, setError] = useState(null);
+  const editFormRef = useRef(null);
 
   useEffect(() => {
     fetchUsers();
@@ -21,6 +22,11 @@ const UserManagement = () => {
 
   const handleEdit = (user) => {
     setEditingUser({ ...user });
+     setTimeout(() => {
+      if (editFormRef.current) {
+        editFormRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   const handleChange = (e) => {
@@ -95,7 +101,7 @@ const UserManagement = () => {
       </table>
 
       {editingUser && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}  ref={editFormRef}>
           <h3>Editar Usuario</h3>
           <input
             name="username"
