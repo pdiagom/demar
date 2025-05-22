@@ -6,6 +6,8 @@ import CategoryFilter from "./CategoryFilter";
 import { getCategories } from "../services/categoryService";
 import { useCart } from "../context/cartContext"; // Importa el hook useCart
 import { useLoading } from "../context/loadingContext"; // Importa el hook useLoading
+import SearchBar from "./SearchBar";
+import PriceFilter from "./PriceFilter";
 
 const ArticleList = ({ currentUser }) => {
   const { dispatch } = useCart(); // Accede a dispatch del contexto
