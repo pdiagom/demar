@@ -1,11 +1,8 @@
-// src/components/CategoryFilter.jsx
-
 import React from 'react';
 
 const CategoryFilter = ({ categories, selectedCategory, onCategoryChange }) => {
     return (
-        <div>
-
+        <div className="category-filter">
             <select value={selectedCategory} onChange={onCategoryChange}>
                 <option value="">Todas las categorías</option>
                 {categories.map(category => (
