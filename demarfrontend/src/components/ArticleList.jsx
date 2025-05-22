@@ -56,16 +56,17 @@ const ArticleList = ({ currentUser }) => {
     }
   }, [location]);
 
-  const filteredArticles = articles.filter(
-    (article) =>
-      (selectedCategory
-        ? article.categoryId === Number(selectedCategory)
-        : true) &&
-      article.price >= priceRange.min &&
-      article.price <= priceRange.max &&
-      article.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredArticles = articles
+  .filter((article) => 
+    (selectedCategory ? article.categoryId === Number(selectedCategory) : true) &&
+    article.price >= priceRange.min &&
+    article.price <= priceRange.max &&
+    article.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+const handleSearch = (term) => {
+  setSearchTerm(term);
+};
   const handleAddToCart = (article) => {
     // Aquí se define la acción para agregar al carrito
     dispatch({ type: "ADD_TO_CART", payload: { article, quantity: 1 } });
@@ -88,7 +89,7 @@ const ArticleList = ({ currentUser }) => {
 
   return (
     <div>
-      <SearchBar onSearch={setSearchTerm} />
+      <SearchBar onSearch={handleSearch} />
       <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}

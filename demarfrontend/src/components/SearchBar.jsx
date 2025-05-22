@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import debounce from 'lodash.debounce';
 
 const SearchBar = ({ onSearch }) => {
-  const [term, setTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(term);
+  // Debounce the search function
+  const debouncedSearch = useCallback(
+    debounce((term) => {
+      onSearch(term);
+    }, 300),
+    [onSearch]
+  );
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+    debouncedSearch(e.target.value);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="search-bar">
+      <label htmlFor="search-input">Buscar artículos:</label>
       <input
+        id="search-input"
         type="text"
         placeholder="Buscar por nombre"
-        value={term}
-        onChange={(e) => setTerm(e.target.value)}
+        value={searchTerm}
+        onChange={handleChange}
       />
-      <button type="submit">Buscar</button>
-    </form>
+    </div>
   );
 };
 
