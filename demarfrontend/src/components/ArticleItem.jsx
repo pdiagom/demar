@@ -6,6 +6,9 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...article });
     const [newImage, setNewImage] = useState(null);
+    const [priceRange, setPriceRange] = useState({ min: 0, max: Infinity });
+    const [searchTerm, setSearchTerm] = useState('');
+
 
     // Efecto para sincronizar formData con los cambios en articulos
     useEffect(() => {
