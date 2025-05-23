@@ -11,7 +11,7 @@ const Cart = () => {
     const { cartItems, total } = state;
     const navigate = useNavigate();
     const [error, setError] = useState(null);
-    const itemStockReached = item.quantity >= item.article.stock;
+    
 
     useEffect(() => {
         if (error) {
