@@ -288,9 +288,24 @@ class OrderViewSet(viewsets.ModelViewSet):
         except Cart.DoesNotExist:
             return Response({'error': 'Carrito no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
+        # Validar stock antes de crear el pedido
+        for item in cart.items.all():
+            if item.quantity > item.article.stock:
+                return Response({
+                    'error': f"Stock insuficiente para el artículo {item.article.name} (disponible: {item.article.stock})"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Restar stock y crear el pedido
         order = Order.create_order(cart, shipping_data)
+    
+        for item in order.items.all():
+            article = item.article
+            article.stock -= item.quantity
+            article.save()
+
         serializer = self.get_serializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     
     @action(detail=False, methods=['get'])
     def all_orders(self, request):
