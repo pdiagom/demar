@@ -83,7 +83,7 @@ switch (role) {
           <option value="2">Gestor</option>
         </select>
       </div>
-      <table className="users-table">
+       <table className="users-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -94,7 +94,7 @@ switch (role) {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <tr key={user.id}>
               <td data-label="ID">{user.id}</td>
               <td data-label="Nombre de Usuario">{user.username}</td>
@@ -110,7 +110,7 @@ switch (role) {
       </table>
 
       {editingUser && (
-        <form onSubmit={handleSubmit}  ref={editFormRef}>
+        <form onSubmit={handleSubmit} ref={editFormRef}>
           <h3>Editar Usuario</h3>
           <input
             name="username"
