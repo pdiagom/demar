@@ -22,7 +22,7 @@ const cartReducer = (state, action) => {
                 return {
                     ...state,
                     cartItems: updatedCartItems,
-                    total: state.total + newItem.article.price * newItem.quantity,
+                    total: (state.total + newItem.article.price * newItem.quantity).toFixed(2),
                 };
             } else {
                 // Si el artículo no está en el carrito, agrégalo
