@@ -130,7 +130,7 @@ class Cart(models.Model):
     
     def calculate_total(self):
         total = sum(item.article.price * item.quantity for item in self.items.all())
-        self.total = total
+        self.total = round(total,2)
         self.save()
         
     def checkout(self):
