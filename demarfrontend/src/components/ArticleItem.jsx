@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CategorySelect from './CategorySelect';
+import articleService from '../services/articleService';
 
 const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     const [isEditing, setIsEditing] = useState(false);
