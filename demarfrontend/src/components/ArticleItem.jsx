@@ -24,9 +24,22 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
         setNewImage(e.target.files[0]);
     };
 
-    const handleAddToCart = () => {
-        onAddToCart(article);
-    };
+    const handleAddToCart = async () => {
+    try {
+        const stock = await articleService.getStock(article.idArticle);
+        const existingItem = JSON.parse(localStorage.getItem('cart'))?.find(i => i.article.idArticle === article.idArticle);
+        const currentQuantity = existingItem ? existingItem.quantity : 0;
+
+        if (currentQuantity < stock) {
+            onAddToCart(article);
+        } else {
+            alert('No puedes añadir más unidades de este artículo. Stock insuficiente.');
+        }
+    } catch (error) {
+        console.error('Error al verificar stock:', error);
+        alert('Error al verificar stock del artículo.');
+    }
+};
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
@@ -82,8 +95,8 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                     <input type="text" name="name" value={formData.name} onChange={handleEditChange} required />
                     <input type="text" name="numRef" value={formData.numRef} onChange={handleEditChange} required />
                     <textarea name="description" value={formData.description} onChange={handleEditChange} required></textarea>
-                    <input type="number" name="price" value={formData.price} onChange={handleEditChange} required />
-                    <input type="number" name="stock" value={formData.stock} onChange={handleEditChange} required />
+                    <input type="number" name="price" value={formData.price} min={0.01} onChange={handleEditChange} required />
+                    <input type="number" name="stock" value={formData.stock} min={1} onChange={handleEditChange} required />
                     <input type="file" onChange={handleImageChange} accept="image/*" />
                     <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: parseInt(e.target.value, 10) })} required />
                     <button type="submit">Actualizar</button>

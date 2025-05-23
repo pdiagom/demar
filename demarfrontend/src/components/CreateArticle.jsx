@@ -59,8 +59,8 @@ const CreateArticle = ({ onArticleCreated }) => {
             <input type="text" name="name" placeholder="Nombre" value={formData.name} onChange={handleChange} required />
             <input type="text" name="numRef" placeholder="Número de Referencia" value={formData.numRef} onChange={handleChange} required />
             <textarea name="description" placeholder="Descripción" value={formData.description} onChange={handleChange} required></textarea>
-            <input type="number" name="price" placeholder="Precio" value={formData.price} onChange={handleChange} required />
-            <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} required />
+            <input type="number" name="price" placeholder="Precio" value={formData.price} min={0.01} onChange={handleChange} required />
+            <input type="number" name="stock" placeholder="Stock" value={formData.stock} min={1} onChange={handleChange} required />
             <input type="file" name="image" accept="image/*" onChange={handleChange} required />
             <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: e.target.value })} required />
             <button type="submit" className="btn-primary">Crear Artículo</button>

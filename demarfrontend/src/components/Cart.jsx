@@ -4,12 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/cartContext';
 import cartService from '../services/cartService';
 import { useNavigate } from 'react-router-dom';
+import articleService from '../services/articleService';
 
 const Cart = () => {
     const { state, dispatch } = useCart();
     const { cartItems, total } = state;
     const navigate = useNavigate();
     const [error, setError] = useState(null);
+    const itemStockReached = item.quantity >= item.article.stock;
 
     useEffect(() => {
         if (error) {
@@ -21,9 +23,22 @@ const Cart = () => {
             return () => clearTimeout(timer);
         }
     }, [error]);
-    const handleIncrease = (article) => {
-        dispatch({ type: 'ADD_TO_CART', payload: { article, quantity: 1 } });
-    };
+    const handleIncrease = async (article) => {
+    try {
+        const stock = await articleService.getStock(article.idArticle);
+        const itemInCart = cartItems.find(item => item.article.idArticle === article.idArticle);
+        const currentQuantity = itemInCart ? itemInCart.quantity : 0;
+
+        if (currentQuantity < stock) {
+            dispatch({ type: 'ADD_TO_CART', payload: { article, quantity: 1 } });
+        } else {
+            setError('No puedes añadir más unidades de este artículo. Stock insuficiente.');
+        }
+    } catch (error) {
+        console.error('Error al obtener el stock:', error);
+        setError('Error al verificar stock del artículo.');
+    }
+};
 
     const handleDecrease = (article) => {
         dispatch({ type: 'DECREASE_QUANTITY', payload: article });
