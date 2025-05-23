@@ -104,6 +104,7 @@ const CreateArticle = ({ onArticleCreated }) => {
   placeholder="Precio"
   value={formData.price === 0 ? '' : formData.price}
   min={0.01}
+  step={0.01}
   onChange={handleChange}
   required
 />

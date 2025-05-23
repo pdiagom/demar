@@ -96,7 +96,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                     <input type="text" name="name" value={formData.name} onChange={handleEditChange} required />
                     <input type="text" name="numRef" value={formData.numRef} onChange={handleEditChange} required />
                     <textarea name="description" value={formData.description} onChange={handleEditChange} required></textarea>
-                    <input type="number" name="price" value={formData.price === 0 ? '' : formData.price} min={0.01} onChange={handleEditChange} required />
+                    <input type="number" name="price" value={formData.price === 0 ? '' : formData.price} min={0.01} step="0.01" onChange={handleEditChange} required />
                     <input type="number" name="stock" value={formData.stock === 0 ? '' : formData.stock} min={1} onChange={handleEditChange} required />
                     <input type="file" onChange={handleImageChange} accept="image/*" />
                     <CategorySelect selectedCategory={formData.categoryId} onCategoryChange={(e) => setFormData({ ...formData, categoryId: parseInt(e.target.value, 10) })} required />
