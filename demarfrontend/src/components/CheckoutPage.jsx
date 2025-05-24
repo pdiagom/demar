@@ -126,7 +126,7 @@ const CheckoutPage = () => {
             </li>
           ))}
         </ul>
-        <p>Total: {cartDetails.total.toFixed(2)}€</p>
+        <p>Total: {Number(cartDetails.total).toFixed(2)}€</p>
       </div>
 
       <form onSubmit={handleSubmit}>
