@@ -39,7 +39,7 @@ const CheckoutPage = () => {
               purchase_units: [
                 {
                   amount: {
-                    value: cartDetails.total.toFixed(2),
+                    value: Number(cartDetails.total).toFixed(2),
                   },
                 },
               ],
