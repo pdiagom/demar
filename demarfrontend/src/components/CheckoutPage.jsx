@@ -1,3 +1,5 @@
+// src/components/CheckoutPage.jsx
+
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import orderService from "../services/orderService";
@@ -24,8 +26,10 @@ const CheckoutPage = () => {
     expiryDate: "",
     cvv: "",
   });
+
   const paypalRef = useRef();
 
+  // Cargar PayPal solo si está seleccionado y hay detalles del carrito
   useEffect(() => {
     if (formData.paymentMethod === "PayPal" && window.paypal && cartDetails) {
       window.paypal
@@ -35,7 +39,7 @@ const CheckoutPage = () => {
               purchase_units: [
                 {
                   amount: {
-                    value: cartDetails.total.toFixed(2), // Asegura 2 decimales
+                    value: cartDetails.total.toFixed(2),
                   },
                 },
               ],
@@ -43,7 +47,7 @@ const CheckoutPage = () => {
           },
           onApprove: async (data, actions) => {
             await actions.order.capture();
-            handleSubmit(); // Procesa la orden en tu backend
+            await handleSubmit(); // Procesar orden
           },
           onError: (err) => {
             console.error("Error de PayPal:", err);
@@ -54,19 +58,13 @@ const CheckoutPage = () => {
     }
   }, [formData.paymentMethod, cartDetails]);
 
+  // Cargar datos del carrito y del usuario
   useEffect(() => {
-    if (errorMessage) {
-      const timer = setTimeout(() => {
-        setErrorMessage("");
-      }, 5000); // El mensaje desaparecerá después de 5 segundos
-
-      return () => clearTimeout(timer);
-    }
     const fetchData = async () => {
       try {
         const [cartDetails, userData] = await Promise.all([
           cartService.getCartDetails(cartId),
-          getCurrentUser(), // Implementa este método en userService
+          getCurrentUser(),
         ]);
         setCartDetails(cartDetails);
         setFormData((prevState) => ({
@@ -78,6 +76,7 @@ const CheckoutPage = () => {
         }));
       } catch (error) {
         console.error("Error fetching data:", error);
+        setErrorMessage("Error al cargar los datos del usuario o carrito.");
       }
     };
 
@@ -89,24 +88,23 @@ const CheckoutPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault(); // e puede ser null si es llamado desde PayPal
+
     try {
       const orderData = {
         cartId,
         ...formData,
         total: cartDetails.total,
       };
-      const order = await orderService.createOrderFromCart(orderData);
+
+      await orderService.createOrderFromCart(orderData);
 
       dispatch({ type: "CLEAR_CART" });
-
       setCartDetails(null);
       navigate("/articleList", { state: { orderSuccess: true } });
     } catch (error) {
       console.error("Error al crear el pedido:", error);
-      setErrorMessage(
-        "Hay algún dato erróneo en el pedido. Por favor, verifique la información."
-      );
+      setErrorMessage("Verifique los datos del pedido e intente de nuevo.");
     }
   };
 
@@ -118,9 +116,9 @@ const CheckoutPage = () => {
     <div className="checkout-container">
       <h2>Finalizar Compra</h2>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
+
       <div className="cart-summary">
         <h3>Resumen del Carrito</h3>
-        <p>Artículos:</p>
         <ul>
           {cartDetails.items.map((item) => (
             <li key={item.id}>
@@ -128,14 +126,15 @@ const CheckoutPage = () => {
             </li>
           ))}
         </ul>
-        <p>Total: ${cartDetails.total}</p>
+        <p>Total: {cartDetails.total.toFixed(2)}€</p>
       </div>
+
       <form onSubmit={handleSubmit}>
         <h3>Dirección de Envío</h3>
         <input
           type="text"
           name="shippingAddress"
-          placeholder="Dirección de envío"
+          placeholder="Dirección"
           value={formData.shippingAddress}
           onChange={handleChange}
           required
@@ -172,30 +171,15 @@ const CheckoutPage = () => {
           onChange={handleChange}
         >
           <option value="Tarjeta">Tarjeta</option>
-          <option value="Transferencia">Transferencia</option>
           <option value="PayPal">PayPal</option>
         </select>
 
-        {formData.paymentMethod === "Transferencia" && (
-          <div className="card-details">
-            <input
-              type="text"
-              name="nCuenta"
-              placeholder="Número de cuenta"
-              value={formData.nCuenta}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        )}
-        {formData.paymentMethod === "PayPal" && <div ref={paypalRef}></div>}
-
         {formData.paymentMethod === "Tarjeta" && (
-          <div className="card-details">
+          <>
             <input
               type="text"
               name="cardNumber"
-              placeholder="Número de tarjeta"
+              placeholder="Número de Tarjeta"
               value={formData.cardNumber}
               onChange={handleChange}
               required
@@ -203,7 +187,7 @@ const CheckoutPage = () => {
             <input
               type="text"
               name="cardHolder"
-              placeholder="Titular de la tarjeta"
+              placeholder="Titular"
               value={formData.cardHolder}
               onChange={handleChange}
               required
@@ -211,7 +195,7 @@ const CheckoutPage = () => {
             <input
               type="text"
               name="expiryDate"
-              placeholder="Fecha de expiración (MM/YY)"
+              placeholder="Fecha de Expiración (MM/AA)"
               value={formData.expiryDate}
               onChange={handleChange}
               required
@@ -224,10 +208,13 @@ const CheckoutPage = () => {
               onChange={handleChange}
               required
             />
-          </div>
+            <button type="submit">Pagar</button>
+          </>
         )}
 
-        <button type="submit">Confirmar Pedido</button>
+        {formData.paymentMethod === "PayPal" && (
+          <div ref={paypalRef}></div>
+        )}
       </form>
     </div>
   );
