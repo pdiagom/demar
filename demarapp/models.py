@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -124,22 +125,19 @@ class OrderItem(models.Model):
     
 class Cart(models.Model):
     idCart = models.AutoField(primary_key=True)
-    total = models.FloatField(default=0.0)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     date = models.DateField(auto_now_add=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     
     def calculate_total(self):
         total = sum(item.article.price * item.quantity for item in self.items.all())
-        self.total = round(total,2)
+        self.total = round(total, 2)  # ← Asegura redondeo
         self.save()
-        
+
     def checkout(self):
         self.items.all().delete()
-        self.total = 0.0
+        self.total = Decimal('0.00')
         self.save()
-    
-    def __str__(self):
-        return str(self.idCart)
     
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)  
