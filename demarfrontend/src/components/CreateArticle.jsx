@@ -16,16 +16,17 @@ const CreateArticle = ({ onArticleCreated }) => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+  const { name, value, files, type } = e.target;
 
-    if (name === "image") {
-      setFormData({ ...formData, image: files[0] });
-    } else if (type === "number") {
-      setFormData({ ...formData, [name]: value === "" ? "" : Number(value) });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
+  if (name === "image") {
+    setFormData({ ...formData, image: files[0] });
+  } else if (type === "number") {
+    setFormData({ ...formData, [name]: value === "" ? "" : Number(value) });
+  } else {
+    setFormData({ ...formData, [name]: value });
+  }
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
