@@ -168,7 +168,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                 ? article.description.slice(0, 50) + "..."
                 : article.description}
             </p>
-            <button onClick={() => setShowModal(true)}>Ver detalles</button>
+            
 
             <p>Precio: {article.price}€</p>
             <p>Stock: {article.stock}</p>
@@ -180,6 +180,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                   <button onClick={handleDelete}>Eliminar</button>
                 </>
               )}
+              <button onClick={() => setShowModal(true)}>Ver detalles</button>
               <button onClick={handleAddToCart}>Agregar al Carrito</button>
             </div>
           </div>
