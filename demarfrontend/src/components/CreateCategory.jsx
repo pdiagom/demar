@@ -42,19 +42,21 @@ const CreateCategory = () => {
             {success && <div className="success-message">{success}</div>}
             <form onSubmit={handleSubmit} className="category-form">
                 <div>
-                    <label htmlFor="name">Nombre:</label>
+                    
                     <input
                         type="text"
                         id="name"
+                        placeholder='Nombre de la categoría'
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
                 </div>
                 <div>
-                    <label htmlFor="description">Descripción:</label>
+                    
                     <textarea
                         id="description"
+                        placeholder='Descripción de la categoría'
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         required
