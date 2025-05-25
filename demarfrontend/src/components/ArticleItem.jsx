@@ -156,7 +156,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
             <button type="submit">Actualizar</button>
           </form>
         ) : (
-          <div className="article-item">
+          <div>
             <h2>{article.name}</h2>
             {article.image && ( // Condición para mostrar la imagen solo si existe
               <img className="article" src={article.image} alt={article.name} />
