@@ -100,6 +100,19 @@ li {
   margin-bottom: 10px;
 }
 
+.article-item {
+  background-color: #ffe7e7;
+  border: 1px solid #ff0000;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  width: calc(25% - 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
 .carrito {
   width: 90%;
   justify-self: center;
