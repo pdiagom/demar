@@ -58,7 +58,7 @@ button:hover {
 input,
 textarea,
 select {
-  border: 1px solid #ff0000;
+  border: 1px solid #ffcece;
   border-radius: 5px;
   padding: 10px;
   width: 100%;
