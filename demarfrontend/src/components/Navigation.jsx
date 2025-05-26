@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import headerimage from "../../../media/media/demar2.jpg"; // Ajusta la ruta según tu estructura de carpetas
+import headerimage from "../../../media/media/demar_sin_fondo.png"; // Ajusta la ruta según tu estructura de carpetas
 const Navigation = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
@@ -16,7 +16,7 @@ const Navigation = () => {
 
     return (
         <nav>
-            <img src={headerimage} alt="Logo Demar" />
+            <img src={headerimage} alt="Logo Demar" className="demar" />
             <Link to="/dashboard">Mi perfil</Link>
             {currentUser===1?(<Link to="/admin">Administrador</Link>):("")}
             {currentUser===2?(<Link to="/superuser">Gestor</Link>):("")}
