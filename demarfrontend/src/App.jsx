@@ -14,7 +14,6 @@ import CheckoutPage from "./components/CheckoutPage";
 import PasswordResetRequest from "./components/PasswordResetRequest";
 import PasswordResetConfirm from "./components/PasswordResetConfirm";
 import Superuser from "./components/SuperUser"; 
-import headerImage from '../../media/media/demar1.png';
 import { LoadingProvider } from "./context/loadingContext"; // Importa el contexto de carga
 import GlobalSpinner from "./components/GlobalSpinner"; // Importa el componente de spinner global
 import ScrollToCartButton from "./components/ScrollToCartButton"; // Importa el botón para desplazarse al carrito
