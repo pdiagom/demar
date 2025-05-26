@@ -401,6 +401,7 @@ p {
 }
 
 .order-items li {
+  width: 200px;
   background-color: #fff0f0;
   padding: 10px;
   margin-bottom: 5px;
