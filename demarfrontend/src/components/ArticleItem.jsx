@@ -38,6 +38,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
 
       if (currentQuantity < stock) {
         onAddToCart(article);
+        const newPopup = { id: Date.now(), message: `${article.name} añadido al carrito` };
         setPopups((prevPopups) => [...prevPopups, newPopup]);
         setTimeout(() => {
           setPopups((prevPopups) =>
