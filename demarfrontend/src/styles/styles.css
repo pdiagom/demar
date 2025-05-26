@@ -262,6 +262,7 @@ p {
 
 .admin-nav {
   display: flex;
+  padding-left: 15px;
   margin-bottom: 20px;
 }
 
@@ -588,6 +589,7 @@ img {
     flex-direction: column;
     align-items: center;
     margin-bottom: 300px;
+    padding-right: 0;
   }
 
   nav a {
