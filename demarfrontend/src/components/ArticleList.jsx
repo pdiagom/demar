@@ -67,9 +67,25 @@ const ArticleList = ({ currentUser }) => {
 const handleSearch = (term) => {
   setSearchTerm(term);
 };
-  const handleAddToCart = (article) => {
-    // Aquí se define la acción para agregar al carrito
-    dispatch({ type: "ADD_TO_CART", payload: { article, quantity: 1 } });
+  const handleAddToCart = async (article) => {
+    try {
+          const stock = await articleService.getStock(article.idArticle);
+          const existingItem = JSON.parse(localStorage.getItem("cart"))?.find(
+            (i) => i.article.idArticle === article.idArticle
+          );
+          const currentQuantity = existingItem ? existingItem.quantity : 0;
+    
+          if (currentQuantity < stock) {
+            onAddToCart(article);
+          } else {
+            alert(
+              "No puedes añadir más unidades de este artículo. Stock insuficiente."
+            );
+          }
+        } catch (error) {
+          console.error("Error al verificar stock:", error);
+          alert("Error al verificar stock del artículo.");
+        }
   };
 
   const renderArticlesList = () => {
