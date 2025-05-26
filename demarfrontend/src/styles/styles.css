@@ -89,7 +89,7 @@ li {
   width: calc(20% - 20px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: end;
   position: relative;
   min-height: 725px;
 }
