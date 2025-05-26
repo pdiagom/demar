@@ -16,7 +16,7 @@ const Navigation = () => {
 
     return (
         <nav>
-            <img src="../media/demar2.jpg" alt="Logo Demar" />
+            <img src="../media/media/demar2.jpg" alt="Logo Demar" />
             <Link to="/dashboard">Mi perfil</Link>
             {currentUser===1?(<Link to="/admin">Administrador</Link>):("")}
             {currentUser===2?(<Link to="/superuser">Gestor</Link>):("")}
