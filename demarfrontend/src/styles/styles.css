@@ -1053,12 +1053,12 @@ img {
 }
 
 .added-to-cart-popup {
-  background-color: rgb(193, 190, 190);
+  background-color: rgb(255, 255, 255);
   color: #4CAF50;
   padding: 15px;
   border-radius: 5px;
   margin-top: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
   animation: fadeInOut 3s ease-in-out;
 }
 
