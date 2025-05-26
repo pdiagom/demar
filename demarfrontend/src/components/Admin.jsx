@@ -53,7 +53,7 @@ const Admin = () => {
 
     return (
         <div className="admin-dashboard">
-            <h2>Dashboard de Administración</h2>
+            <h2>Menú de Administración</h2>
             <nav className="admin-nav">
                 {['articles', 'categories', 'orders'].map((tab) => (
                     <button
