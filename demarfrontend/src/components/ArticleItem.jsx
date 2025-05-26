@@ -14,7 +14,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showStockErrorModal, setShowStockErrorModal] = useState(false);
-
+  const [showAddedToCartPopup, setShowAddedToCartPopup] = useState(false);
   // Efecto para sincronizar formData con los cambios en articulos
   useEffect(() => {
     setFormData({ ...article });
@@ -36,6 +36,8 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
 
       if (currentQuantity < stock) {
         onAddToCart(article);
+        setShowAddedToCartPopup(true);
+        setTimeout(() => setShowAddedToCartPopup(false), 3000);
       } else {
         setShowStockErrorModal(true);
       }
@@ -186,7 +188,11 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
           </div>
         )}
       </li>
-
+{showAddedToCartPopup && (
+        <div className="added-to-cart-popup">
+          Artículo añadido al carrito
+        </div>
+      )}
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <h2>{article.name}</h2>
         {article.image && (
