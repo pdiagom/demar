@@ -24,22 +24,22 @@ h3 {
 a {
   color: #ff0000;
   text-decoration: none;
-
+  transition: transform 0.3s ease;
   padding: 10px;
 }
 
 a:hover {
-  background-color: rgba(255, 200, 200, 0.5);
-  padding: 10px;
-  border-radius: 12px;
+   transform: scale(1.1);
 }
 
 nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin-bottom: 10px;
-  background-color: #999ec8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #fff;
+    padding-right: 30px;
+    height: 150px;
 }
 /* Botones */
 button {
