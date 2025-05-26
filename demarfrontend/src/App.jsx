@@ -50,7 +50,7 @@ function App() {
   return (
     <LoadingProvider>
     <Router>
-      <img src={headerImage} alt="DEMAR Header" className="headerStyle" />
+      
       <Navigation />
       <Routes>
         <Route path="/register" element={<Register />} />

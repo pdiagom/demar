@@ -38,6 +38,8 @@ nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin-bottom: 10px;
+  background-color: #999ec8;
 }
 /* Botones */
 button {
@@ -1028,5 +1030,5 @@ img {
 }
 
 .demar{
-  width: 150px;
+  width: 200px;
 }
