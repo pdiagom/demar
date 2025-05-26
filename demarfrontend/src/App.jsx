@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react"; // Importa useEffect para manejar efectos secundarios
 import Register from "./components/Register";
 import Admin from "./components/Admin";
@@ -55,6 +55,7 @@ function App() {
       <Navigation />
       <ScrollToCartButton />
       <Routes>
+        <Route path="/" element={<Navigate to="/articleList" replace />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/login"
