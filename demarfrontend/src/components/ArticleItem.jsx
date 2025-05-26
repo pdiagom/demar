@@ -3,10 +3,13 @@ import axios from "axios";
 import CategorySelect from "./CategorySelect";
 import articleService from "../services/articleService";
 import Modal from "./Modal";
+import { useCart } from "../context/cartContext";
+
 const ArticleItem = ({ article, categories, onAddToCart, user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...article });
   const [newImage, setNewImage] = useState(null);
+  const { state } = useCart(); // Accede al estado del carrito
   const [priceRange, setPriceRange] = useState({ min: 0, max: Infinity });
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -24,20 +27,16 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     setNewImage(e.target.files[0]);
   };
 
-  const handleAddToCart = async () => {
+    const handleAddToCart = async () => {
     try {
       const stock = await articleService.getStock(article.idArticle);
-      const existingItem = JSON.parse(localStorage.getItem("cart"))?.find(
-        (i) => i.article.idArticle === article.idArticle
-      );
-      const currentQuantity = existingItem ? existingItem.quantity : 0;
+      const itemInCart = state.cartItems.find(item => item.article.idArticle === article.idArticle);
+      const currentQuantity = itemInCart ? itemInCart.quantity : 0;
 
       if (currentQuantity < stock) {
         onAddToCart(article);
       } else {
-        alert(
-          "No puedes añadir más unidades de este artículo. Stock insuficiente."
-        );
+        alert("No puedes añadir más unidades de este artículo. Stock insuficiente.");
       }
     } catch (error) {
       console.error("Error al verificar stock:", error);
