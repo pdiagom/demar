@@ -59,7 +59,7 @@ export const getCurrentUser = async () => {
         const response = await fetch(`${API_URL}users/me/`, {
             method: "GET",
             headers: {
-                "Authorization": `Token ${token}`,  // Nota: Usamos 'Token' en lugar de 'Bearer'
+                "Authorization": `Token ${token}`, 
                 "Content-Type": "application/json",
             },
         });
@@ -70,7 +70,7 @@ export const getCurrentUser = async () => {
     }
 };
 export const checkUserExists = async (username, email) => {
-    // Esta es una implementación simulada. En un caso real, harías una llamada a tu API.
+    
     const response = await fetch(`${API_URL}check-user/`, {
       method: 'POST',
       headers: {
