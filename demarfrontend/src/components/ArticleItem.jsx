@@ -232,7 +232,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
         <p>
           No puedes añadir más unidades de este artículo. Stock insuficiente.
         </p>
-        <button onClick={() => setShowStockErrorModal(false)}>Cerrar</button>
+    
       </Modal>
     </>
   );
