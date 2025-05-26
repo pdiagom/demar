@@ -14,7 +14,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showStockErrorModal, setShowStockErrorModal] = useState(false);
-  const [showAddedToCartPopup, setShowAddedToCartPopup] = useState(false);
+  const [popups, setPopups] = useState([]);
   // Efecto para sincronizar formData con los cambios en articulos
   useEffect(() => {
     setFormData({ ...article });
@@ -28,16 +28,22 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     setNewImage(e.target.files[0]);
   };
 
-    const handleAddToCart = async () => {
+  const handleAddToCart = async () => {
     try {
       const stock = await articleService.getStock(article.idArticle);
-      const itemInCart = state.cartItems.find(item => item.article.idArticle === article.idArticle);
+      const itemInCart = state.cartItems.find(
+        (item) => item.article.idArticle === article.idArticle
+      );
       const currentQuantity = itemInCart ? itemInCart.quantity : 0;
 
       if (currentQuantity < stock) {
         onAddToCart(article);
-        setShowAddedToCartPopup(true);
-        setTimeout(() => setShowAddedToCartPopup(false), 3000);
+        setPopups((prevPopups) => [...prevPopups, newPopup]);
+        setTimeout(() => {
+          setPopups((prevPopups) =>
+            prevPopups.filter((popup) => popup.id !== newPopup.id)
+          );
+        }, 3000);
       } else {
         setShowStockErrorModal(true);
       }
@@ -170,7 +176,6 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
                 ? article.description.slice(0, 50) + "..."
                 : article.description}
             </p>
-            
 
             <p>Precio: {article.price}€</p>
             <p>Stock: {article.stock}</p>
@@ -188,11 +193,13 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
           </div>
         )}
       </li>
-{showAddedToCartPopup && (
-        <div className="added-to-cart-popup">
-          Artículo añadido al carrito
-        </div>
-      )}
+      <div className="popup-container">
+        {popups.map((popup) => (
+          <div key={popup.id} className="added-to-cart-popup">
+            {popup.message}
+          </div>
+        ))}
+      </div>
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <h2>{article.name}</h2>
         {article.image && (
@@ -216,9 +223,14 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
           Agregar al Carrito
         </button>
       </Modal>
-        <Modal show={showStockErrorModal} onClose={() => setShowStockErrorModal(false)}>
+      <Modal
+        show={showStockErrorModal}
+        onClose={() => setShowStockErrorModal(false)}
+      >
         <h2>Error de Stock</h2>
-        <p>No puedes añadir más unidades de este artículo. Stock insuficiente.</p>
+        <p>
+          No puedes añadir más unidades de este artículo. Stock insuficiente.
+        </p>
         <button onClick={() => setShowStockErrorModal(false)}>Cerrar</button>
       </Modal>
     </>
