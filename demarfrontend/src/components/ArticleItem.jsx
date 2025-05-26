@@ -13,6 +13,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: Infinity });
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showStockErrorModal, setShowStockErrorModal] = useState(false);
 
   // Efecto para sincronizar formData con los cambios en articulos
   useEffect(() => {
@@ -36,7 +37,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
       if (currentQuantity < stock) {
         onAddToCart(article);
       } else {
-        alert("No puedes añadir más unidades de este artículo. Stock insuficiente.");
+        setShowStockErrorModal(true);
       }
     } catch (error) {
       console.error("Error al verificar stock:", error);
@@ -208,6 +209,11 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
         >
           Agregar al Carrito
         </button>
+      </Modal>
+        <Modal show={showStockErrorModal} onClose={() => setShowStockErrorModal(false)}>
+        <h2>Error de Stock</h2>
+        <p>No puedes añadir más unidades de este artículo. Stock insuficiente.</p>
+        <button onClick={() => setShowStockErrorModal(false)}>Cerrar</button>
       </Modal>
     </>
   );
