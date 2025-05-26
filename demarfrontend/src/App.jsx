@@ -17,6 +17,7 @@ import Superuser from "./components/SuperUser";
 import headerImage from '../../media/media/demar1.png';
 import { LoadingProvider } from "./context/loadingContext"; // Importa el contexto de carga
 import GlobalSpinner from "./components/GlobalSpinner"; // Importa el componente de spinner global
+import ScrollToCartButton from "./components/ScrollToCartButton"; // Importa el botón para desplazarse al carrito
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -52,6 +53,7 @@ function App() {
     <Router>
       
       <Navigation />
+      <ScrollToCartButton />
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route
