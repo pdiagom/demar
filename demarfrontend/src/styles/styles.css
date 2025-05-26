@@ -597,7 +597,7 @@ img {
   }
 }
 @media (max-width: 576px) {
-  button:not(.btn-close) {
+  button:not(.btn-close, .scroll-to-cart-button) {
     width: 100%;
     margin-bottom: 10px;
   }
@@ -1093,7 +1093,7 @@ img {
 .scroll-to-cart-button img {
   width: 30px;
   height: 30px;
-  filter: invert(1); /* Esto hará que el icono sea blanco si es negro originalmente */
+  filter: invert(1); 
 }
 
 @media (max-width: 768px) {
