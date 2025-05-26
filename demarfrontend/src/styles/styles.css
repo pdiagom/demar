@@ -707,6 +707,8 @@ img {
 
   .admin-nav {
     flex-direction: column;
+    padding: 10px;
+    padding-bottom: 220px;
   }
 
   .admin-nav button {
