@@ -289,12 +289,13 @@ p {
 }
 
 .success-message {
-  background-color: #ffeded;
+  background-color: #fccdcd;
   color: #800000;
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 4px;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(255, 0, 0, 0.1);
 }
 
 .error-message {
