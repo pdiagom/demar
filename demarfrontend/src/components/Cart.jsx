@@ -112,11 +112,12 @@ const handleSaveCart = async () => {
           </ul>
           <h3>Total: {total}€</h3>
           <button onClick={handleSaveCart}>Procesar Compra</button>
-           <button className="scroll-to-top-button" onClick={scrollToTop}>
-        Volver Arriba
-      </button>
+           
         </div>
       )}
+      <button className="scroll-to-top-button" onClick={scrollToTop}>
+        Volver Arriba
+      </button>
     </div>
   );
 };
