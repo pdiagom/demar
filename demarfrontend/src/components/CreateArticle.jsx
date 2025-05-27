@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import CategorySelect from "./CategorySelect";
 
@@ -13,6 +13,7 @@ const CreateArticle = ({ onArticleCreated }) => {
     image: null,
   });
 
+  const fileInputRef = useRef(null);
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
@@ -49,6 +50,8 @@ const CreateArticle = ({ onArticleCreated }) => {
           },
         }
       );
+
+      
       setSuccessMessage("Artículo creado correctamente!");
       setFormData({
         name: "",
@@ -59,6 +62,10 @@ const CreateArticle = ({ onArticleCreated }) => {
         categoryId: "",
         image: null,
       });
+      
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
@@ -124,6 +131,7 @@ const CreateArticle = ({ onArticleCreated }) => {
           name="image"
           accept="image/*"
           onChange={handleChange}
+          ref={fileInputRef}
           required
         />
         <CategorySelect
