@@ -1,22 +1,27 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react"; // Importa useEffect para manejar efectos secundarios
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { useState, useEffect } from "react";
 import Register from "./components/Register";
 import Admin from "./components/Admin";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
-import MaintenancePage from "./components/MaintenancePage"; // Importa el nuevo componente
+import MaintenancePage from "./components/MaintenancePage";
 import Navigation from "./components/Navigation";
-import PrivateRoute from "./components/PrivateRoute"; // Importa el componente de ruta privada
+import PrivateRoute from "./components/PrivateRoute";
 import ArticleList from "./components/ArticleList";
-import Cart from "./components/Cart"; // Importa el componente Cart
+import Cart from "./components/Cart";
 import "./styles/styles.css";
 import CheckoutPage from "./components/CheckoutPage";
 import PasswordResetRequest from "./components/PasswordResetRequest";
 import PasswordResetConfirm from "./components/PasswordResetConfirm";
-import Superuser from "./components/SuperUser"; 
-import { LoadingProvider } from "./context/loadingContext"; // Importa el contexto de carga
-import GlobalSpinner from "./components/GlobalSpinner"; // Importa el componente de spinner global
-import ScrollToCartButton from "./components/ScrollToCartButton"; // Importa el botón para desplazarse al carrito
+import Superuser from "./components/SuperUser";
+import { LoadingProvider } from "./context/loadingContext";
+import GlobalSpinner from "./components/GlobalSpinner";
+import ScrollToCartButton from "./components/ScrollToCartButton";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -49,74 +54,79 @@ function App() {
 
   return (
     <LoadingProvider>
-    <Router>
-      
-      <Navigation />
-      <ScrollToCartButton />
-      <Routes>
-        <Route path="/" element={<Navigate to="/articleList" replace />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/login"
-          element={
-            <Login setUserId={setUserId} setCurrentUser={setCurrentUser} />
-          }
-        />
-        <Route path="/checkout/:cartId" element={<CheckoutPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            currentUser && currentUser === 1 ? (
+      <Router>
+        <Navigation />
+        <ScrollToCartButton />
+        <Routes>
+          <Route path="/" element={<Navigate to="/articleList" replace />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={
+              <Login setUserId={setUserId} setCurrentUser={setCurrentUser} />
+            }
+          />
+          <Route path="/checkout/:cartId" element={<CheckoutPage />} />
+          <Route
+            path="/dashboard"
+            element={
               <PrivateRoute>
-                <Admin />
+                <Dashboard />
               </PrivateRoute>
-            ) : (
-              <MaintenancePage />
-            )
-          }
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              currentUser && currentUser === 1 ? (
+                <PrivateRoute>
+                  <Admin />
+                </PrivateRoute>
+              ) : (
+                <MaintenancePage />
+              )
+            }
+          />
+          <Route
+            path="/superuser"
+            element={
+              currentUser && currentUser === 2 ? (
+                <PrivateRoute>
+                  <Superuser />
+                </PrivateRoute>
+              ) : (
+                <MaintenancePage />
+              )
+            }
+          />
+          <Route
+            path="/articleList"
+            element={
+              <ArticleList
+                onAddToCart={onAddToCart}
+                currentUser={currentUser} // Pasar el usuario actual
+              />
+            }
+          />
+          <Route
+            path="/password-reset"
+            exact
+            component={PasswordResetRequest}
+          />
+          <Route
+            path="/password-reset-confirm"
+            element={<PasswordResetConfirm />}
+          />
+        </Routes>
+        <Cart
+          cartItems={cartItems}
+          total={total}
+          onRemoveFromCart={removeFromCart}
+          userId={userId}
+          currentUser={currentUser} // Pasar el usuario actual
         />
-        <Route
-          path="/superuser"
-          element={
-            currentUser && currentUser === 2 ? (
-              <PrivateRoute>
-                <Superuser />
-              </PrivateRoute>
-            ) : (
-              <MaintenancePage />
-            )
-          }
-        />
-        <Route
-          path="/articleList"
-          element={
-            <ArticleList
-              onAddToCart={onAddToCart}
-              currentUser={currentUser} // Pasar el usuario actual
-            />
-          }
-        />
-        <Route path="/password-reset" exact component={PasswordResetRequest} />
-        <Route path="/password-reset-confirm" element={<PasswordResetConfirm />} />
-
-      </Routes>
-      <Cart
-        cartItems={cartItems}
-        total={total}
-        onRemoveFromCart={removeFromCart}
-        userId={userId}
-        currentUser={currentUser} // Pasar el usuario actual
-      />
-      <GlobalSpinner/>
-    </Router>
+        <GlobalSpinner />
+      </Router>
     </LoadingProvider>
   );
 }

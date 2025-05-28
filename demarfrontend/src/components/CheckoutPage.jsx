@@ -172,7 +172,7 @@ const CheckoutPage = () => {
         >
           <option value="Tarjeta">Tarjeta</option>
           <option value="PayPal">PayPal</option>
-            <option value="Transferencia">Transferencia Bancaria</option>
+          <option value="Transferencia">Transferencia Bancaria</option>
         </select>
 
         {formData.paymentMethod === "Tarjeta" && (
@@ -215,7 +215,14 @@ const CheckoutPage = () => {
         {formData.paymentMethod === "Transferencia" && (
           <div>
             <p>Introduzca el numero de cuenta:</p>
-            <input type="text" name="nCuenta" placeholder="Numero de cuenta" value={formData.nCuenta} onChange={handleChange} required />
+            <input
+              type="text"
+              name="nCuenta"
+              placeholder="Numero de cuenta"
+              value={formData.nCuenta}
+              onChange={handleChange}
+              required
+            />
             <button type="submit">Confirmar Transferencia</button>
           </div>
         )}

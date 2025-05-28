@@ -38,7 +38,10 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
 
       if (currentQuantity < stock) {
         onAddToCart(article);
-        const newPopup = { id: Date.now(), message: `${article.name} añadido al carrito` };
+        const newPopup = {
+          id: Date.now(),
+          message: `${article.name} añadido al carrito`,
+        };
         setPopups((prevPopups) => [...prevPopups, newPopup]);
         setTimeout(() => {
           setPopups((prevPopups) =>
@@ -72,7 +75,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
     } else if (formData["image"] instanceof File) {
       updatedFormData.append("image", formData["image"]);
     }
-    // Si no hay nueva imagen y la imagen existente no es un File, no la incluyas
+    // Si no hay nueva imagen y la imagen existente no es un File, no se incluye
 
     console.log("Datos a enviar:", Array.from(updatedFormData.entries()));
 
@@ -232,7 +235,6 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
         <p>
           No puedes añadir más unidades de este artículo. Stock insuficiente.
         </p>
-    
       </Modal>
     </>
   );

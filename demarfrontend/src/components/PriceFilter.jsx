@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const PriceFilter = ({ onPriceChange }) => {
-  const [min, setMin] = useState('');
-  const [max, setMax] = useState('');
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();

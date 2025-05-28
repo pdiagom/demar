@@ -62,20 +62,20 @@ const orderService = {
   },
 
   getAllOrders: async () => {
-  const token = localStorage.getItem("token");
-  try {
-    const response = await axios.get(`${API_URL}/all_orders/`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
-    console.log("Orders received:", response.data);  // Log para depuración
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching all orders:", error);
-    throw error;
-  }
-},
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${API_URL}/all_orders/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      console.log("Orders received:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching all orders:", error);
+      throw error;
+    }
+  },
 
   updateOrderStatus: async (orderId, newStatus) => {
     const token = localStorage.getItem("token");
@@ -107,7 +107,7 @@ const orderService = {
           Authorization: `Token ${token}`,
         },
       });
-      return true; // Indicar éxito
+      return true;
     } catch (error) {
       console.error(
         "Error deleting order:",
@@ -117,65 +117,62 @@ const orderService = {
     }
   },
 
-  // Nuevo método para obtener los items de un pedido específico
+  // Método para obtener los items de un pedido específico
   getOrderItems: async (orderId) => {
-  const token = localStorage.getItem("token");
-  try {
-    console.log(`Fetching items for order ${orderId}`);
-    const response = await axios.get(`${API_URL}/${orderId}/items/`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
-    console.log("Order items received:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching order items:", error);
-    if (error.response) {
-      console.error("Response data:", error.response.data);
-      console.error("Response status:", error.response.status);
-      console.error("Response headers:", error.response.headers);
-    }
-    throw error;
-  }
-},
-getOrderDetails : async (orderId) => {
-  const token = localStorage.getItem("token");
-  try {
-    const response = await axios.get(`${API_URL}/${orderId}/details/`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching order details:', error);
-    throw error;
-  }
-},
-getOrderStats: async () => {
     const token = localStorage.getItem("token");
     try {
-        const response = await axios.get(`${API_URL}/order_stats/`, {
-            headers: {
-                Authorization: `Token ${token}`,
-            },
-        });
-
-        return response.data;
+      console.log(`Fetching items for order ${orderId}`);
+      const response = await axios.get(`${API_URL}/${orderId}/items/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      console.log("Order items received:", response.data);
+      return response.data;
     } catch (error) {
-        console.error('Error fetching order stats:', error);
-        if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-            console.error("Response headers:", error.response.headers);
-        }
-        throw error;
+      console.error("Error fetching order items:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      }
+      throw error;
     }
-},
+  },
+  getOrderDetails: async (orderId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${API_URL}/${orderId}/details/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching order details:", error);
+      throw error;
+    }
+  },
+  getOrderStats: async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${API_URL}/order_stats/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
 
-
-
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching order stats:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      }
+      throw error;
+    }
+  },
 };
 
 export default orderService;

@@ -17,17 +17,16 @@ const CreateArticle = ({ onArticleCreated }) => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
-  const { name, value, files, type } = e.target;
+    const { name, value, files, type } = e.target;
 
-  if (name === "image") {
-    setFormData({ ...formData, image: files[0] });
-  } else if (type === "number") {
-    setFormData({ ...formData, [name]: value === "" ? "" : Number(value) });
-  } else {
-    setFormData({ ...formData, [name]: value });
-  }
-};
-
+    if (name === "image") {
+      setFormData({ ...formData, image: files[0] });
+    } else if (type === "number") {
+      setFormData({ ...formData, [name]: value === "" ? "" : Number(value) });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +50,6 @@ const CreateArticle = ({ onArticleCreated }) => {
         }
       );
 
-      
       setSuccessMessage("Artículo creado correctamente!");
       setFormData({
         name: "",
@@ -62,7 +60,7 @@ const CreateArticle = ({ onArticleCreated }) => {
         categoryId: "",
         image: null,
       });
-      
+
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -107,25 +105,25 @@ const CreateArticle = ({ onArticleCreated }) => {
           required
         ></textarea>
         <input
-  type="number"
-  name="price"
-  placeholder="Precio"
-  value={formData.price === 0 ? '' : formData.price}
-  min={0.01}
-  step={0.01}
-  onChange={handleChange}
-  required
-/>
+          type="number"
+          name="price"
+          placeholder="Precio"
+          value={formData.price === 0 ? "" : formData.price}
+          min={0.01}
+          step={0.01}
+          onChange={handleChange}
+          required
+        />
 
-<input
-  type="number"
-  name="stock"
-  placeholder="Stock"
-  value={formData.stock === 0 ? '' : formData.stock}
-  min={1}
-  onChange={handleChange}
-  required
-/>
+        <input
+          type="number"
+          name="stock"
+          placeholder="Stock"
+          value={formData.stock === 0 ? "" : formData.stock}
+          min={1}
+          onChange={handleChange}
+          required
+        />
         <input
           type="file"
           name="image"

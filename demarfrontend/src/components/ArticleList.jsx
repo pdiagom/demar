@@ -4,8 +4,8 @@ import { useLocation } from "react-router-dom";
 import ArticleItem from "./ArticleItem";
 import CategoryFilter from "./CategoryFilter";
 import { getCategories } from "../services/categoryService";
-import { useCart } from "../context/cartContext"; // Importa el hook useCart
-import { useLoading } from "../context/loadingContext"; // Importa el hook useLoading
+import { useCart } from "../context/cartContext"; 
+import { useLoading } from "../context/loadingContext"; 
 import SearchBar from "./SearchBar";
 import PriceFilter from "./PriceFilter";
 
@@ -18,8 +18,7 @@ const ArticleList = ({ currentUser }) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const location = useLocation();
   const [priceRange, setPriceRange] = useState({ min: 0, max: Infinity });
-  const [searchTerm, setSearchTerm] = useState('');
-
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchArticles = async () => {
     setIsLoading(true); // Inicia la carga
@@ -56,17 +55,19 @@ const ArticleList = ({ currentUser }) => {
     }
   }, [location]);
 
-  const filteredArticles = articles
-  .filter((article) => 
-    (selectedCategory ? article.categoryId === Number(selectedCategory) : true) &&
-    article.price >= priceRange.min &&
-    article.price <= priceRange.max &&
-    article.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredArticles = articles.filter(
+    (article) =>
+      (selectedCategory
+        ? article.categoryId === Number(selectedCategory)
+        : true) &&
+      article.price >= priceRange.min &&
+      article.price <= priceRange.max &&
+      article.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-const handleSearch = (term) => {
-  setSearchTerm(term);
-};
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
   const handleAddToCart = (article) => {
     // Aquí se define la acción para agregar al carrito
     dispatch({ type: "ADD_TO_CART", payload: { article, quantity: 1 } });
@@ -87,7 +88,7 @@ const handleSearch = (term) => {
     ));
   };
 
-      return (
+  return (
     <div>
       <div className="filters-container">
         <div className="main-filters">
@@ -96,7 +97,9 @@ const handleSearch = (term) => {
             <CategoryFilter
               categories={categories}
               selectedCategory={selectedCategory}
-              onCategoryChange={(event) => setSelectedCategory(event.target.value)}
+              onCategoryChange={(event) =>
+                setSelectedCategory(event.target.value)
+              }
             />
           </div>
           <PriceFilter onPriceChange={setPriceRange} />

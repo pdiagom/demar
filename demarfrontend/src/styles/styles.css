@@ -29,18 +29,18 @@ a {
 }
 
 a:hover {
-   transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    background-color: #fff;
-    padding-right: 30px;
-    height: 150px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #fff;
+  padding-right: 30px;
+  height: 150px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 /* Botones */
 button {
@@ -91,9 +91,7 @@ li {
   flex-direction: column;
   justify-content: end;
   position: relative;
-
 }
-
 
 .article {
   width: 100%;
@@ -103,20 +101,12 @@ li {
   margin-bottom: 10px;
 }
 
-
 .carrito {
   width: 90%;
   justify-self: center;
   list-style-type: none;
   display: flex;
   flex-wrap: wrap;
-}
-
-/* --- Reset básico --- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 /* --- Contenedores generales --- */
@@ -203,7 +193,7 @@ select {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-height: 60px; /* Ajusta este valor según necesites */
+  min-height: 60px;
 }
 
 .articleItem > * {
@@ -306,8 +296,6 @@ p {
   border-radius: 4px;
   text-align: center;
 }
-
-
 
 /* Estilos para el Dashboard */
 .dashboard {
@@ -426,7 +414,6 @@ li button {
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
 
 li h2 {
@@ -452,7 +439,7 @@ li p {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-height: 60px; /* Ajusta este valor según necesites */
+  min-height: 60px;
 }
 .login-container {
   margin-left: 2.5%;
@@ -1037,14 +1024,12 @@ img {
   }
 }
 
-.demar{
+.demar {
   width: 200px;
 }
 
-.prohibido{
+.prohibido {
   width: 300px;
-  
-
 }
 
 .popup-container {
@@ -1056,17 +1041,23 @@ img {
 
 .added-to-cart-popup {
   background-color: rgb(255, 255, 255);
-  color: #4CAF50;
+  color: #4caf50;
   padding: 15px;
   border-radius: 5px;
   margin-top: 10px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   animation: fadeInOut 3s ease-in-out;
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  10%, 90% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
 }
 
 .scroll-to-cart-button {
@@ -1083,7 +1074,7 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
   z-index: 1000;
 }
@@ -1095,7 +1086,7 @@ img {
 .scroll-to-cart-button img {
   width: 30px;
   height: 30px;
-  filter: invert(1); 
+  filter: invert(1);
 }
 
 @media (max-width: 768px) {

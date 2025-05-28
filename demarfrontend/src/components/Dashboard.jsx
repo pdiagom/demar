@@ -278,20 +278,20 @@ const Dashboard = () => {
                   <td data-label="Estado">{order.status}</td>
                   <td data-label="Acciones">
                     <div className="button-group">
-                    <button
-                      onClick={() => handleShowOrderDetails(order.idOrder)}
-                      className="btn-primary"
-                    >
-                      Ver Detalles
-                    </button>
-                    {order.status === "Pendiente" && (
                       <button
-                        onClick={() => handleCancelOrder(order.idOrder)}
-                        className="btn-secondary"
+                        onClick={() => handleShowOrderDetails(order.idOrder)}
+                        className="btn-primary"
                       >
-                        Cancelar Pedido
+                        Ver Detalles
                       </button>
-                    )}
+                      {order.status === "Pendiente" && (
+                        <button
+                          onClick={() => handleCancelOrder(order.idOrder)}
+                          className="btn-secondary"
+                        >
+                          Cancelar Pedido
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

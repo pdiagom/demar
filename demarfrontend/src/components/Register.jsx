@@ -52,7 +52,8 @@ const Register = () => {
         break;
       case "password":
         if (!validatePassword(value)) {
-          error = "La contraseña debe tener al menos 8 caracteres y contener letras y números";
+          error =
+            "La contraseña debe tener al menos 8 caracteres y contener letras y números";
         }
         break;
       case "confirmPassword":
@@ -60,7 +61,6 @@ const Register = () => {
           error = "Las contraseñas no coinciden";
         }
         break;
-
     }
     return error;
   };
@@ -68,9 +68,9 @@ const Register = () => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
     const fieldError = await validateField(name, value);
-    setErrors(prev => ({ ...prev, [name]: fieldError }));
+    setErrors((prev) => ({ ...prev, [name]: fieldError }));
   };
 
   const validatePassword = (password) => {
@@ -102,7 +102,8 @@ const Register = () => {
       } catch (error) {
         console.error("Error durante el registro:", error);
         setErrors({
-          general: "Ocurrió un error durante el registro. Por favor, inténtelo de nuevo.",
+          general:
+            "Ocurrió un error durante el registro. Por favor, inténtelo de nuevo.",
         });
       }
     }
@@ -115,12 +116,21 @@ const Register = () => {
         {Object.entries(formData).map(([key, value]) => (
           <div key={key}>
             <input
-              type={key.includes('password')|| key.includes('confirmPassword') ? 'password' : 'text'}
+              type={
+                key.includes("password") || key.includes("confirmPassword")
+                  ? "password"
+                  : "text"
+              }
               name={key}
               placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
               onChange={handleChange}
               value={value}
-              required={['username', 'email', 'password', 'confirmPassword'].includes(key)}
+              required={[
+                "username",
+                "email",
+                "password",
+                "confirmPassword",
+              ].includes(key)}
             />
             {errors[key] && <p className="error">{errors[key]}</p>}
           </div>

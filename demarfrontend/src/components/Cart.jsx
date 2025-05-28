@@ -56,25 +56,24 @@ const Cart = () => {
     dispatch({ type: "REMOVE_FROM_CART", payload: article });
   };
 
-const handleSaveCart = async () => {
-  try {
-    const response = await cartService.saveCart(cartItems);
-    const cartId = response.cart_id;
-    scrollToTop();
-    setTimeout(() => {
-      navigate(`/checkout/${cartId}`);
-    }, 500); // Espera 500ms antes de redirigir
-  } catch (error) {
-    console.error("Error al guardar el carrito:", error);
-    scrollToTop();
-    if (error.response && error.response.status === 401) {
-      setError("Debe iniciar sesión para procesar el carrito");
-    } else {
-      setError("Hubo un error al guardar el carrito.");
+  const handleSaveCart = async () => {
+    try {
+      const response = await cartService.saveCart(cartItems);
+      const cartId = response.cart_id;
+      scrollToTop();
+      setTimeout(() => {
+        navigate(`/checkout/${cartId}`);
+      }, 500); // Espera 500ms antes de redirigir
+    } catch (error) {
+      console.error("Error al guardar el carrito:", error);
+      scrollToTop();
+      if (error.response && error.response.status === 401) {
+        setError("Debe iniciar sesión para procesar el carrito");
+      } else {
+        setError("Hubo un error al guardar el carrito.");
+      }
     }
-  }
-};
-
+  };
 
   return (
     <div className="cart-container">
@@ -112,7 +111,6 @@ const handleSaveCart = async () => {
           </ul>
           <h3>Total: {total}€</h3>
           <button onClick={handleSaveCart}>Procesar Compra</button>
-           
         </div>
       )}
       <button className="scroll-to-top-button" onClick={scrollToTop}>

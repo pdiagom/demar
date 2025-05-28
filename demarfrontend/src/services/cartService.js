@@ -62,7 +62,7 @@ const cartService = {
       `https://demar.onrender.com/demar/cart/create_cart_with_items/`,
       {
         items,
-        total: Math.round(parseFloat(total) * 100) / 100, // ejemplo: 31.5 => 31.50
+        total: Math.round(parseFloat(total) * 100) / 100,
       },
       {
         headers: {

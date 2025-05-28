@@ -4,16 +4,16 @@ import Modal from "./Modal";
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
-   const [orderStats, setOrderStats] = useState({
-        Pendiente: 0,
-        'En Proceso': 0,
-        Completado: 0,
-        Cancelado: 0
-    });
+  const [orderStats, setOrderStats] = useState({
+    Pendiente: 0,
+    "En Proceso": 0,
+    Completado: 0,
+    Cancelado: 0,
+  });
   const [editingOrder, setEditingOrder] = useState(null);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [statusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
@@ -33,19 +33,19 @@ const OrderList = () => {
     }
   };
 
-   const fetchOrderStats = async () => {
-        try {
-            const stats = await orderService.getOrderStats();
-            setOrderStats(stats);
-        } catch (error) {
-            console.error('Error al obtener las estadísticas de pedidos:', error);
-        }
-    };
-const handleStatusFilterChange = (e) => {
-  setStatusFilter(e.target.value);
-};
+  const fetchOrderStats = async () => {
+    try {
+      const stats = await orderService.getOrderStats();
+      setOrderStats(stats);
+    } catch (error) {
+      console.error("Error al obtener las estadísticas de pedidos:", error);
+    }
+  };
+  const handleStatusFilterChange = (e) => {
+    setStatusFilter(e.target.value);
+  };
 
-   const handleStatusChange = async (idOrder, newStatus) => {
+  const handleStatusChange = async (idOrder, newStatus) => {
     try {
       const updatedOrder = await orderService.updateOrderStatus(
         idOrder,
@@ -57,18 +57,18 @@ const handleStatusFilterChange = (e) => {
         )
       );
       setEditingOrder(null);
-      
+
       // Actualizar las estadísticas localmente
-      setOrderStats(prevStats => {
-        const oldStatus = orders.find(order => order.idOrder === idOrder).status;
+      setOrderStats((prevStats) => {
+        const oldStatus = orders.find(
+          (order) => order.idOrder === idOrder
+        ).status;
         return {
           ...prevStats,
           [oldStatus]: prevStats[oldStatus] - 1,
-          [newStatus]: prevStats[newStatus] + 1
+          [newStatus]: prevStats[newStatus] + 1,
         };
       });
-
- 
     } catch (error) {
       setError(
         "No se pudo actualizar el estado del pedido. Por favor, intente de nuevo."
@@ -87,25 +87,24 @@ const handleStatusFilterChange = (e) => {
     }
   };
 
-    const handleShowItems = async (orderId) => {
-  try {
-    const orderData = await orderService.getOrderDetails(orderId);
-    setSelectedOrder({
-      ...orderData.order,
-      items: orderData.items
-    });
-    setShowModal(true);
-  } catch (error) {
-    console.error("Error al cargar los detalles del pedido:", error);
-    setError(
-      "No se pudieron cargar los detalles del pedido. Por favor, intente de nuevo."
-    );
-  }
-};
-const filteredOrders = statusFilter
-  ? orders.filter(order => order.status === statusFilter)
-  : orders;
-
+  const handleShowItems = async (orderId) => {
+    try {
+      const orderData = await orderService.getOrderDetails(orderId);
+      setSelectedOrder({
+        ...orderData.order,
+        items: orderData.items,
+      });
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error al cargar los detalles del pedido:", error);
+      setError(
+        "No se pudieron cargar los detalles del pedido. Por favor, intente de nuevo."
+      );
+    }
+  };
+  const filteredOrders = statusFilter
+    ? orders.filter((order) => order.status === statusFilter)
+    : orders;
 
   if (error) {
     return <div className="error-message">{error}</div>;
@@ -114,34 +113,34 @@ const filteredOrders = statusFilter
   return (
     <div className="orders-section">
       <h3>Resumen de Pedidos</h3>
-            <div className="order-stats">
-                <div className="stat-item">
-                    <span className="stat-label">Pendientes:</span>
-                    <span className="stat-value">{orderStats.Pendiente}</span>
-                </div>
-                <div className="stat-item">
-                    <span className="stat-label">En Proceso:</span>
-                    <span className="stat-value">{orderStats['En Proceso']}</span>
-                </div>
-                <div className="stat-item">
-                    <span className="stat-label">Completados:</span>
-                    <span className="stat-value">{orderStats.Completado}</span>
-                </div>
-                <div className="stat-item">
-                    <span className="stat-label">Cancelados:</span>
-                    <span className="stat-value">{orderStats.Cancelado}</span>
-                </div>
-            </div>
+      <div className="order-stats">
+        <div className="stat-item">
+          <span className="stat-label">Pendientes:</span>
+          <span className="stat-value">{orderStats.Pendiente}</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">En Proceso:</span>
+          <span className="stat-value">{orderStats["En Proceso"]}</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Completados:</span>
+          <span className="stat-value">{orderStats.Completado}</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Cancelados:</span>
+          <span className="stat-value">{orderStats.Cancelado}</span>
+        </div>
+      </div>
       <h3>Lista de Todos los Pedidos</h3>
-       <div className="filter-container">
-  <select value={statusFilter} onChange={handleStatusFilterChange}>
-    <option value="">Todos los estados</option>
-    <option value="Pendiente">Pendiente</option>
-    <option value="En Proceso">En Proceso</option>
-    <option value="Completado">Completado</option>
-    <option value="Cancelado">Cancelado</option>
-  </select>
-</div>
+      <div className="filter-container">
+        <select value={statusFilter} onChange={handleStatusFilterChange}>
+          <option value="">Todos los estados</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="En Proceso">En Proceso</option>
+          <option value="Completado">Completado</option>
+          <option value="Cancelado">Cancelado</option>
+        </select>
+      </div>
       <table className="orders-table">
         <thead>
           <tr>
@@ -178,7 +177,9 @@ const filteredOrders = statusFilter
                   order.status
                 )}
               </td>
-              <td data-label="Fecha">{new Date(order.date).toLocaleDateString()}</td>
+              <td data-label="Fecha">
+                {new Date(order.date).toLocaleDateString()}
+              </td>
               <td data-label="Acciones">
                 <div className="button-group">
                   {editingOrder === order.idOrder ? (
@@ -215,17 +216,28 @@ const filteredOrders = statusFilter
         </tbody>
       </table>
 
-        <Modal show={showModal} onClose={() => setShowModal(false)}>
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
         {selectedOrder && (
           <div className="order-details">
             <h4>Detalles del Pedido #{selectedOrder.idOrder}</h4>
-            <p><strong>Fecha:</strong> {new Date(selectedOrder.date).toLocaleDateString()}</p>
-            <p><strong>Estado:</strong> {selectedOrder.status}</p>
-            <p><strong>Total:</strong> {selectedOrder.total}€</p>
-            <p><strong>Método de pago:</strong> {selectedOrder.paymentMethod}</p>
+            <p>
+              <strong>Fecha:</strong>{" "}
+              {new Date(selectedOrder.date).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Estado:</strong> {selectedOrder.status}
+            </p>
+            <p>
+              <strong>Total:</strong> {selectedOrder.total}€
+            </p>
+            <p>
+              <strong>Método de pago:</strong> {selectedOrder.paymentMethod}
+            </p>
             <h5>Dirección de envío:</h5>
             <p>{selectedOrder.shippingAddress}</p>
-            <p>{selectedOrder.city}, {selectedOrder.postalCode}</p>
+            <p>
+              {selectedOrder.city}, {selectedOrder.postalCode}
+            </p>
             <p>{selectedOrder.country}</p>
             <h5>Artículos:</h5>
             <ul className="order-items">
