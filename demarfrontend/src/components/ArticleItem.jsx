@@ -9,7 +9,7 @@ const ArticleItem = ({ article, categories, onAddToCart, user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...article });
   const [newImage, setNewImage] = useState(null);
-  const { state } = useCart(); // Accede al estado del carrito
+  const { state } = useCart(); 
   const [priceRange, setPriceRange] = useState({ min: 0, max: Infinity });
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);

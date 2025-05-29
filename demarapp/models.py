@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     postalCode = models.CharField(max_length=100, blank=True, null=True)
-    role = models.IntegerField(default=0)  # 0 = Usuario normal, 1 = Admin
+    role = models.IntegerField(default=0)  # 0 = Usuario normal, 1 = Admin, 2 = SuperAdmin
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -131,7 +131,7 @@ class Cart(models.Model):
     
     def calculate_total(self):
         total = sum(item.article.price * item.quantity for item in self.items.all())
-        self.total = round(total, 2)  # ← Asegura redondeo
+        self.total = round(total, 2)  
         self.save()
 
     def checkout(self):
