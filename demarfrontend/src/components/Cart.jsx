@@ -66,7 +66,7 @@ const Cart = () => {
       }, 500); // Espera 500ms antes de redirigir
     } catch (error) {
       console.error("Error al guardar el carrito:", error);
-      scrollToTop();
+      setTimeout(()=>{scrollToTop();},3000);
       if (error.response && error.response.status === 401) {
         setError("Debe iniciar sesión para procesar el carrito");
       } else {
