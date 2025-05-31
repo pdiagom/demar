@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'demar.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
     "https://demar-gray.vercel.app",
-# URL de tu frontend en React
+
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
@@ -186,7 +186,7 @@ REST_FRAMEWORK = {
 
 STATIC_URL = '/static/'
 
-# Añade esta línea:
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -201,11 +201,11 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'demar-media'  # usa tu nombre de bucket
-AWS_S3_REGION_NAME = 'eu-north-1'  # cambia si usaste otra región
+AWS_STORAGE_BUCKET_NAME = 'demar-media'  
+AWS_S3_REGION_NAME = 'eu-north-1' 
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.eu-north-1.amazonaws.com'
-AWS_QUERYSTRING_AUTH = False  # Hace que las URLs no tengan tokens temporales
+AWS_QUERYSTRING_AUTH = False  
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_FILE_OVERWRITE = False
 AWS_LOCATION = 'media/articles/'

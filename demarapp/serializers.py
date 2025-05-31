@@ -44,7 +44,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         
     def to_internal_value(self, data):
         if data.get('image') and isinstance(data['image'], str):
-            # Si es una URL, no lo proceses como un archivo
+            # Si es una URL, no lo procesa como un archivo
             self.fields['image'] = serializers.URLField(required=False, allow_null=True)
         return super().to_internal_value(data)
 
