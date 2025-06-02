@@ -4,9 +4,15 @@ import React, { createContext, useContext, useReducer } from "react";
 const CartContext = createContext();
 
 // Estado inicial
-const initialState = {
-  cartItems: [],
-  total: 0,
+const getInitialState = () => {
+  const savedCart = localStorage.getItem('cart');
+  if (savedCart) {
+    return JSON.parse(savedCart);
+  }
+  return {
+    cartItems: [],
+    total: 0,
+  };
 };
 
 // Función para calcular el total con dos decimales
@@ -71,7 +77,7 @@ const cartReducer = (state, action) => {
       };
 
     case "CLEAR_CART":
-      return initialState;
+      return getInitialState();
 
     default:
       return state;
@@ -80,7 +86,12 @@ const cartReducer = (state, action) => {
 
 // Proveedor del contexto
 export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [state, dispatch] = useReducer(cartReducer, getInitialState());
+
+  // Efecto para guardar el estado en localStorage cada vez que cambie
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(state));
+  }, [state]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
