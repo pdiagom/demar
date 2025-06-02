@@ -9,7 +9,7 @@ const Navigation = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("currentUser");
-
+    localStorage.removeItem("cart");
     navigate("/login");
     window.location.reload();
   };
