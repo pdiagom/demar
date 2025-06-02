@@ -187,6 +187,9 @@ select {
   flex-direction: column;
 }
 
+.cart-article-name{
+  margin-right: 30px;
+}
 .cart-items-container {
   max-height: 400px;
   overflow-y: auto;
@@ -223,7 +226,7 @@ select {
 .item-actions {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 
 .cart-button {

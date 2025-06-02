@@ -64,6 +64,7 @@ const Cart = () => {
       setTimeout(() => {
         navigate(`/checkout/${cartId}`);
       }, 500); // Espera 500ms antes de redirigir
+      dispatch({ type: "CLEAR_CART" });
     } catch (error) {
       console.error("Error al guardar el carrito:", error);
       setTimeout(()=>{scrollToTop();},3000);
@@ -88,7 +89,7 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <li className="articleItem" key={item.article.idArticle}>
                   <div className="item-info">
-                    <span>{item.article.name}</span>
+                    <span className="cart-article-name">{item.article.name}</span>
                     <span>{item.article.price}€</span>
                   </div>
                   <div className="item-actions">
