@@ -10,9 +10,6 @@ const Navigation = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("currentUser");
     localStorage.removeItem("cart");
-    if(localStorage.getItem("__paypal_storage__")) {
-      localStorage.removeItem("__paypal_storage__");
-    }
     navigate("/login");
     window.location.reload();
   };
