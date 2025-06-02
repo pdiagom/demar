@@ -75,7 +75,7 @@ const Cart = () => {
     }
   };
 
-  return (
+    return (
     <div className="cart-container">
       <h2>Carrito de Compras</h2>
       {error && <p className="error">{error}</p>}
@@ -83,39 +83,45 @@ const Cart = () => {
         <p>Tu carrito está vacío.</p>
       ) : (
         <div className="cart">
-          <ul className="carrito">
-            {cartItems.map((item) => (
-              <li className="articleItem" key={item.article.idArticle}>
-                {item.article.name} - {item.article.price}€
-                <button
-                  className="cart-button"
-                  onClick={() => handleDecrease(item.article)}
-                >
-                  -
-                </button>
-                <span>{item.quantity}</span>
-                <button
-                  className="cart-button"
-                  onClick={() => handleIncrease(item.article)}
-                >
-                  +
-                </button>
-                <button
-                  className="cart-button remove-button"
-                  onClick={() => handleRemove(item.article)}
-                >
-                  Eliminar
-                </button>
-              </li>
-            ))}
-          </ul>
-          <h3>Total: {total}€</h3>
-          <button onClick={handleSaveCart}>Procesar Compra</button>
+          <div className="cart-items-container">
+            <ul className="carrito">
+              {cartItems.map((item) => (
+                <li className="articleItem" key={item.article.idArticle}>
+                  <div className="item-info">
+                    <span>{item.article.name}</span>
+                    <span>{item.article.price}€</span>
+                  </div>
+                  <div className="item-actions">
+                    <button
+                      className="cart-button"
+                      onClick={() => handleDecrease(item.article)}
+                    >
+                      -
+                    </button>
+                    <span>{item.quantity}</span>
+                    <button
+                      className="cart-button"
+                      onClick={() => handleIncrease(item.article)}
+                    >
+                      +
+                    </button>
+                    <button
+                      className="cart-button remove-button"
+                      onClick={() => handleRemove(item.article)}
+                    >
+                      X
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="cart-summary">
+            <h3>Total: {total}€</h3>
+            <button onClick={handleSaveCart}>Procesar Compra</button>
+          </div>
         </div>
       )}
-      <button className="scroll-to-top-button" onClick={scrollToTop}>
-        Volver Arriba
-      </button>
     </div>
   );
 };
