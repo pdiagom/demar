@@ -122,6 +122,9 @@ const Cart = () => {
           </div>
         </div>
       )}
+      <button className="scroll-to-top-button" onClick={scrollToTop}>
+        Volver Arriba
+      </button>
     </div>
   );
 };
