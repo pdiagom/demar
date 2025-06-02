@@ -5,7 +5,7 @@ const CartContext = createContext();
 
 // Estado inicial
 const getInitialState = () => {
-  const savedCart = localStorage.getItem('cart');
+  const savedCart = localStorage.getItem("cart");
   if (savedCart) {
     return JSON.parse(savedCart);
   }
@@ -77,7 +77,10 @@ const cartReducer = (state, action) => {
       };
 
     case "CLEAR_CART":
-      return getInitialState();
+      return {
+        cartItems: [],
+        total: 0,
+      };
 
     default:
       return state;
@@ -90,7 +93,7 @@ export const CartProvider = ({ children }) => {
 
   // Efecto para guardar el estado en localStorage cada vez que cambie
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(state));
+    localStorage.setItem("cart", JSON.stringify(state));
   }, [state]);
 
   return (
