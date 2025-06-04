@@ -192,20 +192,27 @@ const Dashboard = () => {
             <>
               {isEditing ? (
                 <form onSubmit={handleSubmit} className="edit-form">
-                  {Object.entries(editedUser).map(([key, value]) => (
-                    <div key={key}>
-                      <label>
-                        {key.charAt(0).toUpperCase() + key.slice(1)}:
-                      </label>
-                      <input
-                        type={key === "email" ? "email" : "text"}
-                        name={key}
-                        value={value || ""}
-                        onChange={handleChange}
-                      />
-                      {errors[key] && <p className="error">{errors[key]}</p>}
-                    </div>
-                  ))}
+                  {Object.entries(editedUser).map(([key, value]) => {
+                    if (key !== "id" && key !== "role") {
+                      return (
+                        <div key={key}>
+                          <label>
+                            {key.charAt(0).toUpperCase() + key.slice(1)}:
+                          </label>
+                          <input
+                            type={key === "email" ? "email" : "text"}
+                            name={key}
+                            value={value || ""}
+                            onChange={handleChange}
+                          />
+                          {errors[key] && (
+                            <p className="error">{errors[key]}</p>
+                          )}
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
                   <div className="form-actions">
                     <button type="submit" className="btn-primary">
                       Guardar cambios
