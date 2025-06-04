@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [editedUser, setEditedUser] = useState({});
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,31 +78,92 @@ const Dashboard = () => {
     setEditedUser(user);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedUser((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const updatedUser = await updateUser(editedUser);
-      setUser(updatedUser);
-      setIsEditing(false);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleCancelOrder = async (orderId) => {
     try {
       await orderService.updateOrderStatus(orderId, "Cancelado");
       fetchUserOrders(); // Actualiza la lista de pedidos
     } catch (err) {
       setError("Error al cancelar el pedido");
+    }
+  };
+
+  const validateField = async (name, value) => {
+    let error = "";
+    switch (name) {
+      case "username":
+        if (value.length < 3) {
+          error = "El nombre de usuario debe tener al menos 3 caracteres";
+        } else if (value !== user.username) {
+          try {
+            const response = await checkUserExists(value, "");
+            if (response.usernameExists) {
+              error = "Este nombre de usuario ya está en uso";
+            }
+          } catch (err) {
+            console.error("Error al verificar el nombre de usuario:", err);
+          }
+        }
+        break;
+      case "email":
+        if (!/\S+@\S+\.\S+/.test(value)) {
+          error = "Email inválido";
+        } else if (value !== user.email) {
+          try {
+            const response = await checkUserExists("", value);
+            if (response.emailExists) {
+              error = "Este email ya está registrado";
+            }
+          } catch (err) {
+            console.error("Error al verificar el email:", err);
+          }
+        }
+        break;
+      case "phone":
+        if (value && !/^\d{9,}$/.test(value)) {
+          error = "El teléfono debe tener al menos 9 dígitos";
+        }
+        break;
+      case "postalCode":
+        if (value && !/^\d{5}$/.test(value)) {
+          error = "El código postal debe tener 5 dígitos";
+        }
+        break;
+    }
+    return error;
+  };
+
+  const handleChange = async (e) => {
+    const { name, value } = e.target;
+    setEditedUser((prev) => ({ ...prev, [name]: value }));
+
+    const fieldError = await validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: fieldError }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
+
+    for (const [key, value] of Object.entries(editedUser)) {
+      const fieldError = await validateField(key, value);
+      if (fieldError) {
+        newErrors[key] = fieldError;
+      }
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      setIsLoading(true);
+      try {
+        const updatedUser = await updateUser(editedUser);
+        setUser(updatedUser);
+        setIsEditing(false);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -130,78 +192,20 @@ const Dashboard = () => {
             <>
               {isEditing ? (
                 <form onSubmit={handleSubmit} className="edit-form">
-                  <div>
-                    <label>Nombre de usuario:</label>
-                    <input
-                      type="text"
-                      name="username"
-                      value={editedUser.username}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>Email:</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={editedUser.email}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>Nombre:</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={editedUser.name}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>Teléfono:</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={editedUser.phone || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>Dirección:</label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={editedUser.address || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>Ciudad:</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={editedUser.city || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>País:</label>
-                    <input
-                      type="text"
-                      name="country"
-                      value={editedUser.country || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>Código postal:</label>
-                    <input
-                      type="text"
-                      name="postalCode"
-                      value={editedUser.postalCode || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
+                  {Object.entries(editedUser).map(([key, value]) => (
+                    <div key={key}>
+                      <label>
+                        {key.charAt(0).toUpperCase() + key.slice(1)}:
+                      </label>
+                      <input
+                        type={key === "email" ? "email" : "text"}
+                        name={key}
+                        value={value || ""}
+                        onChange={handleChange}
+                      />
+                      {errors[key] && <p className="error">{errors[key]}</p>}
+                    </div>
+                  ))}
                   <div className="form-actions">
                     <button type="submit" className="btn-primary">
                       Guardar cambios
