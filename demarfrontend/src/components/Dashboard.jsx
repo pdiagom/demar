@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentUser, updateUser } from "../services/authService";
+import { getCurrentUser, updateUser, checkUserExists } from "../services/authService";
 import orderService from "../services/orderService";
 import Modal from "./Modal";
 import { useLoading } from "../context/loadingContext";
